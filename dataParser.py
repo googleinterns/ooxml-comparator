@@ -18,7 +18,10 @@ class ooxml_file:
 		self.filename = filename
 		
 	def load_data(self):
-
+		"""
+		This function loads the OOXML files, Unzips then and saves their data 
+		in a dictionary format for all the XMLs present in the code.
+		"""
 		archive = zipfile.ZipFile(self.filename, 'r')
 
 		self.xml_files = {}
@@ -43,7 +46,14 @@ class ooxml_file:
 				self.other_data_files[zip_obj.filename]=zip_obj.filename
 	
 	def save_json_data(self,out_path):
+		"""
+		This saves the loaded XML file's dictionaries into the path provides 
+		in JSON format.
 
+		@Param out_path: path to salve all the XML files by creating a folder 
+						for the XML file.
+
+		"""
 		path_name_decomp = self.filename.split('/')
 		dir_name = self.filename[:-len(path_name_decomp[-1])]
 		
@@ -76,6 +86,13 @@ class ooxml_file:
 
 
 def prepare_folder(path):
+	"""
+	Function to create a new generate folder and 
+	create all the json data for all files in the generated folder.
+
+	@param path: path to the folder whose all files has to be converted to json data 
+	"""
+
 	path = path.strip()
 	if path[-1]=='/':
 		gen_path = path + 'generated/'
