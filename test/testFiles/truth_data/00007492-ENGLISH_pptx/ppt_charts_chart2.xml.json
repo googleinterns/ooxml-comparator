@@ -1,0 +1,362 @@
+{
+    "c:chartSpace": {
+        "@xmlns:c": "http://schemas.openxmlformats.org/drawingml/2006/chart",
+        "@xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "c:lang": {
+            "@val": "en-GB"
+        },
+        "c:chart": {
+            "c:title": {
+                "c:tx": {
+                    "c:rich": {
+                        "a:bodyPr": null,
+                        "a:lstStyle": null,
+                        "a:p": [
+                            {
+                                "a:pPr": {
+                                    "a:defRPr": null
+                                },
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-ZA"
+                                    },
+                                    "a:t": "Private school learners"
+                                }
+                            },
+                            {
+                                "a:pPr": {
+                                    "a:defRPr": null
+                                },
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-ZA"
+                                    },
+                                    "a:t": "(% Private school)"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "c:layout": {
+                    "c:manualLayout": {
+                        "c:xMode": {
+                            "@val": "edge"
+                        },
+                        "c:yMode": {
+                            "@val": "edge"
+                        },
+                        "c:x": {
+                            "@val": "0.54022209774615026"
+                        },
+                        "c:y": {
+                            "@val": "6.1190504976571414E-2"
+                        }
+                    }
+                }
+            },
+            "c:plotArea": {
+                "c:layout": {
+                    "c:manualLayout": {
+                        "c:layoutTarget": {
+                            "@val": "inner"
+                        },
+                        "c:xMode": {
+                            "@val": "edge"
+                        },
+                        "c:yMode": {
+                            "@val": "edge"
+                        },
+                        "c:x": {
+                            "@val": "0.23903018372703683"
+                        },
+                        "c:y": {
+                            "@val": "5.0810367454068833E-2"
+                        },
+                        "c:w": {
+                            "@val": "0.70640726159230049"
+                        },
+                        "c:h": {
+                            "@val": "0.65529673374161568"
+                        }
+                    }
+                },
+                "c:barChart": {
+                    "c:barDir": {
+                        "@val": "bar"
+                    },
+                    "c:grouping": {
+                        "@val": "clustered"
+                    },
+                    "c:ser": {
+                        "c:idx": {
+                            "@val": "0"
+                        },
+                        "c:order": {
+                            "@val": "0"
+                        },
+                        "c:dPt": [
+                            {
+                                "c:idx": {
+                                    "@val": "3"
+                                },
+                                "c:spPr": {
+                                    "a:solidFill": {
+                                        "a:srgbClr": {
+                                            "@val": "FF0000"
+                                        }
+                                    }
+                                }
+                            },
+                            {
+                                "c:idx": {
+                                    "@val": "6"
+                                },
+                                "c:spPr": {
+                                    "a:solidFill": {
+                                        "a:srgbClr": {
+                                            "@val": "00B050"
+                                        }
+                                    }
+                                }
+                            }
+                        ],
+                        "c:dLbls": {
+                            "c:dLbl": {
+                                "c:idx": {
+                                    "@val": "5"
+                                },
+                                "c:spPr": {
+                                    "a:noFill": null
+                                },
+                                "c:txPr": {
+                                    "a:bodyPr": null,
+                                    "a:lstStyle": null,
+                                    "a:p": {
+                                        "a:pPr": {
+                                            "a:defRPr": null
+                                        },
+                                        "a:endParaRPr": {
+                                            "@lang": "en-US"
+                                        }
+                                    }
+                                }
+                            },
+                            "c:spPr": {
+                                "a:noFill": null,
+                                "a:ln": {
+                                    "a:noFill": null
+                                },
+                                "a:effectLst": null
+                            },
+                            "c:showVal": {
+                                "@val": "1"
+                            },
+                            "c:extLst": {
+                                "c:ext": {
+                                    "@uri": "{CE6537A1-D6FC-4f65-9D91-7224C49458BB}",
+                                    "@xmlns:c15": "http://schemas.microsoft.com/office/drawing/2012/chart",
+                                    "c15:layout": null,
+                                    "c15:showLeaderLines": {
+                                        "@val": "0"
+                                    }
+                                }
+                            }
+                        },
+                        "c:cat": {
+                            "c:strRef": {
+                                "c:f": "Sheet1!$A$2:$A$8",
+                                "c:strCache": {
+                                    "c:ptCount": {
+                                        "@val": "7"
+                                    },
+                                    "c:pt": [
+                                        {
+                                            "@idx": "0",
+                                            "c:v": "Netherlands"
+                                        },
+                                        {
+                                            "@idx": "1",
+                                            "c:v": "Australia"
+                                        },
+                                        {
+                                            "@idx": "2",
+                                            "c:v": "India"
+                                        },
+                                        {
+                                            "@idx": "3",
+                                            "c:v": "Global average"
+                                        },
+                                        {
+                                            "@idx": "4",
+                                            "c:v": "USA"
+                                        },
+                                        {
+                                            "@idx": "5",
+                                            "c:v": "United Kingdom"
+                                        },
+                                        {
+                                            "@idx": "6",
+                                            "c:v": "South Africa"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "c:val": {
+                            "c:numRef": {
+                                "c:f": "Sheet1!$E$2:$E$8",
+                                "c:numCache": {
+                                    "c:formatCode": "0%",
+                                    "c:ptCount": {
+                                        "@val": "7"
+                                    },
+                                    "c:pt": [
+                                        {
+                                            "@idx": "0",
+                                            "c:v": "0.71750000000000003"
+                                        },
+                                        {
+                                            "@idx": "1",
+                                            "c:v": "0.30400000000000038"
+                                        },
+                                        {
+                                            "@idx": "2",
+                                            "c:v": "0.16500000000000001"
+                                        },
+                                        {
+                                            "@idx": "3",
+                                            "c:v": "0.13100000000000001"
+                                        },
+                                        {
+                                            "@idx": "4",
+                                            "c:v": "0.10600000000000002"
+                                        },
+                                        {
+                                            "@idx": "5",
+                                            "c:v": "4.8000000000000001E-2"
+                                        },
+                                        {
+                                            "@idx": "6",
+                                            "c:v": "4.0000000000000022E-2"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "c:dLbls": null,
+                    "c:axId": [
+                        {
+                            "@val": "78926592"
+                        },
+                        {
+                            "@val": "78928128"
+                        }
+                    ]
+                },
+                "c:catAx": {
+                    "c:axId": {
+                        "@val": "78926592"
+                    },
+                    "c:scaling": {
+                        "c:orientation": {
+                            "@val": "minMax"
+                        }
+                    },
+                    "c:axPos": {
+                        "@val": "l"
+                    },
+                    "c:numFmt": {
+                        "@formatCode": "General",
+                        "@sourceLinked": "0"
+                    },
+                    "c:tickLblPos": {
+                        "@val": "nextTo"
+                    },
+                    "c:crossAx": {
+                        "@val": "78928128"
+                    },
+                    "c:crosses": {
+                        "@val": "autoZero"
+                    },
+                    "c:auto": {
+                        "@val": "1"
+                    },
+                    "c:lblAlgn": {
+                        "@val": "ctr"
+                    },
+                    "c:lblOffset": {
+                        "@val": "100"
+                    }
+                },
+                "c:valAx": {
+                    "c:axId": {
+                        "@val": "78928128"
+                    },
+                    "c:scaling": {
+                        "c:orientation": {
+                            "@val": "minMax"
+                        }
+                    },
+                    "c:axPos": {
+                        "@val": "b"
+                    },
+                    "c:numFmt": {
+                        "@formatCode": "0%",
+                        "@sourceLinked": "1"
+                    },
+                    "c:tickLblPos": {
+                        "@val": "nextTo"
+                    },
+                    "c:txPr": {
+                        "a:bodyPr": null,
+                        "a:lstStyle": null,
+                        "a:p": {
+                            "a:pPr": {
+                                "a:defRPr": {
+                                    "@sz": "1100"
+                                }
+                            },
+                            "a:endParaRPr": {
+                                "@lang": "en-US"
+                            }
+                        }
+                    },
+                    "c:crossAx": {
+                        "@val": "78926592"
+                    },
+                    "c:crosses": {
+                        "@val": "autoZero"
+                    },
+                    "c:crossBetween": {
+                        "@val": "between"
+                    }
+                }
+            },
+            "c:plotVisOnly": {
+                "@val": "1"
+            },
+            "c:dispBlanksAs": {
+                "@val": "gap"
+            }
+        },
+        "c:txPr": {
+            "a:bodyPr": null,
+            "a:lstStyle": null,
+            "a:p": {
+                "a:pPr": {
+                    "a:defRPr": {
+                        "@sz": "1400"
+                    }
+                },
+                "a:endParaRPr": {
+                    "@lang": "en-US"
+                }
+            }
+        },
+        "c:externalData": {
+            "@r:id": "rId1"
+        }
+    }
+}

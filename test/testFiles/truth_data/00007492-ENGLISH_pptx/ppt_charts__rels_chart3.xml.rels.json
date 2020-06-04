@@ -1,0 +1,11 @@
+{
+    "Relationships": {
+        "@xmlns": "http://schemas.openxmlformats.org/package/2006/relationships",
+        "Relationship": {
+            "@Id": "rId1",
+            "@Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject",
+            "@Target": "file:///\\\\msfs01\\c$\\Users\\Bernardt\\Desktop\\Curro%20Save%20Local\\Alfresco\\finance-department\\Presentations\\Presentations\\Curro%20numbers%20for%20presentation.xlsx",
+            "@TargetMode": "External"
+        }
+    }
+}
