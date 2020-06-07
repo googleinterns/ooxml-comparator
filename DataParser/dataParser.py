@@ -92,6 +92,9 @@ def prepare_folder(path):
 
 	@param path: path to the folder whose all files has to be converted to json data 
 	"""
+	isDirectory = os.path.isdir(path)
+	if not isDirectory:
+		return False
 
 	path = path.strip()
 	if path[-1]=='/':
@@ -99,92 +102,37 @@ def prepare_folder(path):
 	else:
 		gen_path = path + '/generated/'
 
+	converted_files = 0
 	if not os.path.exists(gen_path):
 		os.mkdir(gen_path)
 	
 	for cur_path in Path(path).rglob('*.pptx'):
+		converted_files += 1
 		cur_file = ooxml_file(str(cur_path))
 		cur_file.load_data()
 		cur_file.save_json_data(gen_path)
 	
 	for cur_path in Path(path).rglob('*.xlsx'):
+		converted_files += 1
 		cur_file = ooxml_file(str(cur_path))
 		cur_file.load_data()
 		cur_file.save_json_data(gen_path)
 		
 	for cur_path in Path(path).rglob('*.docx'):
+		converted_files += 1
 		cur_file = ooxml_file(str(cur_path))
 		cur_file.load_data()
 		cur_file.save_json_data(gen_path)
 
-if '--run' in sys.argv:
-	cur_path = sys.argv[-1].strip()
-	prepare_folder(cur_path)
+	print("Number of files processed :",converted_files)
 
-
-#====================================================
-# Testing Code
-#====================================================
-
-testFiles = "./test/testFiles"
-
-truth_folder = "./test/testFiles/truth_data"
-
-def build_testdata():
-	"""
-	This method builds the gold directory structure for the files added
-	in the test folder of the data path. This created directory structure 
-	will be used while comparing the test.
-	"""
-	os.system("rm -r ./test/testFiles/generated")
-	os.system("rm -r ./test/testFiles/truth_data")
-
-	if not os.path.exists(truth_folder):
-		os.mkdir(truth_folder)
-
-	prepare_folder("./test/testFiles")
-	os.system("cp -r ./test/testFiles/generated/* ./test/testFiles/truth_data")
-
-
-# --build-test in command line argument to generate the gold test data
-if "--build-test" in sys.argv:
-	build_testdata()
-
-
-def are_dir_trees_equal(dir1, dir2):
-	"""
-	Compare two directories recursively. Files in each directory are
-	assumed to be equal if their names and contents are equal.
-
-	@param dir1: First directory path
-	@param dir2: Second directory path
-
-	@return: True if the directory trees are the same and 
-		there were no errors while accessing the directories or files, 
-		False otherwise.
-	"""
-	dirs_cmp = filecmp.dircmp(dir1, dir2)
-	if len(dirs_cmp.left_only)>0 or len(dirs_cmp.right_only)>0 or \
-		len(dirs_cmp.funny_files)>0:
-		return False
-
-	(_, mismatch, errors) =  filecmp.cmpfiles(
-		dir1, dir2, dirs_cmp.common_files, shallow=False)
-	
-	if len(mismatch)>0 or len(errors)>0:
-		return False
-	
-	for common_dir in dirs_cmp.common_dirs:
-		new_dir1 = os.path.join(dir1, common_dir)
-		new_dir2 = os.path.join(dir2, common_dir)
-		if not are_dir_trees_equal(new_dir1, new_dir2):
-			return False
-	
 	return True
 
-
-# The pytest testing function
-def test_method():
-	os.system("rm -r ./test/testFiles/generated/*")
-	prepare_folder(testFiles)
-	assert(are_dir_trees_equal('./test/testFiles/generated',truth_folder)==True)
+if __name__ == "__main__": 
+	
+	cur_path = sys.argv[-1].strip()
+	success = prepare_folder(cur_path)
+	if success:
+		print("All files in the path converted Successfully and the Json data is stored in the generated folder")
+	else:
+		print("Please enter a valid path")
