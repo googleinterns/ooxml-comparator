@@ -67,7 +67,6 @@ public class JsonUtility {
                 continue;
             }
 
-
             System.out.println("KEY : " + key + ", VALUE : " + value);
 
             if (value instanceof JSONObject) {
@@ -84,7 +83,9 @@ public class JsonUtility {
                     }
                 }
             } else {
+                System.out.println(key_val);
                 if (value!=null) {
+                    System.out.println();
                     stringOrder.add((String) value);
                 }
             }
