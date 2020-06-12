@@ -71,6 +71,7 @@ public class Comparator {
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
         else if (file_extension.equals("pptx")) {
+
             PptxFile file1 = new PptxFile(file_orig, false);
             PptxFile file2 = new PptxFile(file_tripped, true);
 
@@ -105,21 +106,49 @@ public class Comparator {
 
                 }
             }
-            for(int i=runTagCount;i<runTagContents2.size();i++){
-                System.out.println(runTagContents2.get(i));
-            }
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
         }
         else if(file_extension.equals("xlsx")){
+
             XlsxFile file1 = new XlsxFile(file_orig, false);
             XlsxFile file2 = new XlsxFile(file_tripped, true);
 
-            //file1.patchSharedString();
-            //file2.patchSharedString();
+            file1.loadSharedStrings();
+            file2.loadSharedStrings();
 
+            ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
+            ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
 
+//            System.out.println(runTagContents1.toString());
+//            System.out.println(runTagContents2.toString());
+
+            int runTagCount = runTagContents1.size();
+            System.out.println(runTagContents1.size());
+            System.out.println(runTagContents2.size());
+
+//            if(runTagContents2.size()!=runTagCount){
+//                System.out.println("NUMBER OF RUNTAGS ARE NOT SAME!!");
+//                throw new Exception("HYPOTHESIS FAILED");
+//            }
+
+            System.out.println(runTagContents1);
+            System.out.println(runTagContents2);
+            ArrayList<ArrayList<String>> diffReport;
+
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            for(int i=0;i<runTagCount;i++){
+                boolean isSame = compareContent(runTagContents1.get(i),runTagContents2.get(i));
+                if(!isSame){
+                    System.out.println("=======================================================");
+                    System.out.println("Found Mismatch : "+
+                            runTagContents1.get(i).toString()+
+                            " - "+runTagContents2.get(i).toString());
+                    System.out.println("=======================================================");
+
+                }
+            }
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
     }
-
-
 }

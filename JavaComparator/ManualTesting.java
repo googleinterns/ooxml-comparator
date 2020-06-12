@@ -59,6 +59,24 @@ public class ManualTesting {
         }
     }
 
+    public static void testComparator4(){
+        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/Ritz/00049976-ENGLISH_xlsx","/home/vivgupta/OOXMLcomp/generate/roundtripped/Ritz/00049976-ENGLISH_xlsx");
+        try {
+            comparator.compareText();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void testComparator5(){
+        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/Ritz/00049936-ENGLISH_xlsx","/home/vivgupta/OOXMLcomp/generate/roundtripped/Ritz/00049936-ENGLISH_xlsx");
+        try {
+            comparator.compareText();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         //System.out.println("Hello World !!");
         //testDocx();
@@ -66,6 +84,8 @@ public class ManualTesting {
         //testXlsx();
         //testComparator();
         //testComparator2();
-        testComparator3();
+        //testComparator3();
+        //testComparator4();
+        testComparator5();
     }
 }
