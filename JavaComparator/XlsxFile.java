@@ -104,7 +104,6 @@ public class XlsxFile extends OoxmlFile {
                 }
             }
         }
-
         return allTextTag;
     }
 

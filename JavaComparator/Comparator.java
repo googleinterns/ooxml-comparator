@@ -20,7 +20,7 @@ public class Comparator {
         }
     }
 
-    boolean compareContent(ArrayList<String> content1, ArrayList<String> content2) {
+    public boolean CompareContent(ArrayList<String> content1, ArrayList<String> content2) {
 
         StringBuilder sb = new StringBuilder();
         for (String s : content1) {
@@ -37,7 +37,9 @@ public class Comparator {
 
     }
 
-    void compareText() throws Exception {
+    public ArrayList<DiffObject> CompareText() {
+        ArrayList<DiffObject> diffReport = new ArrayList<DiffObject>();
+
         if (file_extension.equals("docx")) {
             DocxFile file1 = new DocxFile(file_orig, false);
             DocxFile file2 = new DocxFile(file_tripped, true);
@@ -51,24 +53,15 @@ public class Comparator {
             int runTagCount = runTagContents1.size();
             if(runTagContents2.size()!=runTagCount){
                 System.out.println("NUMBER OF RUNTAGS ARE NOT SAME!!");
-                throw new Exception("HYPOTHESIS FAILED");
+                return diffReport;
             }
 
-            ArrayList<ArrayList<String>> diffReport;
-
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             for(int i=0;i<runTagCount;i++){
-                boolean isSame = compareContent(runTagContents1.get(i),runTagContents2.get(i));
+                boolean isSame = CompareContent(runTagContents1.get(i),runTagContents2.get(i));
                 if(!isSame){
-                    System.out.println("=======================================================");
-                    System.out.println("Found Mismatch : "+
-                            runTagContents1.get(i).toString()+
-                            " - "+runTagContents2.get(i).toString());
-                    System.out.println("=======================================================");
-
+                    diffReport.add(new DiffObject("w:r",runTagContents1.get(i),runTagContents2.get(i),"RUN TAG CONTENT DIFFERENT"));
                 }
             }
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
         else if (file_extension.equals("pptx")) {
 
@@ -92,25 +85,17 @@ public class Comparator {
 
             System.out.println(runTagContents1);
             System.out.println(runTagContents2);
-            ArrayList<ArrayList<String>> diffReport;
 
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             for(int i=0;i<runTagCount;i++){
-                boolean isSame = compareContent(runTagContents1.get(i),runTagContents2.get(i));
+                boolean isSame = CompareContent(runTagContents1.get(i),runTagContents2.get(i));
                 if(!isSame){
-                    System.out.println("=======================================================");
-                    System.out.println("Found Mismatch : "+
-                            runTagContents1.get(i).toString()+
-                            " - "+runTagContents2.get(i).toString());
-                    System.out.println("=======================================================");
-
+                    diffReport.add(new DiffObject("a:r",runTagContents1.get(i),runTagContents2.get(i),"RUN TAG CONTENT DIFFERENT"));
                 }
             }
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-
         }
-        else if(file_extension.equals("xlsx")){
-
+        else if(file_extension.equals("xls")){
+            // TODO: Not working fine!! Some comarisions fails... Looking into it.
+            
             XlsxFile file1 = new XlsxFile(file_orig, false);
             XlsxFile file2 = new XlsxFile(file_tripped, true);
 
@@ -134,21 +119,15 @@ public class Comparator {
 
             System.out.println(runTagContents1);
             System.out.println(runTagContents2);
-            ArrayList<ArrayList<String>> diffReport;
 
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             for(int i=0;i<runTagCount;i++){
-                boolean isSame = compareContent(runTagContents1.get(i),runTagContents2.get(i));
+                boolean isSame = CompareContent(runTagContents1.get(i),runTagContents2.get(i));
                 if(!isSame){
-                    System.out.println("=======================================================");
-                    System.out.println("Found Mismatch : "+
-                            runTagContents1.get(i).toString()+
-                            " - "+runTagContents2.get(i).toString());
-                    System.out.println("=======================================================");
-
+                    diffReport.add(new DiffObject("c",runTagContents1.get(i),runTagContents2.get(i),"CELL TAG CONTENT DIFFERENT"));
                 }
             }
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         }
+        return diffReport;
     }
 }

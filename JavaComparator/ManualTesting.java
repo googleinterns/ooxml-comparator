@@ -33,45 +33,54 @@ public class ManualTesting {
     }
 
     public static void testComparator(){
-        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/Kix/center_tab_stop_docx","/home/vivgupta/OOXMLcomp/generate/roundtripped/Kix/center_tab_stop_docx");
+        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/center_tab_stop_docx","/home/vivgupta/OOXMLcomp/generate/roundtripped/center_tab_stop_docx");
         try {
-            comparator.compareText();
+            comparator.CompareText();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     public static void testComparator2(){
-        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/Kix/VR_Bank_GmbH_docx","/home/vivgupta/OOXMLcomp/generate/roundtripped/Kix/VR_Bank_GmbH_docx");
+        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/VR_Bank_GmbH_docx","/home/vivgupta/OOXMLcomp/generate/roundtripped/VR_Bank_GmbH_docx");
         try {
-            comparator.compareText();
+            comparator.CompareText();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     public static void testComparator3(){
-        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/Punch/00007492-ENGLISH_pptx","/home/vivgupta/OOXMLcomp/generate/roundtripped/Punch/00007492-ENGLISH_pptx");
+        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/00007492-ENGLISH_pptx","/home/vivgupta/OOXMLcomp/generate/roundtripped/00007492-ENGLISH_pptx");
         try {
-            comparator.compareText();
+            comparator.CompareText();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     public static void testComparator4(){
-        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/Ritz/00049976-ENGLISH_xlsx","/home/vivgupta/OOXMLcomp/generate/roundtripped/Ritz/00049976-ENGLISH_xlsx");
+        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/00049976-ENGLISH_xlsx","/home/vivgupta/OOXMLcomp/generate/roundtripped/00049976-ENGLISH_xlsx");
         try {
-            comparator.compareText();
+            comparator.CompareText();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }
 
     public static void testComparator5(){
-        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/Ritz/00049936-ENGLISH_xlsx","/home/vivgupta/OOXMLcomp/generate/roundtripped/Ritz/00049936-ENGLISH_xlsx");
+        Comparator comparator = new Comparator("/home/vivgupta/OOXMLcomp/generate/original/00049936-ENGLISH_xlsx","/home/vivgupta/OOXMLcomp/generate/roundtripped/00049936-ENGLISH_xlsx");
         try {
-            comparator.compareText();
+            comparator.CompareText();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void testComparator6(){
+        DiffGenerator diff = new DiffGenerator("/home/vivgupta/OOXMLcomp/generate/original","/home/vivgupta/OOXMLcomp/generate/roundtripped","/home/vivgupta/OOXMLcomp/generate/output");
+        try {
+            diff.PrepareFolder();
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -86,6 +95,7 @@ public class ManualTesting {
         //testComparator2();
         //testComparator3();
         //testComparator4();
-        testComparator5();
+        //testComparator5();
+        testComparator6();
     }
 }

@@ -33,7 +33,10 @@ public class DocxFile extends OoxmlFile {
 
             for (JSONObject wrTagObj : wrTag) {
                 System.out.println(wrTagObj);
-                allTextTag.add(JsonUtility.getTextContent(wrTagObj));
+                ArrayList<String> temp = JsonUtility.getTextContent(wrTagObj);
+                if(!temp.isEmpty()){
+                    allTextTag.add(temp);
+                }
             }
         }
 
