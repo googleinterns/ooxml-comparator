@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Comparator {
     String file_orig, file_tripped;
@@ -36,66 +38,95 @@ public class Comparator {
         return stringVal1.equals(stringVal2);
 
     }
+    public ArrayList<DiffObject> diffReport;
+
+    private void compareContent(String tagComp,String FileType,ArrayList<ArrayList<String>> TagContents1,ArrayList<ArrayList<String>> TagContents2){
+        int runTagCount = TagContents1.size();
+        if(TagContents2.size()!=runTagCount){
+            StatusLogger.AddRecordINFO("NUMBER OF "+tagComp+" in "+FileType+" are not same!!");
+        }
+        System.out.println(TagContents1);
+        System.out.println(TagContents2);
+        for(int i=0;i<runTagCount;i++){
+            boolean isSame = CompareContent(TagContents1.get(i),TagContents2.get(i));
+            if(!isSame){
+                diffReport.add(new DiffObject(tagComp,TagContents1.get(i),TagContents2.get(i),"CONTENT DIFFERENT"));
+            }
+        }
+    }
+
+    private void compareContentXLSX(String tagComp,String FileType,ArrayList<ArrayList<String>> TagContents1,ArrayList<ArrayList<String>> TagContents2){
+        int runTagCount = TagContents1.size();
+        System.out.println(TagContents1.size());
+        System.out.println(TagContents2.size());
+
+        if(TagContents2.size()!=runTagCount){
+            System.out.println("NUMBER OF RUNTAGS ARE NOT SAME!!");
+            StatusLogger.AddRecordINFO("NUMBER OF RUNTAGS in XLSX are not same!!");
+        }
+
+        System.out.println(TagContents1);
+        System.out.println(TagContents2);
+
+        HashMap<String, ArrayList<String>> cellValues = new HashMap<String, ArrayList<String>>();
+        for(ArrayList<String> it:TagContents1){
+            cellValues.put(it.get(0),it);
+        }
+        int extraCell = 0;
+        int matched = 0;
+        for(ArrayList<String> it:TagContents2){
+            if(cellValues.containsKey(it.get(0))){
+                matched+=1;
+                ArrayList<String> actualContent = cellValues.get(it.get(0));
+                boolean isSame = CompareContent(actualContent,it);
+                if(!isSame){
+                    diffReport.add(new DiffObject(tagComp,actualContent,it,"CELL TAG CONTENT DIFFERENT"));
+                }
+            }else{
+                extraCell+=1;
+            }
+        }
+    }
 
     public ArrayList<DiffObject> CompareText() {
-        ArrayList<DiffObject> diffReport = new ArrayList<DiffObject>();
+        diffReport = new ArrayList<DiffObject>();
 
-        if (file_extension.equals("docx")) {
+        if (file_extension.equals("doc")) {
             DocxFile file1 = new DocxFile(file_orig, false);
             DocxFile file2 = new DocxFile(file_tripped, true);
 
             ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
             ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
+            compareContent("w:r","docx",runTagContents1,runTagContents2);
 
-            System.out.println(runTagContents1.toString());
-            System.out.println(runTagContents2.toString());
+            System.out.println(runTagContents1);
+            System.out.println(runTagContents2);
 
-            int runTagCount = runTagContents1.size();
-            if(runTagContents2.size()!=runTagCount){
-                System.out.println("NUMBER OF RUNTAGS ARE NOT SAME!!");
-                return diffReport;
-            }
+            ArrayList<ArrayList<String>> commentContents1 = file1.GetCommentContent();
+            ArrayList<ArrayList<String>> commentContents2 = file2.GetCommentContent();
 
-            for(int i=0;i<runTagCount;i++){
-                boolean isSame = CompareContent(runTagContents1.get(i),runTagContents2.get(i));
-                if(!isSame){
-                    diffReport.add(new DiffObject("w:r",runTagContents1.get(i),runTagContents2.get(i),"RUN TAG CONTENT DIFFERENT"));
-                }
-            }
+            compareContent("w:comment","docx",commentContents1,commentContents2);
         }
-        else if (file_extension.equals("pptx")) {
+        else if (file_extension.equals("ppt")) {
 
             PptxFile file1 = new PptxFile(file_orig, false);
             PptxFile file2 = new PptxFile(file_tripped, true);
 
             ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
             ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
+            compareContent("a:r","pptx",runTagContents1,runTagContents2);
 
-//            System.out.println(runTagContents1.toString());
-//            System.out.println(runTagContents2.toString());
-
-            int runTagCount = runTagContents1.size();
-            System.out.println(runTagContents1.size());
-            System.out.println(runTagContents2.size());
-
-//            if(runTagContents2.size()!=runTagCount){
-//                System.out.println("NUMBER OF RUNTAGS ARE NOT SAME!!");
-//                throw new Exception("HYPOTHESIS FAILED");
-//            }
-
-            System.out.println(runTagContents1);
-            System.out.println(runTagContents2);
-
-            for(int i=0;i<runTagCount;i++){
-                boolean isSame = CompareContent(runTagContents1.get(i),runTagContents2.get(i));
-                if(!isSame){
-                    diffReport.add(new DiffObject("a:r",runTagContents1.get(i),runTagContents2.get(i),"RUN TAG CONTENT DIFFERENT"));
-                }
-            }
+            System.out.println("HERE");
+            ArrayList<ArrayList<String>> commentContents1 = file1.GetCommentContent();
+            System.out.println("THERE");
+            ArrayList<ArrayList<String>> commentContents2 = file2.GetCommentContent();
+            System.out.println(commentContents1);
+            System.out.println(commentContents2);
+            compareContent("p:cm","pptx",commentContents1,commentContents2);
         }
-        else if(file_extension.equals("xls")){
+        else if(file_extension.equals("xlsx")){
             // TODO: Not working fine!! Some comarisions fails... Looking into it.
-            
+
             XlsxFile file1 = new XlsxFile(file_orig, false);
             XlsxFile file2 = new XlsxFile(file_tripped, true);
 
@@ -105,28 +136,14 @@ public class Comparator {
             ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
             ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
 
-//            System.out.println(runTagContents1.toString());
-//            System.out.println(runTagContents2.toString());
+            compareContentXLSX("c","xlsx",runTagContents1,runTagContents2);
 
-            int runTagCount = runTagContents1.size();
-            System.out.println(runTagContents1.size());
-            System.out.println(runTagContents2.size());
-
-//            if(runTagContents2.size()!=runTagCount){
-//                System.out.println("NUMBER OF RUNTAGS ARE NOT SAME!!");
-//                throw new Exception("HYPOTHESIS FAILED");
-//            }
-
-            System.out.println(runTagContents1);
-            System.out.println(runTagContents2);
-
-            for(int i=0;i<runTagCount;i++){
-                boolean isSame = CompareContent(runTagContents1.get(i),runTagContents2.get(i));
-                if(!isSame){
-                    diffReport.add(new DiffObject("c",runTagContents1.get(i),runTagContents2.get(i),"CELL TAG CONTENT DIFFERENT"));
-                }
-            }
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            ArrayList<ArrayList<String>> CommentTagContents1 = file1.GetCommentContent();
+            ArrayList<ArrayList<String>> CommentTagContents2 = file2.GetCommentContent();
+            System.out.println("HERE");
+            System.out.println(CommentTagContents1);
+            System.out.println(CommentTagContents2);
+            compareContentXLSX("c","xlsx",CommentTagContents1,CommentTagContents2);
         }
         return diffReport;
     }

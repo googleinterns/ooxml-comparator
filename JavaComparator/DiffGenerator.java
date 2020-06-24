@@ -1,13 +1,14 @@
 import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.*;
 import org.hsqldb.util.CSVWriter;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class DiffGenerator {
     String path1;
@@ -23,15 +24,49 @@ public class DiffGenerator {
     }
 
     public void writeCSVFile(ArrayList<String[]> data,String[] header,String filePath) {
-        File file = new File(filePath);
-        try {
-            CSVWriter writer = new CSVWriter(file, null);
-            writer.writeHeader(header);
-            for (String[] entry : data) {
-                writer.writeData(entry);
+
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Data");
+
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setFontHeightInPoints((short) 14);
+        headerFont.setColor(IndexedColors.RED.getIndex());
+
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        headerCellStyle.setFont(headerFont);
+
+        // Create a Row
+        Row headerRow = sheet.createRow(0);
+
+        for (int i = 0; i < header.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(header[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+
+        // Create Other rows and cells with contacts data
+        int rowNum = 1;
+
+        for (String[] entry : data) {
+            Row row = sheet.createRow(rowNum++);
+            for(int i = 0; i < entry.length; i++){
+                row.createCell(i).setCellValue(entry[i]);
             }
-            writer.close();
-        } catch (IOException e) {
+        }
+
+        // Resize all columns to fit the content size
+        for (int i = 0; i < header.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // Write the output to a file
+        try {
+            FileOutputStream fileOut = new FileOutputStream(filePath);
+            workbook.write(fileOut);
+            fileOut.close();
+        }
+        catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -58,7 +93,7 @@ public class DiffGenerator {
     public int PrepareFolder() throws IOException {
         Path finalFolder = Paths.get(finalPath);
         if(Files.notExists(finalFolder)){
-            System.out.println("NOT A VALID FOLDER PATH");
+            StatusLogger.AddRecordWARNING("NOT A VALID FOLDER PATH : "+finalPath);
             return 0;
         }
 
@@ -66,15 +101,17 @@ public class DiffGenerator {
 
         File file = new File(finalPath+ "/IndividualDiff" );
         if(!file.mkdir()){
-            System.out.println("Failed to create the Directory");
+            StatusLogger.AddRecordWARNING("Failed to create the Directory : "+finalPath);
         }
 
         List<String> foldersOrig = findFoldersInDirectory(path1);
         List<String> foldersRound = findFoldersInDirectory(path2);
 
         if(foldersOrig.size()!=foldersRound.size()){
+            //TODO: HANDLE THISSSS!!!
             return 0;
         }
+
         Collections.sort(foldersOrig);
         Collections.sort(foldersRound);
 
@@ -82,13 +119,20 @@ public class DiffGenerator {
         ArrayList<String[]> summaryData = new ArrayList<String[]>();
         for(int i=0;i<foldersOrig.size();i++) {
             if (!foldersOrig.get(i).equals(foldersRound.get(i))) {
-                System.out.println("FOLDERS NOT SAME\n");
+                StatusLogger.AddRecordWARNING("FOLDERS NOT SAME\n " + foldersOrig.toString() + " : "+foldersRound.toString());
                 return -1;
             }
+            StatusLogger.AddRecordINFO("Comparing the file : "+foldersOrig);
             Comparator cmp = new Comparator(path1 + "/" + foldersOrig.get(i), path2 + "/" + foldersRound.get(i));
+            System.out.println(foldersOrig.get(i));
             ArrayList<DiffObject> temp = cmp.CompareText();
+
             for(DiffObject x:temp){
-                allDiffs.add(x.getCsvEntry());
+                String[] a = x.getCsvEntry();
+                String[] a2 = new String[a.length + 1];
+                a2[0] = foldersOrig.get(i);
+                System.arraycopy(a, 0, a2, 1, a.length);
+                allDiffs.add(a2);
             }
             GenerateIndividualDiffReport(foldersOrig.get(i), temp);
             summaryData.add(new String[]{foldersOrig.get(i), String.valueOf(temp.isEmpty()), String.valueOf(temp.size())});
@@ -99,18 +143,22 @@ public class DiffGenerator {
     }
 
     private void GenerateComparisionSummary(ArrayList<String[]> summaryData) {
-        writeCSVFile(summaryData,new String[]{"File Name","Exactly Same","Number of Differences"},finalPath+"/summary.csv");
+        StatusLogger.AddRecordINFO("Creating Summary CSV Data");
+        writeCSVFile(summaryData,new String[]{"File Name","Exactly Same","Number of Differences"},finalPath+"/summary.xlsx");
     }
 
     private void GenerateGlobalDiffReport(ArrayList<String[]> allDiffs) {
-        writeCSVFile(allDiffs,new String[]{"tag_name","content1","content2","details"},finalPath+"/allDiff.csv");
+        StatusLogger.AddRecordINFO("Creating All Diff CSV Data");
+        writeCSVFile(allDiffs,new String[]{"File Name","tag_name","content1","content2","details"},finalPath+"/allDiff.xlsx");
     }
 
     private void GenerateIndividualDiffReport(String s, ArrayList<DiffObject> temp) {
+        StatusLogger.AddRecordINFO("Creating Individual CSV Data in "+s);
         ArrayList<String[]> entry = new ArrayList<String[]>();
         for (DiffObject diffObject : temp) {
             entry.add(diffObject.getCsvEntry());
         }
-        writeCSVFile(entry,new String[]{"tag_name","content1","content2","details"},finalPath+"/IndividualDiff/"+s+".csv");
+        writeCSVFile(entry,new String[]{"tag_name","content1","content2","details"},finalPath+"/IndividualDiff/"+s+".xlsx");
     }
+
 }

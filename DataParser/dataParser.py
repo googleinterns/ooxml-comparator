@@ -103,29 +103,45 @@ def prepare_folder(path):
 		gen_path = path + '/generated/'
 
 	converted_files = 0
+	failed_files = 0
 	if not os.path.exists(gen_path):
 		os.mkdir(gen_path)
 	
+	execLogger = open(gen_path+'exec_log.txt','w+')
+
 	for cur_path in Path(path).rglob('*.pptx'):
-		converted_files += 1
-		cur_file = ooxml_file(str(cur_path))
-		cur_file.load_data()
-		cur_file.save_json_data(gen_path)
+		try:
+			cur_file = ooxml_file(str(cur_path))
+			cur_file.load_data()
+			cur_file.save_json_data(gen_path)
+			converted_files += 1
+		except:
+			failed_files += 1
+			execLogger.write("Failed to convert : "+str(cur_path)+"\n")
 	
 	for cur_path in Path(path).rglob('*.xlsx'):
-		converted_files += 1
-		cur_file = ooxml_file(str(cur_path))
-		cur_file.load_data()
-		cur_file.save_json_data(gen_path)
-		
+		try:
+			cur_file = ooxml_file(str(cur_path))
+			cur_file.load_data()
+			cur_file.save_json_data(gen_path)
+			converted_files += 1
+		except:
+			failed_files += 1
+			execLogger.write("Failed to convert : "+str(cur_path)+"\n")
+
 	for cur_path in Path(path).rglob('*.docx'):
-		converted_files += 1
-		cur_file = ooxml_file(str(cur_path))
-		cur_file.load_data()
-		cur_file.save_json_data(gen_path)
+		try:
+			cur_file = ooxml_file(str(cur_path))
+			cur_file.load_data()
+			cur_file.save_json_data(gen_path)
+			converted_files += 1
+		except:
+			failed_files += 1
+			execLogger.write("Failed to convert : "+str(cur_path)+"\n")
 
+	execLogger.close()
 	print("Number of files processed :",converted_files)
-
+	print("Number of conversion Failed :",failed_files)
 	return True
 
 if __name__ == "__main__": 

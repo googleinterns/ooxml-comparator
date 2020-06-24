@@ -15,5 +15,4 @@ public class DiffObject {
     public String[] getCsvEntry(){
         return new String[]{ tag, content1.toString(), content2.toString(), details};
     }
-
 }
