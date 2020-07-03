@@ -1,34 +1,44 @@
-import org.hsqldb.persist.Log;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.logging.*;
 
+/**
+ * The class implements fuctions to log various progress of the execution of the comparator
+ */
 public class StatusLogger {
-    private final static Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-    private static FileHandler handler;
+    private final static Logger loggerExec = Logger.getLogger("EXEC");
+
+    private final static Logger loggerDebug = Logger.getLogger("DEBUG");
 
     static {
         try {
-            handler = new FileHandler("ExecutionLog.txt");
-            handler.setFormatter(new SimpleFormatter());
-            logger.addHandler(handler);
+            FileHandler handlerExec = new FileHandler("ExecutionLog.txt");
+            handlerExec.setFormatter(new SimpleFormatter());
+            loggerExec.addHandler(handlerExec);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            FileHandler handlerDebug = new FileHandler("DebugLog.txt");
+            handlerDebug.setFormatter(new SimpleFormatter());
+            loggerDebug.addHandler(handlerDebug);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void AddRecordINFO(String msg) {
+    public static void AddRecordInfoExec(String msg) {
         LogRecord record = new LogRecord(Level.INFO, msg);
-        logger.log(record);
+        loggerExec.log(record);
     }
 
-    public static void AddRecordWARNING(String msg){
+    public static void AddRecordWarningExec(String msg) {
         LogRecord record = new LogRecord(Level.WARNING,msg);
-        logger.log(record);
+        loggerExec.log(record);
     }
 
-    public static void Flush(){
-        handler.flush();
+    public static void AddRecordInfoDebug(String msg) {
+//        LogRecord record = new LogRecord(Level.INFO, msg);
+//        loggerDebug.log(record);
     }
 }

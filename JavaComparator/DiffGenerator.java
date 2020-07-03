@@ -1,30 +1,41 @@
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.*;
-import org.hsqldb.util.CSVWriter;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/**
+ * DiffGenerator class finds the Difference between files in two folders
+ * using the class FileComparator and Generates the Diff report in 3 different cases
+ * Individual comparision report, Global run Summary and All diff compilation
+ */
 public class DiffGenerator {
     String path1;
     String path2;
     String finalPath;
-    ArrayList<ArrayList<String>> SummaryData;
-    ArrayList<ArrayList<String>> DiffData;
 
+    /**
+     * Constructor takes the various path to bes used in preparation phase to compare
+     * @param pathOrig Path for folder containing the generated original file's JSON
+     * @param pathRound Path for folder containing the generated round tripped file's JSON
+     * @param outputPath Path to store the
+     */
     public DiffGenerator(String pathOrig,String pathRound,String outputPath){
         path1 = pathOrig;
         path2 = pathRound;
         finalPath = outputPath;
     }
 
-    public void writeCSVFile(ArrayList<String[]> data,String[] header,String filePath) {
-
+    /**
+     * Fucntion to write the general XLSX diff report for individual and All diff report
+     * @param data The row data for the table formed
+     * @param header The Headers for the table
+     * @param filePath Path to the XLSX file to be stored
+     */
+    private void writeCSVFile(ArrayList<String[]> data,String[] header,String filePath) {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Data");
 
@@ -71,10 +82,15 @@ public class DiffGenerator {
         }
     }
 
+    /**
+     * Function returning the names of all JSON folders present in the folder
+     * @param directoryPath path to load the folder list from.
+     * @return List of the folders present at the path.
+     */
     public List<String> findFoldersInDirectory(String directoryPath) {
         File directory = new File(directoryPath);
 
-        FileFilter directoryFileFilter = new FileFilter() {
+        var directoryFileFilter = new FileFilter() {
             public boolean accept(File file) {
                 return file.isDirectory();
             }
@@ -82,7 +98,7 @@ public class DiffGenerator {
 
         File[] directoryListAsFile = directory.listFiles(directoryFileFilter);
         assert directoryListAsFile != null;
-        List<String> foldersInDirectory = new ArrayList<String>(directoryListAsFile.length);
+        List<String> foldersInDirectory = new ArrayList<>(directoryListAsFile.length);
         for (File directoryAsFile : directoryListAsFile) {
             foldersInDirectory.add(directoryAsFile.getName());
         }
@@ -90,71 +106,84 @@ public class DiffGenerator {
         return foldersInDirectory;
     }
 
-    public int PrepareFolder() throws IOException {
+    /**
+     * This prepares and run the comparator on folder and files.
+     */
+    public void prepareFolderAndRun(){
+
         Path finalFolder = Paths.get(finalPath);
         if(Files.notExists(finalFolder)){
-            StatusLogger.AddRecordWARNING("NOT A VALID FOLDER PATH : "+finalPath);
-            return 0;
+            // the output path does not exist
+            StatusLogger.AddRecordWarningExec("NOT A VALID FOLDER PATH : "+finalPath);
+            return;
         }
 
-        FileUtils.cleanDirectory(new File(finalPath));
+        // clear the output path to have no prior data
+        try {
+            FileUtils.cleanDirectory(new File(finalPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        // Create the individual Diff folder.
         File file = new File(finalPath+ "/IndividualDiff" );
         if(!file.mkdir()){
-            StatusLogger.AddRecordWARNING("Failed to create the Directory : "+finalPath);
+            StatusLogger.AddRecordWarningExec("Failed to create the Directory : "+finalPath);
         }
 
         List<String> foldersOrig = findFoldersInDirectory(path1);
         List<String> foldersRound = findFoldersInDirectory(path2);
 
-        if(foldersOrig.size()!=foldersRound.size()){
-            //TODO: HANDLE THISSSS!!!
-            return 0;
-        }
+        TreeSet<String> folderPresentRound = new TreeSet<>(foldersRound);
 
-        Collections.sort(foldersOrig);
-        Collections.sort(foldersRound);
+        ArrayList<String[]> allDiffs = new ArrayList<>();
+        ArrayList<String[]> summaryData = new ArrayList<>();
 
-        ArrayList<String[]> allDiffs = new ArrayList<String[]>();
-        ArrayList<String[]> summaryData = new ArrayList<String[]>();
-        for(int i=0;i<foldersOrig.size();i++) {
-            if (!foldersOrig.get(i).equals(foldersRound.get(i))) {
-                StatusLogger.AddRecordWARNING("FOLDERS NOT SAME\n " + foldersOrig.toString() + " : "+foldersRound.toString());
-                return -1;
+        for (String s : foldersOrig) {
+            if (!folderPresentRound.contains(s)) {
+                StatusLogger.AddRecordWarningExec("File Not Present in Round Tripped Folder : " + s);
+                continue;
             }
-            StatusLogger.AddRecordINFO("Comparing the file : "+foldersOrig);
-            Comparator cmp = new Comparator(path1 + "/" + foldersOrig.get(i), path2 + "/" + foldersRound.get(i));
-            System.out.println(foldersOrig.get(i));
+
+            StatusLogger.AddRecordInfoExec("Comparing the file : " + s);
+            StatusLogger.AddRecordInfoDebug("Before Going into Comparator");
+
+            // add time logger for this file comparision.
+            FileComparator cmp = new FileComparator(path1 + "/" + s, path2 + "/" + s);
             ArrayList<DiffObject> temp = cmp.CompareText();
 
-            for(DiffObject x:temp){
+            StatusLogger.AddRecordInfoDebug("Returned from Comparator");
+
+            // Add the name of the folder in the front for all the diffs found
+            for (DiffObject x : temp) {
                 String[] a = x.getCsvEntry();
                 String[] a2 = new String[a.length + 1];
-                a2[0] = foldersOrig.get(i);
+                a2[0] = s;
                 System.arraycopy(a, 0, a2, 1, a.length);
                 allDiffs.add(a2);
             }
-            GenerateIndividualDiffReport(foldersOrig.get(i), temp);
-            summaryData.add(new String[]{foldersOrig.get(i), String.valueOf(temp.isEmpty()), String.valueOf(temp.size())});
+
+            GenerateIndividualDiffReport(s, temp);
+            summaryData.add(new String[]{s, String.valueOf(temp.isEmpty()), String.valueOf(temp.size())});
         }
-        GenerateGlobalDiffReport(allDiffs);
         GenerateComparisionSummary(summaryData);
-        return 1;
+        GenerateGlobalDiffReport(allDiffs);
     }
 
     private void GenerateComparisionSummary(ArrayList<String[]> summaryData) {
-        StatusLogger.AddRecordINFO("Creating Summary CSV Data");
+        StatusLogger.AddRecordInfoExec("Creating Summary CSV Data");
         writeCSVFile(summaryData,new String[]{"File Name","Exactly Same","Number of Differences"},finalPath+"/summary.xlsx");
     }
 
     private void GenerateGlobalDiffReport(ArrayList<String[]> allDiffs) {
-        StatusLogger.AddRecordINFO("Creating All Diff CSV Data");
+        StatusLogger.AddRecordInfoExec("Creating All Diff CSV Data");
+        StatusLogger.AddRecordInfoExec("Total number of Diffs found : "+String.valueOf(allDiffs.size()));
         writeCSVFile(allDiffs,new String[]{"File Name","tag_name","content1","content2","details"},finalPath+"/allDiff.xlsx");
     }
 
     private void GenerateIndividualDiffReport(String s, ArrayList<DiffObject> temp) {
-        StatusLogger.AddRecordINFO("Creating Individual CSV Data in "+s);
-        ArrayList<String[]> entry = new ArrayList<String[]>();
+        StatusLogger.AddRecordInfoExec("Creating Individual CSV Data in "+s);
+        ArrayList<String[]> entry = new ArrayList<>();
         for (DiffObject diffObject : temp) {
             entry.add(diffObject.getCsvEntry());
         }

@@ -1,18 +1,25 @@
-import org.apache.openjpa.persistence.jest.JSON;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.ArrayList;
 
+
+/**
+ * XlsxFile Class implments the methods required for comparasions of XLSX files
+ */
 public class XlsxFile extends OoxmlFile {
-    public final String type = "xlsx";
     public ArrayList<String> filesToCompare,commentToCompare;
     public ArrayList<ArrayList<String>> sharedString;
 
+    /**
+     * Constuctor takes in the FolderPath for the file and creates a list of files to be compared.
+     * @param folderPath Folder path that has the OOXML content of the file in JSON format
+     * @param roundtripped Whether the file is roundTripped file or not.
+     */
     public XlsxFile(String folderPath, boolean roundtripped) {
         super(folderPath, roundtripped);
         loadFromPath();
-        filesToCompare = new ArrayList<String>();
+        filesToCompare = new ArrayList<>();
         for (int i = 1; ; i++) {
             String xmlName = "xl_worksheets_sheet" + i + ".xml.json";
             if (jsonFiles.containsKey(xmlName)) {
@@ -22,8 +29,7 @@ public class XlsxFile extends OoxmlFile {
             }
         }
 
-
-        commentToCompare = new ArrayList<String>();
+        commentToCompare = new ArrayList<>();
         for(int i = 1; ; i++){
             String xmlName = "xl_comments" + i + ".xml.json";
             if (jsonFiles.containsKey(xmlName)) {
@@ -34,24 +40,37 @@ public class XlsxFile extends OoxmlFile {
         }
     }
 
+    /**
+     * This load the contents of the shared strings from the xl_sharedStrings.xml in OOXML.
+     */
     public void loadSharedStrings(){
-        printJsons("xl_sharedStrings.xml.json");
-        ArrayList<String> tags = new ArrayList<String>();
-        tags.add("si");
-        ArrayList<JSONObject> temp = JsonUtility.extract_tag(getJson("xl_sharedStrings.xml.json"), tags);
-        assert(temp.size()==1);
+        if(jsonFiles.containsKey("xl_sharedStrings.xml.json")) {
+            //printJsons("xl_sharedStrings.xml.json");
+            ArrayList<String> tags = new ArrayList<>();
+            tags.add("si");
+            ArrayList<JSONObject> siTagContent = JsonUtility.extractTag(getJson("xl_sharedStrings.xml.json"), tags);
 
-        sharedString = new ArrayList<ArrayList<String>>();
+            if(siTagContent.isEmpty()){
+                return;
+            }
 
-        System.out.println(temp);
-        JSONArray shared_elems = (JSONArray) temp.get(0).get("si");
-        for(Object data:shared_elems){
-            sharedString.add(JsonUtility.getTextContent((JSONObject) data));
+            sharedString = new ArrayList<>();
+            if(siTagContent.get(0).get("si") instanceof JSONObject){
+                sharedString.add(JsonUtility.getTextContent((JSONObject)siTagContent.get(0).get("si"),null,true));
+            }else{
+                JSONArray shared_elems = (JSONArray) siTagContent.get(0).get("si");
+                for (Object data : shared_elems) {
+                    sharedString.add(JsonUtility.getTextContent((JSONObject) data,null,true));
+                }
+            }
         }
     }
 
+    /**
+     * @return the JSON for the files to be compared by adding the Sheet number in the context
+     */
     public ArrayList<JSONObject> getJson() {
-        ArrayList<JSONObject> allJson = new ArrayList<JSONObject>();
+        ArrayList<JSONObject> allJson = new ArrayList<>();
         int counter = 0;
         for (String files : filesToCompare) {
             JSONObject temp = new JSONObject();
@@ -63,8 +82,11 @@ public class XlsxFile extends OoxmlFile {
         return allJson;
     }
 
+    /**
+     * @return the JSON for the files to be compared for Comments Context with Sheet number added
+     */
     public ArrayList<JSONObject> getCommentJson(){
-        ArrayList<JSONObject> allJson = new ArrayList<JSONObject>();
+        ArrayList<JSONObject> allJson = new ArrayList<>();
         int counter = 0;
         for (String files : commentToCompare) {
             JSONObject temp = new JSONObject();
@@ -75,172 +97,140 @@ public class XlsxFile extends OoxmlFile {
         }
         return allJson;
     }
+    ArrayList<ArrayList<String>> allTextTag;
 
+    private void ExtractCellContent(JSONObject file, JSONObject val){
+        if (val.containsKey("@t") && val.get("@t").equals("s")) {
+            if(!val.containsKey("v")) {
+                return;
+            }
+            ArrayList<String> cellValue = sharedString.get(Integer.parseInt((String) val.get("v")));
+            if(val.containsKey("@r")){
+                cellValue.add(0, file.get("file").toString() + val.get("@r"));
+                allTextTag.add(cellValue);
+            }else{
+                StatusLogger.AddRecordWarningExec("This Element contains @t=s and no @r, looking it!!");
+                StatusLogger.AddRecordWarningExec(cellValue.toString());
+            }
+        }
+        else if(val.containsKey("@t") && val.get("@t").equals("str")){
+            ArrayList<String> cellValue = new ArrayList<>();
+            if(val.containsKey("@r")){
+                cellValue.add(file.get("file").toString() +val.get("@r"));
+            }else{
+                StatusLogger.AddRecordWarningExec("This Element contains @t=str and no @r, looking it!!");
+                StatusLogger.AddRecordWarningExec(cellValue.toString());
+            }
+            if (val.containsKey("f")) {
+                if(val.get("f") instanceof JSONObject){
+                    JSONObject fval = (JSONObject) val.get("f");
+                    if(fval.containsKey("#text"))cellValue.add((String)fval.get("#text"));
+                    if(fval.containsKey("@t"))cellValue.add((String)fval.get("@t"));
+                    if(fval.containsKey("@ref"))cellValue.add((String)fval.get("@ref"));
+                }else {
+                    cellValue.add((String) val.get("f"));
+                }
+            }
+            allTextTag.add(cellValue);
+        }
+        else {
+            ArrayList<String> cellValue = new ArrayList<>();
+            if (val.containsKey("@r")) {
+                cellValue.add(file.get("file").toString() +val.get("@r"));
+                //cellValue.add("Normal Cell content");
+            }else{
+                StatusLogger.AddRecordWarningExec("This Element no @r, looking it!!");
+                StatusLogger.AddRecordWarningExec(cellValue.toString());
+            }
+            if (val.containsKey("v")) {
+                cellValue.add((String) val.get("v"));
+                //NOTE: if we want to prune out empty cells, we can do it here!!
+            }
+            if (val.containsKey("f")) {
+                if(val.get("f") instanceof JSONObject){
+                    JSONObject fval = (JSONObject) val.get("f");
+                    if(fval.containsKey("#text"))cellValue.add((String)fval.get("#text"));
+                    if(fval.containsKey("@t"))cellValue.add((String)fval.get("@t"));
+                    if(fval.containsKey("@ref"))cellValue.add((String)fval.get("@ref"));
+                }else {
+                    cellValue.add((String) val.get("f"));
+                }
+            }
+            allTextTag.add(cellValue);
+        }
+    }
+
+    /**
+     * The functions implement the total running of tag extraction for text (c tag) and then in the subtree, finding for strings to be matched
+     * @return List of List, where each of them contains the total data to be compared for each 'c' tag
+     */
     public ArrayList<ArrayList<String>> GetTextContent() {
-        ArrayList<ArrayList<String>> allTextTag = new ArrayList<ArrayList<String>>();
+        allTextTag = new ArrayList<>();
 
         for (JSONObject file : getJson()) {
-            ArrayList<String> tags = new ArrayList<String>();
+            ArrayList<String> tags = new ArrayList<>();
             tags.add("sheetData");
-            ArrayList<JSONObject> sheetData = JsonUtility.extract_tag(file,tags);
-            tags = new ArrayList<String>();
+            ArrayList<JSONObject> sheetData = JsonUtility.extractTag(file,tags);
+            tags = new ArrayList<>();
             tags.add("c");
-            assert(sheetData.size()==1);
-            ArrayList<JSONObject> cTag = JsonUtility.extract_tag(sheetData.get(0), tags);
+
+            // if there is no sheet data then continue with next sheet
+            if(sheetData.isEmpty())continue;
+            ArrayList<JSONObject> cTag = JsonUtility.extractTag(sheetData.get(0), tags);
+
 
             for (JSONObject cTagObj : cTag) {
-                //System.out.println(cTagObj);
                 if(cTagObj.get("c") instanceof JSONObject){
                     JSONObject val = (JSONObject) cTagObj.get("c");
-                    //System.out.println(val.toString());
-                    if (val.containsKey("@t") && val.get("@t").equals("s")) {
-                        ArrayList<String> cellValue = sharedString.get(Integer.parseInt((String) val.get("v")));
-                        if(val.containsKey("@r")){
-                            cellValue.add(0,(String)  file.get("file")+val.get("@r"));
-                            //cellValue.add("Shared String Content");
-                            allTextTag.add(cellValue);
-                        }else{
-                            StatusLogger.AddRecordWARNING("This Element contains @t=s and no @r, looking it!!");
-                            StatusLogger.AddRecordWARNING(cellValue.toString());
-                        }
-                    }
-                    else if(val.containsKey("@t") && val.get("@t").equals("str")){
-                        ArrayList<String> cellValue = new ArrayList<String>();
-                        if(val.containsKey("@r")){
-                            cellValue.add((String)  file.get("file")+val.get("@r"));
-                            //cellValue.add("@t = str type string");
-                        }else{
-                            StatusLogger.AddRecordWARNING("This Element contains @t=str and no @r, looking it!!");
-                            StatusLogger.AddRecordWARNING(cellValue.toString());
-                        }
-                        if (val.containsKey("f")) {
-                            if(val.get("f") instanceof JSONObject){
-                                JSONObject fval = (JSONObject) val.get("f");
-                                if(fval.containsKey("#text"))cellValue.add((String)fval.get("#text"));
-                                if(fval.containsKey("@t"))cellValue.add((String)fval.get("@t"));
-                                if(fval.containsKey("@ref"))cellValue.add((String)fval.get("@ref"));
-                            }else {
-                                cellValue.add((String) val.get("f"));
-                            }
-                        }
-                        allTextTag.add(cellValue);
-                    }
-                    else {
-                        ArrayList<String> cellValue = new ArrayList<String>();
-                        if (val.containsKey("@r")) {
-                            cellValue.add((String)  file.get("file")+val.get("@r"));
-                            //cellValue.add("Normal Cell content");
-                        }else{
-                            StatusLogger.AddRecordWARNING("This Element no @r, looking it!!");
-                            StatusLogger.AddRecordWARNING(cellValue.toString());
-                        }
-                        if (val.containsKey("v")) {
-                            cellValue.add((String) val.get("v"));
-                            //NOTE: if we want to prune out empty cells, we can do it here!!
-                        }
-                        if (val.containsKey("f")) {
-                            if(val.get("f") instanceof JSONObject){
-                                JSONObject fval = (JSONObject) val.get("f");
-                                if(fval.containsKey("#text"))cellValue.add((String)fval.get("#text"));
-                                if(fval.containsKey("@t"))cellValue.add((String)fval.get("@t"));
-                                if(fval.containsKey("@ref"))cellValue.add((String)fval.get("@ref"));
-                            }else {
-                                cellValue.add((String) val.get("f"));
-                            }
-                        }
-                        allTextTag.add(cellValue);
-                    }
+                    ExtractCellContent(file,val);
                 }
                 else {
                     JSONArray tempVal = (JSONArray) cTagObj.get("c");
-                    for (int i = 0; i < tempVal.size(); i++) {
-                        JSONObject val = (JSONObject) tempVal.get(i);
-                        //System.out.println(val.toString());
-                        if (val.containsKey("@t") && val.get("@t").equals("s")) {
-                            ArrayList<String> cellValue = sharedString.get(Integer.parseInt((String) val.get("v")));
-                            if(val.containsKey("@r")){
-                                cellValue.add(0, (String) file.get("file")+val.get("@r"));
-                                //cellValue.add("Shared String Content");
-                                allTextTag.add(cellValue);
-                            }else{
-                                StatusLogger.AddRecordWARNING("This Element contains @t=s and no @r, looking it!!");
-                                StatusLogger.AddRecordWARNING(cellValue.toString());
-                            }
-                        }
-                        else if(val.containsKey("@t") && val.get("@t").equals("str")){
-                            ArrayList<String> cellValue = new ArrayList<String>();
-                            if(val.containsKey("@r")){
-                                cellValue.add((String)  file.get("file")+val.get("@r"));
-                                //cellValue.add("@t = str type string");
-                            }else{
-                                StatusLogger.AddRecordWARNING("This Element contains @t=str and no @r, looking it!!");
-                                StatusLogger.AddRecordWARNING(cellValue.toString());
-                            }
-                            if (val.containsKey("f")) {
-                                if(val.get("f") instanceof JSONObject){
-                                    JSONObject fval = (JSONObject) val.get("f");
-                                    if(fval.containsKey("#text"))cellValue.add((String)fval.get("#text"));
-                                    if(fval.containsKey("@t"))cellValue.add((String)fval.get("@t"));
-                                    if(fval.containsKey("@ref"))cellValue.add((String)fval.get("@ref"));
-                                }else {
-                                    cellValue.add((String) val.get("f"));
-                                }
-                            }
-                            allTextTag.add(cellValue);
-                        }
-                        else {
-                            ArrayList<String> cellValue = new ArrayList<String>();
-                            if (val.containsKey("@r")) {
-                                cellValue.add((String)  file.get("file")+val.get("@r"));
-                                //cellValue.add("Normal cell content");
-                            }else{
-                                StatusLogger.AddRecordWARNING("This Element no @r, looking it!!");
-                                StatusLogger.AddRecordWARNING(cellValue.toString());
-                            }
-                            if (val.containsKey("v")) {
-                                cellValue.add((String) val.get("v"));
-                                //NOTE: if we want to prune out empty cells, we can do it here!!
-                            }
-                            if (val.containsKey("f")) {
-                                if(val.get("f") instanceof JSONObject){
-                                    JSONObject fval = (JSONObject) val.get("f");
-                                    if(fval.containsKey("#text"))cellValue.add((String)fval.get("#text"));
-                                    if(fval.containsKey("@t"))cellValue.add((String)fval.get("@t"));
-                                    if(fval.containsKey("@ref"))cellValue.add((String)fval.get("@ref"));
-                                }else {
-                                    cellValue.add((String) val.get("f"));
-                                }
-                            }
-                            allTextTag.add(cellValue);
-                        }
+                    for (Object o : tempVal) {
+                        JSONObject val = (JSONObject) o;
+                        ExtractCellContent(file, val);
                     }
                 }
             }
         }
         return allTextTag;
     }
+    ArrayList<ArrayList<String>> allCommentTag;
 
-    public ArrayList<ArrayList<String>> GetCommentContent(){
-        ArrayList<ArrayList<String>> allCommentTag = new ArrayList<ArrayList<String>>();
+    private void extractCommentTag(JSONObject wCommentTagObj, JSONObject file){
+        StatusLogger.AddRecordInfoDebug(wCommentTagObj.toString());
+        ArrayList<String> temp = JsonUtility.getCommentContentXlsx(wCommentTagObj, (String) file.get("file"));
+        allCommentTag.add(temp);
+    }
+
+    /**
+     * The functions implement the total running of tag extraction for text (comment tag) and then in the subtree, finding for strings to be matched
+     * @return List of List, where each of them contains the total data to be compared for each 'comment' tag
+     */
+    public ArrayList<ArrayList<String>> getCommentContent(){
+        allCommentTag = new ArrayList<>();
 
         for (JSONObject file : getCommentJson()) {
-            ArrayList<String> tags = new ArrayList<String>();
+            ArrayList<String> tags = new ArrayList<>();
             tags.add("comment");
-            JSONObject wCommentTag = JsonUtility.extract_tag(file, tags).get(0);
 
-            // TODO: Check in any case it may be single JSONObject
-            ArrayList<JSONObject> allCommentTagJson = (ArrayList<JSONObject>) wCommentTag.get("comment");
-            for (JSONObject wCommentTagObj : allCommentTagJson){
-                //System.out.println(wCommentTagObj);
-                ArrayList<String> temp = JsonUtility.getCommentContentXlsx(wCommentTagObj, (String) file.get("file"));
-                allCommentTag.add(temp);
-                //System.out.println(temp.toString());
+            StatusLogger.AddRecordInfoDebug("Before wcommentExtract");
+            StatusLogger.AddRecordInfoDebug(JsonUtility.extractTag(file, tags).toString());
+
+            JSONObject wCommentTag = JsonUtility.extractTag(file, tags).get(0);
+            StatusLogger.AddRecordInfoDebug("After wcommentExtract");
+
+            if(wCommentTag.get("comment") instanceof JSONObject){
+                extractCommentTag((JSONObject) wCommentTag.get("comment"),file);
+            }else{
+                JSONArray allCommentTagJson = (JSONArray) wCommentTag.get("comment");
+                for (Object wCommentTagObj : allCommentTagJson){
+                    extractCommentTag((JSONObject) wCommentTagObj,file);
+                }
             }
+
         }
         return allCommentTag;
     }
 
-    public void debug() {
-        System.out.println(filesToCompare.toString());
-    }
 }
