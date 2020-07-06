@@ -1,0 +1,722 @@
+{
+    "p:sld": {
+        "@xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "@xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+        "p:cSld": {
+            "p:spTree": {
+                "p:nvGrpSpPr": {
+                    "p:cNvPr": {
+                        "@id": "1",
+                        "@name": ""
+                    },
+                    "p:cNvGrpSpPr": null,
+                    "p:nvPr": null
+                },
+                "p:grpSpPr": {
+                    "a:xfrm": {
+                        "a:off": {
+                            "@x": "0",
+                            "@y": "0"
+                        },
+                        "a:ext": {
+                            "@cx": "0",
+                            "@cy": "0"
+                        },
+                        "a:chOff": {
+                            "@x": "0",
+                            "@y": "0"
+                        },
+                        "a:chExt": {
+                            "@cx": "0",
+                            "@cy": "0"
+                        }
+                    }
+                },
+                "p:graphicFrame": [
+                    {
+                        "p:nvGraphicFramePr": {
+                            "p:cNvPr": {
+                                "@id": "5",
+                                "@name": "Chart 4"
+                            },
+                            "p:cNvGraphicFramePr": null,
+                            "p:nvPr": null
+                        },
+                        "p:xfrm": {
+                            "a:off": {
+                                "@x": "251520",
+                                "@y": "4149080"
+                            },
+                            "a:ext": {
+                                "@cx": "5688632",
+                                "@cy": "1943106"
+                            }
+                        },
+                        "a:graphic": {
+                            "a:graphicData": {
+                                "@uri": "http://schemas.openxmlformats.org/drawingml/2006/chart",
+                                "c:chart": {
+                                    "@xmlns:c": "http://schemas.openxmlformats.org/drawingml/2006/chart",
+                                    "@xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                                    "@r:id": "rId3"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvGraphicFramePr": {
+                            "p:cNvPr": {
+                                "@id": "18",
+                                "@name": "Chart 17"
+                            },
+                            "p:cNvGraphicFramePr": null,
+                            "p:nvPr": null
+                        },
+                        "p:xfrm": {
+                            "a:off": {
+                                "@x": "0",
+                                "@y": "1196752"
+                            },
+                            "a:ext": {
+                                "@cx": "6084168",
+                                "@cy": "2736304"
+                            }
+                        },
+                        "a:graphic": {
+                            "a:graphicData": {
+                                "@uri": "http://schemas.openxmlformats.org/drawingml/2006/chart",
+                                "c:chart": {
+                                    "@xmlns:c": "http://schemas.openxmlformats.org/drawingml/2006/chart",
+                                    "@xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                                    "@r:id": "rId4"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "p:cxnSp": [
+                    {
+                        "p:nvCxnSpPr": {
+                            "p:cNvPr": {
+                                "@id": "7",
+                                "@name": "Straight Arrow Connector 6"
+                            },
+                            "p:cNvCxnSpPr": {
+                                "a:stCxn": {
+                                    "@id": "10",
+                                    "@idx": "1"
+                                }
+                            },
+                            "p:nvPr": null
+                        },
+                        "p:spPr": {
+                            "@bwMode": "auto",
+                            "a:xfrm": {
+                                "@rot": "10800000",
+                                "@flipV": "1",
+                                "a:off": {
+                                    "@x": "4211960",
+                                    "@y": "4626713"
+                                },
+                                "a:ext": {
+                                    "@cx": "2304256",
+                                    "@cy": "170437"
+                                }
+                            },
+                            "a:prstGeom": {
+                                "@prst": "straightConnector1",
+                                "a:avLst": null
+                            },
+                            "a:solidFill": {
+                                "a:schemeClr": {
+                                    "@val": "accent1"
+                                }
+                            },
+                            "a:ln": {
+                                "@w": "9525",
+                                "@cap": "flat",
+                                "@cmpd": "sng",
+                                "@algn": "ctr",
+                                "a:solidFill": {
+                                    "a:schemeClr": {
+                                        "@val": "tx1"
+                                    }
+                                },
+                                "a:prstDash": {
+                                    "@val": "solid"
+                                },
+                                "a:round": null,
+                                "a:headEnd": {
+                                    "@type": "none",
+                                    "@w": "med",
+                                    "@len": "med"
+                                },
+                                "a:tailEnd": {
+                                    "@type": "arrow"
+                                }
+                            },
+                            "a:effectLst": null
+                        }
+                    },
+                    {
+                        "p:nvCxnSpPr": {
+                            "p:cNvPr": {
+                                "@id": "14",
+                                "@name": "Straight Arrow Connector 13"
+                            },
+                            "p:cNvCxnSpPr": {
+                                "a:stCxn": {
+                                    "@id": "12",
+                                    "@idx": "1"
+                                }
+                            },
+                            "p:nvPr": null
+                        },
+                        "p:spPr": {
+                            "@bwMode": "auto",
+                            "a:xfrm": {
+                                "@rot": "10800000",
+                                "a:off": {
+                                    "@x": "4283968",
+                                    "@y": "5445224"
+                                },
+                                "a:ext": {
+                                    "@cx": "1512168",
+                                    "@cy": "189602"
+                                }
+                            },
+                            "a:prstGeom": {
+                                "@prst": "straightConnector1",
+                                "a:avLst": null
+                            },
+                            "a:solidFill": {
+                                "a:schemeClr": {
+                                    "@val": "accent1"
+                                }
+                            },
+                            "a:ln": {
+                                "@w": "9525",
+                                "@cap": "flat",
+                                "@cmpd": "sng",
+                                "@algn": "ctr",
+                                "a:solidFill": {
+                                    "a:schemeClr": {
+                                        "@val": "tx1"
+                                    }
+                                },
+                                "a:prstDash": {
+                                    "@val": "solid"
+                                },
+                                "a:round": null,
+                                "a:headEnd": {
+                                    "@type": "none",
+                                    "@w": "med",
+                                    "@len": "med"
+                                },
+                                "a:tailEnd": {
+                                    "@type": "arrow"
+                                }
+                            },
+                            "a:effectLst": null
+                        }
+                    }
+                ],
+                "p:sp": [
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "10",
+                                "@name": "TextBox 9"
+                            },
+                            "p:cNvSpPr": {
+                                "@txBox": "1"
+                            },
+                            "p:nvPr": null
+                        },
+                        "p:spPr": {
+                            "a:xfrm": {
+                                "a:off": {
+                                    "@x": "6516216",
+                                    "@y": "4365104"
+                                },
+                                "a:ext": {
+                                    "@cx": "2026410",
+                                    "@cy": "523220"
+                                }
+                            },
+                            "a:prstGeom": {
+                                "@prst": "rect",
+                                "a:avLst": null
+                            },
+                            "a:noFill": null
+                        },
+                        "p:txBody": {
+                            "a:bodyPr": {
+                                "@wrap": "square",
+                                "@rtlCol": "0",
+                                "a:spAutoFit": null
+                            },
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:pPr": {
+                                    "@algn": "ctr"
+                                },
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-ZA",
+                                        "@sz": "1400",
+                                        "@b": "1",
+                                        "@dirty": "0",
+                                        "@smtClean": "0",
+                                        "a:solidFill": {
+                                            "a:srgbClr": {
+                                                "@val": "002469"
+                                            }
+                                        },
+                                        "a:latin": {
+                                            "@typeface": "ZapfHumnst BT",
+                                            "@pitchFamily": "34",
+                                            "@charset": "0"
+                                        },
+                                        "a:cs": {
+                                            "@typeface": "Arial",
+                                            "@pitchFamily": "34",
+                                            "@charset": "0"
+                                        }
+                                    },
+                                    "a:t": "Predominant private school market"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-ZA",
+                                    "@sz": "1400",
+                                    "@b": "1",
+                                    "@dirty": "0",
+                                    "a:solidFill": {
+                                        "a:srgbClr": {
+                                            "@val": "002469"
+                                        }
+                                    },
+                                    "a:latin": {
+                                        "@typeface": "ZapfHumnst BT",
+                                        "@pitchFamily": "34",
+                                        "@charset": "0"
+                                    },
+                                    "a:cs": {
+                                        "@typeface": "Arial",
+                                        "@pitchFamily": "34",
+                                        "@charset": "0"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "12",
+                                "@name": "TextBox 11"
+                            },
+                            "p:cNvSpPr": {
+                                "@txBox": "1"
+                            },
+                            "p:nvPr": null
+                        },
+                        "p:spPr": {
+                            "a:xfrm": {
+                                "a:off": {
+                                    "@x": "5796136",
+                                    "@y": "5373216"
+                                },
+                                "a:ext": {
+                                    "@cx": "2343032",
+                                    "@cy": "523220"
+                                }
+                            },
+                            "a:prstGeom": {
+                                "@prst": "rect",
+                                "a:avLst": null
+                            },
+                            "a:noFill": null
+                        },
+                        "p:txBody": {
+                            "a:bodyPr": {
+                                "@wrap": "square",
+                                "@rtlCol": "0",
+                                "a:spAutoFit": null
+                            },
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:pPr": {
+                                    "@algn": "ctr"
+                                },
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-ZA",
+                                        "@sz": "1400",
+                                        "@dirty": "0",
+                                        "@smtClean": "0",
+                                        "a:solidFill": {
+                                            "a:srgbClr": {
+                                                "@val": "002469"
+                                            }
+                                        },
+                                        "a:latin": {
+                                            "@typeface": "ZapfHumnst BT",
+                                            "@pitchFamily": "34",
+                                            "@charset": "0"
+                                        },
+                                        "a:cs": {
+                                            "@typeface": "Arial",
+                                            "@pitchFamily": "34",
+                                            "@charset": "0"
+                                        }
+                                    },
+                                    "a:t": "Other potential private school market"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-ZA",
+                                    "@sz": "1400",
+                                    "@dirty": "0",
+                                    "a:solidFill": {
+                                        "a:srgbClr": {
+                                            "@val": "002469"
+                                        }
+                                    },
+                                    "a:latin": {
+                                        "@typeface": "ZapfHumnst BT",
+                                        "@pitchFamily": "34",
+                                        "@charset": "0"
+                                    },
+                                    "a:cs": {
+                                        "@typeface": "Arial",
+                                        "@pitchFamily": "34",
+                                        "@charset": "0"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "2",
+                                "@name": "Title 1"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "title"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": {
+                                "a:normAutofit": {
+                                    "@fontScale": "90000"
+                                }
+                            },
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-ZA",
+                                        "@dirty": "0",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:t": "MARKET POTENTIAL"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-ZA",
+                                    "@dirty": "0"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "4",
+                                "@name": "Slide Number Placeholder 3"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "sldNum",
+                                    "@sz": "quarter",
+                                    "@idx": "12"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:fld": {
+                                    "@id": "{FBF943B6-41D7-4162-9806-64C925351C48}",
+                                    "@type": "slidenum",
+                                    "a:rPr": {
+                                        "@lang": "en-US",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:pPr": null,
+                                    "a:t": "3"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-US"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "p:extLst": {
+                "p:ext": {
+                    "@uri": "{BB962C8B-B14F-4D97-AF65-F5344CB8AC3E}",
+                    "p14:creationId": {
+                        "@xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main",
+                        "@xmlns": "",
+                        "@val": "2448122132"
+                    }
+                }
+            }
+        },
+        "p:clrMapOvr": {
+            "a:masterClrMapping": null
+        },
+        "mc:AlternateContent": {
+            "@xmlns:mc": "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            "mc:Choice": {
+                "@xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main",
+                "@xmlns": "",
+                "@Requires": "p14",
+                "p:transition": {
+                    "@spd": "slow",
+                    "p14:prism": {
+                        "@isContent": "1"
+                    }
+                }
+            },
+            "mc:Fallback": {
+                "p:transition": {
+                    "@spd": "slow",
+                    "p:fade": null
+                }
+            }
+        },
+        "p:timing": {
+            "p:tnLst": {
+                "p:par": {
+                    "p:cTn": {
+                        "@id": "1",
+                        "@dur": "indefinite",
+                        "@restart": "never",
+                        "@nodeType": "tmRoot",
+                        "p:childTnLst": {
+                            "p:seq": {
+                                "@concurrent": "1",
+                                "@nextAc": "seek",
+                                "p:cTn": {
+                                    "@id": "2",
+                                    "@dur": "indefinite",
+                                    "@nodeType": "mainSeq",
+                                    "p:childTnLst": {
+                                        "p:par": {
+                                            "p:cTn": {
+                                                "@id": "3",
+                                                "@fill": "hold",
+                                                "p:stCondLst": {
+                                                    "p:cond": [
+                                                        {
+                                                            "@delay": "indefinite"
+                                                        },
+                                                        {
+                                                            "@evt": "onBegin",
+                                                            "@delay": "0",
+                                                            "p:tn": {
+                                                                "@val": "2"
+                                                            }
+                                                        }
+                                                    ]
+                                                },
+                                                "p:childTnLst": {
+                                                    "p:par": {
+                                                        "p:cTn": {
+                                                            "@id": "4",
+                                                            "@fill": "hold",
+                                                            "p:stCondLst": {
+                                                                "p:cond": {
+                                                                    "@delay": "0"
+                                                                }
+                                                            },
+                                                            "p:childTnLst": {
+                                                                "p:par": {
+                                                                    "p:cTn": {
+                                                                        "@id": "5",
+                                                                        "@presetID": "2",
+                                                                        "@presetClass": "entr",
+                                                                        "@presetSubtype": "4",
+                                                                        "@fill": "hold",
+                                                                        "@nodeType": "withEffect",
+                                                                        "p:stCondLst": {
+                                                                            "p:cond": {
+                                                                                "@delay": "0"
+                                                                            }
+                                                                        },
+                                                                        "p:childTnLst": {
+                                                                            "p:set": {
+                                                                                "p:cBhvr": {
+                                                                                    "p:cTn": {
+                                                                                        "@id": "6",
+                                                                                        "@dur": "1",
+                                                                                        "@fill": "hold",
+                                                                                        "p:stCondLst": {
+                                                                                            "p:cond": {
+                                                                                                "@delay": "0"
+                                                                                            }
+                                                                                        }
+                                                                                    },
+                                                                                    "p:tgtEl": {
+                                                                                        "p:spTgt": {
+                                                                                            "@spid": "5"
+                                                                                        }
+                                                                                    },
+                                                                                    "p:attrNameLst": {
+                                                                                        "p:attrName": "style.visibility"
+                                                                                    }
+                                                                                },
+                                                                                "p:to": {
+                                                                                    "p:strVal": {
+                                                                                        "@val": "visible"
+                                                                                    }
+                                                                                }
+                                                                            },
+                                                                            "p:anim": [
+                                                                                {
+                                                                                    "@calcmode": "lin",
+                                                                                    "@valueType": "num",
+                                                                                    "p:cBhvr": {
+                                                                                        "@additive": "base",
+                                                                                        "p:cTn": {
+                                                                                            "@id": "7",
+                                                                                            "@dur": "500",
+                                                                                            "@fill": "hold"
+                                                                                        },
+                                                                                        "p:tgtEl": {
+                                                                                            "p:spTgt": {
+                                                                                                "@spid": "5"
+                                                                                            }
+                                                                                        },
+                                                                                        "p:attrNameLst": {
+                                                                                            "p:attrName": "ppt_x"
+                                                                                        }
+                                                                                    },
+                                                                                    "p:tavLst": {
+                                                                                        "p:tav": [
+                                                                                            {
+                                                                                                "@tm": "0",
+                                                                                                "p:val": {
+                                                                                                    "p:strVal": {
+                                                                                                        "@val": "#ppt_x"
+                                                                                                    }
+                                                                                                }
+                                                                                            },
+                                                                                            {
+                                                                                                "@tm": "100000",
+                                                                                                "p:val": {
+                                                                                                    "p:strVal": {
+                                                                                                        "@val": "#ppt_x"
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                },
+                                                                                {
+                                                                                    "@calcmode": "lin",
+                                                                                    "@valueType": "num",
+                                                                                    "p:cBhvr": {
+                                                                                        "@additive": "base",
+                                                                                        "p:cTn": {
+                                                                                            "@id": "8",
+                                                                                            "@dur": "500",
+                                                                                            "@fill": "hold"
+                                                                                        },
+                                                                                        "p:tgtEl": {
+                                                                                            "p:spTgt": {
+                                                                                                "@spid": "5"
+                                                                                            }
+                                                                                        },
+                                                                                        "p:attrNameLst": {
+                                                                                            "p:attrName": "ppt_y"
+                                                                                        }
+                                                                                    },
+                                                                                    "p:tavLst": {
+                                                                                        "p:tav": [
+                                                                                            {
+                                                                                                "@tm": "0",
+                                                                                                "p:val": {
+                                                                                                    "p:strVal": {
+                                                                                                        "@val": "1+#ppt_h/2"
+                                                                                                    }
+                                                                                                }
+                                                                                            },
+                                                                                            {
+                                                                                                "@tm": "100000",
+                                                                                                "p:val": {
+                                                                                                    "p:strVal": {
+                                                                                                        "@val": "#ppt_y"
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        ]
+                                                                                    }
+                                                                                }
+                                                                            ]
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "p:prevCondLst": {
+                                    "p:cond": {
+                                        "@evt": "onPrev",
+                                        "@delay": "0",
+                                        "p:tgtEl": {
+                                            "p:sldTgt": null
+                                        }
+                                    }
+                                },
+                                "p:nextCondLst": {
+                                    "p:cond": {
+                                        "@evt": "onNext",
+                                        "@delay": "0",
+                                        "p:tgtEl": {
+                                            "p:sldTgt": null
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
