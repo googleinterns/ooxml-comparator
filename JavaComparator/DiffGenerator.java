@@ -106,6 +106,7 @@ public class DiffGenerator {
         return foldersInDirectory;
     }
 
+
     /**
      * This prepares and run the comparator on folder and files.
      */
@@ -139,6 +140,13 @@ public class DiffGenerator {
         ArrayList<String[]> allDiffs = new ArrayList<>();
         ArrayList<String[]> summaryData = new ArrayList<>();
 
+        // Will be used in runDataGeneration
+        RunReportData generalRep = new RunReportData("Global");
+        RunReportData docxRep = new RunReportData("Docx");
+        RunReportData pptxRep = new RunReportData("Pptx");
+        RunReportData xlsxRep = new RunReportData("Xlsx");
+        RunReportData dumpRep = new RunReportData("dump");// some other type of file
+
         for (String s : foldersOrig) {
             if (!folderPresentRound.contains(s)) {
                 StatusLogger.AddRecordWarningExec("File Not Present in Round Tripped Folder : " + s);
@@ -149,35 +157,401 @@ public class DiffGenerator {
             StatusLogger.AddRecordInfoDebug("Before Going into Comparator");
 
             // add time logger for this file comparision.
+            long startTime = System.nanoTime();
             FileComparator cmp = new FileComparator(path1 + "/" + s, path2 + "/" + s);
             ArrayList<DiffObject> temp = cmp.CompareText();
+            long elapsedTime = System.nanoTime() - startTime;
 
-            StatusLogger.AddRecordInfoDebug("Returned from Comparator");
+            if(!cmp.file_extension.equals("invalid")) {
 
-            // Add the name of the folder in the front for all the diffs found
-            for (DiffObject x : temp) {
-                String[] a = x.getCsvEntry();
-                String[] a2 = new String[a.length + 1];
-                a2[0] = s;
-                System.arraycopy(a, 0, a2, 1, a.length);
-                allDiffs.add(a2);
+                // Report data collection starts
+                RunReportData typeRep = dumpRep;
+                switch (cmp.file_extension) {
+                    case "docx":
+                        typeRep = docxRep;
+                        break;
+                    case "pptx":
+                        typeRep = pptxRep;
+                        break;
+                    case "xlsx":
+                        typeRep = xlsxRep;
+                        break;
+                }
+
+                generalRep.totalFilesMatched++;
+                typeRep.totalFilesMatched++;
+                if (temp.isEmpty()) {
+                    generalRep.numberOfFileNoDiff++;
+                    typeRep.numberOfFileNoDiff++;
+                }
+                generalRep.totalDiff += temp.size();
+                typeRep.totalDiff += temp.size();
+                int CommentDiff = 0;
+                int TextDiff = 0;
+                for (DiffObject x : temp) {
+                    generalRep.addTag(x.tag);
+                    generalRep.addType(x.type);
+                    typeRep.addTag(x.tag);
+                    typeRep.addType(x.type);
+                    if (x.type.equals("0")) {
+                        TextDiff++;
+                    } else {
+                        CommentDiff++;
+                    }
+                }
+                if (TextDiff > 0) {
+                    if (CommentDiff == 0) {
+                        generalRep.filesWithOnlyTextDiff++;
+                        typeRep.filesWithOnlyTextDiff++;
+                    }
+                    typeRep.filesContainingTextDiffs++;
+                    generalRep.filesContainingTextDiffs++;
+                }
+                if (CommentDiff > 0) {
+                    if (TextDiff == 0) {
+                        generalRep.filesWithOnlyCommentDiff++;
+                        typeRep.filesWithOnlyCommentDiff++;
+                    }
+                    generalRep.filesContainingCommentDiffs++;
+                    typeRep.filesContainingCommentDiffs++;
+                }
+                generalRep.addTime((int) (elapsedTime / 1000000));
+                typeRep.addTime((int) (elapsedTime / 1000000));
+                // Repord Data collection ends
+
+
+                StatusLogger.AddRecordInfoDebug("Returned from Comparator");
+                // Add the name of the folder in the front for all the diffs found
+                for (DiffObject x : temp) {
+
+                    String[] a = x.getCsvEntry();
+                    String[] a2 = new String[a.length + 1];
+                    a2[0] = s;
+                    System.arraycopy(a, 0, a2, 1, a.length);
+                    allDiffs.add(a2);
+                }
+
+                GenerateIndividualDiffReport(s, temp);
+                summaryData.add(new String[]{s, String.valueOf(temp.isEmpty()), String.valueOf(temp.size()), String.valueOf(elapsedTime/1000000)});
             }
-
-            GenerateIndividualDiffReport(s, temp);
-            summaryData.add(new String[]{s, String.valueOf(temp.isEmpty()), String.valueOf(temp.size())});
         }
         GenerateComparisionSummary(summaryData);
         GenerateGlobalDiffReport(allDiffs);
+
+        ArrayList<RunReportData> allPages = new ArrayList<>();
+        allPages.add(generalRep);
+        allPages.add(docxRep);
+        allPages.add(pptxRep);
+        allPages.add(xlsxRep);
+        CreateRunSummary(allPages);
+    }
+
+    private void CreateRunSummary(ArrayList<RunReportData> pages){
+        Workbook workbook = new XSSFWorkbook();
+        for(RunReportData curData:pages){
+            Sheet sheet = workbook.createSheet(curData.fileType);
+
+            Font titleFont = workbook.createFont();
+            titleFont.setBold(true);
+            titleFont.setFontHeightInPoints((short) 20);
+            titleFont.setColor(IndexedColors.BLUE.getIndex());
+
+            Font sectionFont = workbook.createFont();
+            sectionFont.setBold(true);
+            sectionFont.setFontHeightInPoints((short) 16);
+            sectionFont.setColor(IndexedColors.RED.getIndex());
+
+            Font subSectionFont = workbook.createFont();
+            subSectionFont.setBold(true);
+            subSectionFont.setFontHeightInPoints((short) 14);
+            subSectionFont.setColor(IndexedColors.ORANGE.getIndex());
+
+            CellStyle headerCellStyle = workbook.createCellStyle();
+
+            // Write the file type in the cell
+            Row headerRow = sheet.createRow(0);
+            Cell cell = headerRow.createCell(0);
+            cell.setCellValue(curData.fileType);
+            headerCellStyle.setFont(titleFont);
+            cell.setCellStyle(headerCellStyle);
+
+            headerRow = sheet.createRow(2);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("File Metrics");
+            headerCellStyle.setFont(sectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            headerRow = sheet.createRow(3);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of files compared");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.totalFilesMatched);
+
+
+            headerRow = sheet.createRow(4);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Number of files with no diffs");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.numberOfFileNoDiff);
+
+
+            headerRow = sheet.createRow(5);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("% of files with no diffs");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.getPercentageNoDiff());
+
+            headerRow = sheet.createRow(7);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Diff Metrics");
+            headerCellStyle.setFont(sectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            headerRow = sheet.createRow(8);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of diffs across all the files");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.totalDiff);
+
+
+            headerRow = sheet.createRow(9);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Most common tag which is causing a difference among all files");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.getMostFreqTagCausingDiff());
+
+
+            headerRow = sheet.createRow(10);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of text diffs across all the files");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.typeCausingDiff.get("0"));// 0 means text
+
+
+            headerRow = sheet.createRow(11);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of comment diffs across all the files");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.typeCausingDiff.get("1"));// 1 means comment
+
+
+            headerRow = sheet.createRow(13);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Diff + file metrics");
+            headerCellStyle.setFont(sectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            headerRow = sheet.createRow(14);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of files with atleast one text diffs");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.filesContainingTextDiffs);
+
+
+            headerRow = sheet.createRow(15);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of files with atleast one comment diffs");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.filesContainingCommentDiffs);
+
+
+            headerRow = sheet.createRow(16);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of files with only text diffs");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.filesWithOnlyTextDiff);
+
+
+            headerRow = sheet.createRow(17);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total number of files with only comment diffs");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue(curData.filesWithOnlyCommentDiff);
+
+
+            headerRow = sheet.createRow(19);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Latency metrics");
+            headerCellStyle.setFont(sectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(1);
+            cell.setCellValue("in ms");
+            headerCellStyle.setFont(sectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(2);
+            cell.setCellValue("in s");
+            headerCellStyle.setFont(sectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            cell = headerRow.createCell(3);
+            cell.setCellValue("in mins");
+            headerCellStyle.setFont(sectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+
+            headerRow = sheet.createRow(20);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total time to run for all files");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            float val = curData.totalTimeTaken();
+            cell = headerRow.createCell(1);
+            cell.setCellValue(val);
+
+            cell = headerRow.createCell(2);
+            cell.setCellValue(val/1000);
+
+            cell = headerRow.createCell(3);
+            cell.setCellValue(val/60000);
+
+
+            headerRow = sheet.createRow(21);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Total time to run for all files");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            val = curData.avgTimeTaken();
+            cell = headerRow.createCell(1);
+            cell.setCellValue(val);
+
+            cell = headerRow.createCell(2);
+            cell.setCellValue(val/1000);
+
+            cell = headerRow.createCell(3);
+            cell.setCellValue(val/60000);
+
+
+            headerRow = sheet.createRow(22);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("Maximum time taken compared to all files");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            val = curData.maxTimeTaken();
+            cell = headerRow.createCell(1);
+            cell.setCellValue(val);
+
+            cell = headerRow.createCell(2);
+            cell.setCellValue(val/1000);
+
+            cell = headerRow.createCell(3);
+            cell.setCellValue(val/60000);
+
+
+            headerRow = sheet.createRow(23);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("99th percentile latency");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            val = curData.get99Percentile();
+            cell = headerRow.createCell(1);
+            cell.setCellValue(val);
+
+            cell = headerRow.createCell(2);
+            cell.setCellValue(val/1000);
+
+            cell = headerRow.createCell(3);
+            cell.setCellValue(val/60000);
+
+
+            headerRow = sheet.createRow(24);
+            cell = headerRow.createCell(0);
+            cell.setCellValue("50th percentile latency");
+            headerCellStyle.setFont(subSectionFont);
+            cell.setCellStyle(headerCellStyle);
+
+            val = curData.get50Percentile();
+            cell = headerRow.createCell(1);
+            cell.setCellValue(val);
+
+            cell = headerRow.createCell(2);
+            cell.setCellValue(val/1000);
+
+            cell = headerRow.createCell(3);
+            cell.setCellValue(val/60000);
+
+            for (int i = 0; i < 4; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            if(curData.fileType.equals("Global")){
+                headerRow = sheet.createRow(26);
+                cell = headerRow.createCell(0);
+                cell.setCellValue("Summary/AllDiff file Path : ");
+                headerCellStyle.setFont(subSectionFont);
+                cell.setCellStyle(headerCellStyle);
+
+                cell = headerRow.createCell(1);
+                cell.setCellValue(finalPath+"/summary.xlsx");
+
+
+                headerRow = sheet.createRow(27);
+                cell = headerRow.createCell(0);
+                cell.setCellValue("Individual Diff file path : ");
+                headerCellStyle.setFont(subSectionFont);
+                cell.setCellStyle(headerCellStyle);
+
+                cell = headerRow.createCell(1);
+                cell.setCellValue(finalPath+"/IndividualDiff/");
+            }
+        }
+        // Write the output to a file
+        try {
+            FileOutputStream fileOut = new FileOutputStream(finalPath+"/RunReport.xlsx");
+            workbook.write(fileOut);
+            fileOut.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     private void GenerateComparisionSummary(ArrayList<String[]> summaryData) {
         StatusLogger.AddRecordInfoExec("Creating Summary CSV Data");
-        writeCSVFile(summaryData,new String[]{"File Name","Exactly Same","Number of Differences"},finalPath+"/summary.xlsx");
+        writeCSVFile(summaryData,new String[]{"File Name","Exactly Same","Number of Differences","timeTaken(in ms)"},finalPath+"/summary.xlsx");
     }
 
     private void GenerateGlobalDiffReport(ArrayList<String[]> allDiffs) {
         StatusLogger.AddRecordInfoExec("Creating All Diff CSV Data");
-        StatusLogger.AddRecordInfoExec("Total number of Diffs found : "+String.valueOf(allDiffs.size()));
+        StatusLogger.AddRecordInfoExec("Total number of Diffs found : "+ allDiffs.size());
         writeCSVFile(allDiffs,new String[]{"File Name","tag_name","content1","content2","details"},finalPath+"/allDiff.xlsx");
     }
 
@@ -187,7 +561,7 @@ public class DiffGenerator {
         for (DiffObject diffObject : temp) {
             entry.add(diffObject.getCsvEntry());
         }
-        writeCSVFile(entry,new String[]{"tag_name","content1","content2","details"},finalPath+"/IndividualDiff/"+s+".xlsx");
+        writeCSVFile(entry,new String[]{"tag_name","diff_type (0-Text,1-Comment)","content1","content2","details"},finalPath+"/IndividualDiff/"+s+".xlsx");
     }
 
 }

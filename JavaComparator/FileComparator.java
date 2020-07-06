@@ -32,15 +32,14 @@ public class FileComparator{
         for (String s : content1) {
             try{
                 float val = Float.parseFloat(s);
-                val = Math.round(val*100)/100.0f;
-                s = String.valueOf(val);
+                s = String.valueOf(Math.round(val));
             }catch(NumberFormatException e){
                 // not a float!!
             }
 
             for(int i=0;i<s.length();i++){
                 if(!delim.contains(s.charAt(i))){
-                   sb.append(s.charAt(i));
+                   sb.append(Character.toLowerCase(s.charAt(i)));
                 }
             }
         }
@@ -49,14 +48,13 @@ public class FileComparator{
         for (String s : content2) {
             try{
                 float val = Float.parseFloat(s);
-                val = Math.round(val*100)/100.0f;
-                s = String.valueOf(val);
+                s = String.valueOf(Math.round(val));
             }catch(NumberFormatException e){
                 // not a float!!
             }
             for(int i=0;i<s.length();i++){
                 if(!delim.contains(s.charAt(i))){
-                    sb.append(s.charAt(i));
+                    sb.append(Character.toLowerCase(s.charAt(i)));
                 }
             }
         }
@@ -66,7 +64,7 @@ public class FileComparator{
 
     public ArrayList<DiffObject> diffReport;
 
-    private void compareContentByOrder(String tagComp, String FileType, ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2){
+    private void compareContentByOrder(String tagComp,String type, String FileType, ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2){
         if(TagContents2.size()!=TagContents1.size()){
             StatusLogger.AddRecordInfoExec("NUMBER OF "+tagComp+" in "+FileType+" are not same!!");
             ArrayList<String> fillerData  = new ArrayList<>();
@@ -85,22 +83,15 @@ public class FileComparator{
             boolean isSame = comparisionLogic(TagContents1.get(i),TagContents2.get(i));
             matched+=1;
             if(!isSame){
-                diffReport.add(new DiffObject(tagComp,TagContents1.get(i),TagContents2.get(i),"CONTENT DIFFERENT"));
+                diffReport.add(new DiffObject(tagComp,type,TagContents1.get(i),TagContents2.get(i),"CONTENT DIFFERENT"));
             }
         }
         StatusLogger.AddRecordInfoExec("MATCHED : "+ matched);
     }
 
-    private void compareContentByID(ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2, String diffMsg){
+    private void compareContentByID(String type,ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2, String diffMsg){
         if(TagContents2.size()!=TagContents1.size()){
             StatusLogger.AddRecordInfoExec("NUMBER OF c in "+file_extension+" are not same!!");
-            ArrayList<String> fillerData  = new ArrayList<>();
-            while(TagContents1.size()<TagContents2.size()){
-                TagContents1.add(fillerData);
-            }
-            while(TagContents1.size()>TagContents2.size()){
-                TagContents2.add(fillerData);
-            }
         }
 
         HashMap<String, ArrayList<String>> cellValues = new HashMap<>();
@@ -115,7 +106,7 @@ public class FileComparator{
                 ArrayList<String> actualContent = cellValues.get(it.get(0));
                 boolean isSame = comparisionLogic(actualContent,it);
                 if(!isSame){
-                    diffReport.add(new DiffObject("c",actualContent,it,diffMsg));
+                    diffReport.add(new DiffObject("c",type,actualContent,it,diffMsg));
                 }
             }
         }
@@ -136,12 +127,12 @@ public class FileComparator{
 
                 ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
                 ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
-                compareContentByOrder("w:r", "docx", runTagContents1, runTagContents2);
+                compareContentByOrder("w:r","0", "docx", runTagContents1, runTagContents2);
 
                 ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
                 ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
 
-                compareContentByOrder("w:comment", "docx", commentContents1, commentContents2);
+                compareContentByOrder("w:comment","1", "docx", commentContents1, commentContents2);
                 break;
             }
             case "pptx": {
@@ -153,13 +144,13 @@ public class FileComparator{
                 ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
 
                 StatusLogger.AddRecordInfoDebug("BEFORE Content Comparator");
-                compareContentByOrder("a:r", "pptx", runTagContents1, runTagContents2);
+                compareContentByOrder("a:r", "0","pptx", runTagContents1, runTagContents2);
                 StatusLogger.AddRecordInfoDebug("AFTER Content Comparator");
 
                 ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
                 ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
 
-                compareContentByOrder("p:cm", "pptx", commentContents1, commentContents2);
+                compareContentByOrder("p:cm","1","pptx", commentContents1, commentContents2);
                 break;
             }
             case "xlsx": {
@@ -174,14 +165,15 @@ public class FileComparator{
                 ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
                 ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
 
-                compareContentByID(runTagContents1, runTagContents2, "Cell value different");
+                StatusLogger.AddRecordInfoDebug("Before content comparator");
+                compareContentByID("0",runTagContents1, runTagContents2, "Cell value different");
                 StatusLogger.AddRecordInfoDebug("AFTER Content Comparator");
 
                 ArrayList<ArrayList<String>> CommentTagContents1 = file1.getCommentContent();
                 ArrayList<ArrayList<String>> CommentTagContents2 = file2.getCommentContent();
                 StatusLogger.AddRecordInfoDebug("After GetCommentContent");
 
-                compareContentByID(CommentTagContents1, CommentTagContents2, "Cell Comment Different");
+                compareContentByID("1",CommentTagContents1, CommentTagContents2, "Cell Comment Different");
                 break;
             }
         }
