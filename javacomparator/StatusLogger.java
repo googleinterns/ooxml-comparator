@@ -27,17 +27,17 @@ public class StatusLogger {
         }
     }
 
-    public static void AddRecordInfoExec(String msg) {
+    public static void addRecordInfoExec(String msg) {
         LogRecord record = new LogRecord(Level.INFO, msg);
         loggerExec.log(record);
     }
 
-    public static void AddRecordWarningExec(String msg) {
-        LogRecord record = new LogRecord(Level.WARNING, msg);
+    public static void addRecordWarningExec(String msg) {
+        LogRecord record = new LogRecord(Level.WARNING,msg);
         loggerExec.log(record);
     }
 
-    public static void AddRecordInfoDebug(String msg) {
+    public static void addRecordInfoDebug(String msg) {
 //        LogRecord record = new LogRecord(Level.INFO, msg);
 //        loggerDebug.log(record);
     }

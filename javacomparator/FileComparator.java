@@ -18,7 +18,7 @@ public class FileComparator {
             fileExtension = "xlsx";
         } else {
             fileExtension = "invalid";
-            System.out.println("Either Path is invalid / File types do not match");
+            StatusLogger.addRecordWarningExec("Either Path is invalid / File types do not match");
         }
     }
 
@@ -69,7 +69,7 @@ public class FileComparator {
 
     private void compareContentByOrder(String tagComp, String type, String FileType, ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2) {
         if (TagContents2.size() != TagContents1.size()) {
-            StatusLogger.AddRecordInfoExec("NUMBER OF " + tagComp + " in " + FileType + " are not same!!");
+            StatusLogger.addRecordInfoExec("NUMBER OF " + tagComp + " in " + FileType + " are not same!!");
             ArrayList<String> fillerData = new ArrayList<>();
             while (TagContents1.size() < TagContents2.size()) {
                 TagContents1.add(fillerData);
@@ -89,12 +89,12 @@ public class FileComparator {
                 diffReport.add(new DiffObject(tagComp, type, TagContents1.get(i), TagContents2.get(i), "CONTENT DIFFERENT"));
             }
         }
-        StatusLogger.AddRecordInfoExec("MATCHED : " + matched);
+        StatusLogger.addRecordInfoExec("MATCHED : " + matched);
     }
 
     private void compareContentByID(String type, ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2, String diffMsg) {
         if (TagContents2.size() != TagContents1.size()) {
-            StatusLogger.AddRecordInfoExec("NUMBER OF c in " + fileExtension + " are not same!!");
+            StatusLogger.addRecordInfoExec("NUMBER OF c in " + fileExtension + " are not same!!");
         }
 
         HashMap<String, ArrayList<String>> cellValues = new HashMap<>();
@@ -113,7 +113,7 @@ public class FileComparator {
                 }
             }
         }
-        StatusLogger.AddRecordInfoExec("MATCHED : " + matched);
+        StatusLogger.addRecordInfoExec("MATCHED : " + matched);
     }
 
     /**
@@ -147,9 +147,9 @@ public class FileComparator {
                 ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
                 ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
 
-                StatusLogger.AddRecordInfoDebug("BEFORE Content Comparator");
+                StatusLogger.addRecordInfoDebug("BEFORE Content Comparator");
                 compareContentByOrder("a:r", "0", "pptx", runTagContents1, runTagContents2);
-                StatusLogger.AddRecordInfoDebug("AFTER Content Comparator");
+                StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
 
                 ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
                 ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
@@ -164,18 +164,18 @@ public class FileComparator {
 
                 file1.loadSharedStrings();
                 file2.loadSharedStrings();
-                StatusLogger.AddRecordInfoDebug("After Shared String Loading");
+                StatusLogger.addRecordInfoDebug("After Shared String Loading");
 
                 ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
                 ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
 
-                StatusLogger.AddRecordInfoDebug("Before content comparator");
+                StatusLogger.addRecordInfoDebug("Before content comparator");
                 compareContentByID("0", runTagContents1, runTagContents2, "Cell value different");
-                StatusLogger.AddRecordInfoDebug("AFTER Content Comparator");
+                StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
 
                 ArrayList<ArrayList<String>> CommentTagContents1 = file1.getCommentContent();
                 ArrayList<ArrayList<String>> CommentTagContents2 = file2.getCommentContent();
-                StatusLogger.AddRecordInfoDebug("After GetCommentContent");
+                StatusLogger.addRecordInfoDebug("After GetCommentContent");
 
                 compareContentByID("1", CommentTagContents1, CommentTagContents2, "Cell Comment Different");
                 break;

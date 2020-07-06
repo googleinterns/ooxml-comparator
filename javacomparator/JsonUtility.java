@@ -11,25 +11,21 @@ public class JsonUtility {
     public static ArrayList<JSONObject> buffer;
     public static ArrayList<String> stringOrder;
 
-    JsonUtility() {
-
-    }
-
     /**
      * Recusion to extract the Tags that needs to be processed.
      *
-     * @param jsonData     JSONData of the whole Tree
-     * @param tags         Tags that need to be searched for in the Tree
+     * @param jsonDataSubtree     JSONData of the whole Tree
+     * @param tagsToSearch         Tags that need to be searched for in the Tree
      * @param ignoreAttrib Whether we want to visit the Attributes too or not.
      */
-    private static void recurseVisit(JSONObject jsonData, ArrayList<String> tags, Boolean ignoreAttrib) {
-        if (jsonData == null) {
+    private static void recurseVisit(JSONObject jsonDataSubtree, ArrayList<String> tagsToSearch, Boolean ignoreAttrib) {
+        if (jsonDataSubtree == null) {
             return;
         }
         //StatusLogger.AddRecordInfoDebug(jsonData.toString());
-        for (Object key : jsonData.keySet()) {
+        for (Object key : jsonDataSubtree.keySet()) {
 
-            Object value = jsonData.get(key); // do something with jsonObject here
+            Object value = jsonDataSubtree.get(key); // do something with jsonObject here
             String keyVal = (String) key;
 
             if (ignoreAttrib && (keyVal.charAt(0) == '@')) {
@@ -37,19 +33,19 @@ public class JsonUtility {
                 continue;
             }
 
-            if (tags.contains(keyVal)) {
+            if (tagsToSearch.contains(keyVal)) {
                 JSONObject json = new JSONObject();
                 json.put(keyVal, value);
                 buffer.add(json);
             }
 
             if (value instanceof JSONObject) {
-                recurseVisit((JSONObject) value, tags, ignoreAttrib);
+                recurseVisit((JSONObject) value, tagsToSearch, ignoreAttrib);
             } else if (value instanceof JSONArray) {
                 JSONArray subtags = (JSONArray) value;
                 for (Object subtag : subtags) {
                     if (subtag instanceof JSONObject)
-                        recurseVisit((JSONObject) subtag, tags, ignoreAttrib);
+                        recurseVisit((JSONObject) subtag, tagsToSearch, ignoreAttrib);
                 }
             }
         }
@@ -76,22 +72,22 @@ public class JsonUtility {
                 continue;
             }
 
-            boolean nseenText = seenTag;
+            boolean seenTagInParent = seenTag;
             if (textTags != null && textTags.contains(keyVal)) {
-                nseenText = true;
+                seenTagInParent = true;
             }
 
             if (value instanceof JSONObject) {
-                recurseText((JSONObject) value, textTags, nseenText);
+                recurseText((JSONObject) value, textTags, seenTagInParent);
             } else if (value instanceof JSONArray) {
                 JSONArray subtags = (JSONArray) value;
                 for (Object subtag : subtags) {
                     if (subtag != null) {
-                        recurseText((JSONObject) subtag, textTags, nseenText);
+                        recurseText((JSONObject) subtag, textTags, seenTagInParent);
                     }
                 }
             } else {
-                if (value != null && nseenText) {
+                if (value != null && seenTagInParent) {
                     stringOrder.add((String) value);
                 }
             }

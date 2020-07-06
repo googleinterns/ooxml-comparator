@@ -21,9 +21,9 @@ public class XlsxFile extends OoxmlFile {
         loadFromPath();
         filesToCompare = new ArrayList<>();
         for (int i = 1; ; i++) {
-            String xmlName = "xl_worksheets_sheet" + i + ".xml.json";
-            if (jsonFiles.containsKey(xmlName)) {
-                filesToCompare.add(xmlName);
+            String xmlFileName = "xl_worksheets_sheet" + i + ".xml.json";
+            if (jsonDataFiles.containsKey(xmlFileName)) {
+                filesToCompare.add(xmlFileName);
             } else {
                 break;
             }
@@ -31,9 +31,9 @@ public class XlsxFile extends OoxmlFile {
 
         commentToCompare = new ArrayList<>();
         for(int i = 1; ; i++){
-            String xmlName = "xl_comments" + i + ".xml.json";
-            if (jsonFiles.containsKey(xmlName)) {
-                commentToCompare.add(xmlName);
+            String xmlFileName = "xl_comments" + i + ".xml.json";
+            if (jsonDataFiles.containsKey(xmlFileName)) {
+                commentToCompare.add(xmlFileName);
             } else {
                 break;
             }
@@ -44,8 +44,7 @@ public class XlsxFile extends OoxmlFile {
      * This load the contents of the shared strings from the xl_sharedStrings.xml in OOXML.
      */
     public void loadSharedStrings(){
-        if(jsonFiles.containsKey("xl_sharedStrings.xml.json")) {
-            //printJsons("xl_sharedStrings.xml.json");
+        if(jsonDataFiles.containsKey("xl_sharedStrings.xml.json")) {
             ArrayList<String> tags = new ArrayList<>();
             tags.add("si");
             ArrayList<JSONObject> siTagContent = JsonUtility.extractTag(getJson("xl_sharedStrings.xml.json"), tags);
@@ -73,11 +72,11 @@ public class XlsxFile extends OoxmlFile {
         ArrayList<JSONObject> allJson = new ArrayList<>();
         int counter = 0;
         for (String files : filesToCompare) {
-            JSONObject temp = new JSONObject();
-            temp.put("file",String.valueOf(counter));
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("file",String.valueOf(counter));
             counter++;
-            temp.put("sheet_data",getJson(files));
-            allJson.add((temp));
+            jsonObject.put("sheet_data",getJson(files));
+            allJson.add((jsonObject));
         }
         return allJson;
     }
@@ -89,11 +88,11 @@ public class XlsxFile extends OoxmlFile {
         ArrayList<JSONObject> allJson = new ArrayList<>();
         int counter = 0;
         for (String files : commentToCompare) {
-            JSONObject temp = new JSONObject();
-            temp.put("file",String.valueOf(counter));
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("file",String.valueOf(counter));
             counter++;
-            temp.put("sheet_data",getJson(files));
-            allJson.add((temp));
+            jsonObject.put("sheet_data",getJson(files));
+            allJson.add((jsonObject));
         }
         return allJson;
     }
@@ -109,8 +108,8 @@ public class XlsxFile extends OoxmlFile {
                 cellValue.add(0, file.get("file").toString() + val.get("@r"));
                 allTextTag.add(cellValue);
             }else{
-                StatusLogger.AddRecordWarningExec("This Element contains @t=s and no @r, looking it!!");
-                StatusLogger.AddRecordWarningExec(cellValue.toString());
+                StatusLogger.addRecordWarningExec("This Element contains @t=s and no @r, looking it!!");
+                StatusLogger.addRecordWarningExec(cellValue.toString());
             }
         }
         else if(val.containsKey("@t") && val.get("@t").equals("str")){
@@ -118,8 +117,8 @@ public class XlsxFile extends OoxmlFile {
             if(val.containsKey("@r")){
                 cellValue.add(file.get("file").toString() +val.get("@r"));
             }else{
-                StatusLogger.AddRecordWarningExec("This Element contains @t=str and no @r, looking it!!");
-                StatusLogger.AddRecordWarningExec(cellValue.toString());
+                StatusLogger.addRecordWarningExec("This Element contains @t=str and no @r, looking it!!");
+                StatusLogger.addRecordWarningExec(cellValue.toString());
             }
             if (val.containsKey("f")) {
                 if(val.get("f") instanceof JSONObject){
@@ -137,10 +136,9 @@ public class XlsxFile extends OoxmlFile {
             ArrayList<String> cellValue = new ArrayList<>();
             if (val.containsKey("@r")) {
                 cellValue.add(file.get("file").toString() +val.get("@r"));
-                //cellValue.add("Normal Cell content");
             }else{
-                StatusLogger.AddRecordWarningExec("This Element no @r, looking it!!");
-                StatusLogger.AddRecordWarningExec(cellValue.toString());
+                StatusLogger.addRecordWarningExec("This Element no @r, looking it!!");
+                StatusLogger.addRecordWarningExec(cellValue.toString());
             }
             if (val.containsKey("v")) {
                 cellValue.add((String) val.get("v"));
@@ -176,18 +174,17 @@ public class XlsxFile extends OoxmlFile {
 
             // if there is no sheet data then continue with next sheet
             if(sheetData.isEmpty())continue;
-            ArrayList<JSONObject> cTag = JsonUtility.extractTag(sheetData.get(0), tags);
+            ArrayList<JSONObject> cTagOccurence = JsonUtility.extractTag(sheetData.get(0), tags);
 
-
-            for (JSONObject cTagObj : cTag) {
+            for (JSONObject cTagObj : cTagOccurence) {
                 if(cTagObj.get("c") instanceof JSONObject){
-                    JSONObject val = (JSONObject) cTagObj.get("c");
-                    ExtractCellContent(file,val);
+                    JSONObject cTagObject = (JSONObject) cTagObj.get("c");
+                    ExtractCellContent(file,cTagObject);
                 }
                 else {
-                    JSONArray tempVal = (JSONArray) cTagObj.get("c");
-                    for (Object o : tempVal) {
-                        JSONObject val = (JSONObject) o;
+                    JSONArray cTagsArray = (JSONArray) cTagObj.get("c");
+                    for (Object object : cTagsArray) {
+                        JSONObject val = (JSONObject) object;
                         ExtractCellContent(file, val);
                     }
                 }
@@ -198,9 +195,9 @@ public class XlsxFile extends OoxmlFile {
     ArrayList<ArrayList<String>> allCommentTag;
 
     private void extractCommentTag(JSONObject wCommentTagObj, JSONObject file){
-        StatusLogger.AddRecordInfoDebug(wCommentTagObj.toString());
-        ArrayList<String> temp = JsonUtility.getCommentContentXlsx(wCommentTagObj, (String) file.get("file"));
-        allCommentTag.add(temp);
+        StatusLogger.addRecordInfoDebug(wCommentTagObj.toString());
+        ArrayList<String> allStringCommentContent = JsonUtility.getCommentContentXlsx(wCommentTagObj, (String) file.get("file"));
+        allCommentTag.add(allStringCommentContent);
     }
 
     /**
@@ -214,18 +211,18 @@ public class XlsxFile extends OoxmlFile {
             ArrayList<String> tags = new ArrayList<>();
             tags.add("comment");
 
-            StatusLogger.AddRecordInfoDebug("Before wcommentExtract");
-            StatusLogger.AddRecordInfoDebug(JsonUtility.extractTag(file, tags).toString());
+            StatusLogger.addRecordInfoDebug("Before wcommentExtract");
+            StatusLogger.addRecordInfoDebug(JsonUtility.extractTag(file, tags).toString());
 
-            JSONObject wCommentTag = JsonUtility.extractTag(file, tags).get(0);
-            StatusLogger.AddRecordInfoDebug("After wcommentExtract");
+            JSONObject commentTag = JsonUtility.extractTag(file, tags).get(0);
+            StatusLogger.addRecordInfoDebug("After wcommentExtract");
 
-            if(wCommentTag.get("comment") instanceof JSONObject){
-                extractCommentTag((JSONObject) wCommentTag.get("comment"),file);
+            if(commentTag.get("comment") instanceof JSONObject){
+                extractCommentTag((JSONObject) commentTag.get("comment"),file);
             }else{
-                JSONArray allCommentTagJson = (JSONArray) wCommentTag.get("comment");
-                for (Object wCommentTagObj : allCommentTagJson){
-                    extractCommentTag((JSONObject) wCommentTagObj,file);
+                JSONArray allCommentTagJson = (JSONArray) commentTag.get("comment");
+                for (Object commentTagObj : allCommentTagJson){
+                    extractCommentTag((JSONObject) commentTagObj,file);
                 }
             }
 

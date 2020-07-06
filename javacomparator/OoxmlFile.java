@@ -1,5 +1,3 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
@@ -14,10 +12,10 @@ import java.util.TreeMap;
  * OoxmlFile Class implement various file loading methods to load JSON files into the Objects
  */
 public class OoxmlFile {
-    String dataPath;
+    String fileDataPath;
     boolean roundtripped;
 
-    Map<String, JSONObject> jsonFiles;
+    Map<String, JSONObject> jsonDataFiles;
 
     /**
      * Constuctor takes in the FolderPath for the file and creates a list of files to be compared.
@@ -26,16 +24,16 @@ public class OoxmlFile {
      * @param roundtripped Whether the file is roundTripped file or not.
      */
     public OoxmlFile(String folderPath, boolean roundtripped) {
-        this.dataPath = folderPath;
+        this.fileDataPath = folderPath;
         this.roundtripped = roundtripped;
-        jsonFiles = new TreeMap<>();
+        jsonDataFiles = new TreeMap<>();
     }
 
     /**
      * Load all the subfiles in the Folder for OOXML file. Each of the XML's JSON file is loaded and saved by indexing on name.
      */
     public void loadFromPath() {
-        File folder = new File(dataPath);
+        File folder = new File(fileDataPath);
         File[] listOfFiles = folder.listFiles();
 
         for (int i = 0; i < Objects.requireNonNull(listOfFiles).length; i++) {
@@ -44,9 +42,9 @@ public class OoxmlFile {
 
                 JSONParser parser = new JSONParser();
                 try {
-                    Object obj = parser.parse(new FileReader(listOfFiles[i]));
-                    JSONObject jsonObject = (JSONObject) obj;
-                    this.jsonFiles.put(fileName, jsonObject);
+                    Object object = parser.parse(new FileReader(listOfFiles[i]));
+                    JSONObject jsonObject = (JSONObject) object;
+                    this.jsonDataFiles.put(fileName, jsonObject);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -62,23 +60,6 @@ public class OoxmlFile {
      * @return JSONObject of the file
      */
     public JSONObject getJson(String fileName) {
-        return jsonFiles.get(fileName);
+        return jsonDataFiles.get(fileName);
     }
-
-    private void printAllJsons() {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        for (Map.Entry<String, JSONObject> entry : this.jsonFiles.entrySet()) {
-            System.out.println("Key = " + entry.getKey());
-            String prettyJsonString = gson.toJson(entry.getValue());
-            System.out.println(prettyJsonString);
-        }
-    }
-
-    private void printJsons(String fileName) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String prettyJsonString = gson.toJson(jsonFiles.get(fileName));
-        System.out.println(fileName);
-        System.out.println(prettyJsonString);
-    }
-
 }

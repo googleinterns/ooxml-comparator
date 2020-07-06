@@ -9,7 +9,7 @@ import java.util.HashMap;
  * PptxFile Class implments the methods required for comparasions of PPTX files
  */
 public class PptxFile extends OoxmlFile {
-    public final String type = "pptx";
+    public final String typeFile = "pptx";
     public ArrayList<String> filesToCompare;
     public ArrayList<String> commentToCompare;
 
@@ -23,9 +23,9 @@ public class PptxFile extends OoxmlFile {
         loadFromPath();
         filesToCompare = new ArrayList<>();
         for (int i = 1; ; i++) {
-            String xmlName = "ppt_slides_slide" + i + ".xml.json";
-            if (jsonFiles.containsKey(xmlName)) {
-                filesToCompare.add(xmlName);
+            String xmlFileName = "ppt_slides_slide" + i + ".xml.json";
+            if (jsonDataFiles.containsKey(xmlFileName)) {
+                filesToCompare.add(xmlFileName);
             } else {
                 break;
             }
@@ -33,9 +33,9 @@ public class PptxFile extends OoxmlFile {
 
         commentToCompare = new ArrayList<>();
         for(int i = 1; ; i++){
-            String xmlName = "ppt_comments_comment" + i + ".xml.json";
-            if (jsonFiles.containsKey(xmlName)) {
-                commentToCompare.add(xmlName);
+            String xmlFileName = "ppt_comments_comment" + i + ".xml.json";
+            if (jsonDataFiles.containsKey(xmlFileName)) {
+                commentToCompare.add(xmlFileName);
             } else {
                 break;
             }
@@ -93,7 +93,7 @@ public class PptxFile extends OoxmlFile {
      */
     private HashMap<String,ArrayList<String>> getAuthorTable(){
         HashMap<String,ArrayList<String>> authorTable = new HashMap<>();
-        if(jsonFiles.containsKey("ppt_commentAuthors.xml.json")){
+        if(jsonDataFiles.containsKey("ppt_commentAuthors.xml.json")){
             JSONObject authorFile = getJson("ppt_commentAuthors.xml.json");
             ArrayList<String> tags = new ArrayList<>();
             tags.add("p:cmAuthor");
@@ -102,22 +102,20 @@ public class PptxFile extends OoxmlFile {
             if(wCommentAuth.get("p:cmAuthor") instanceof JSONObject){
                 JSONObject obj = (JSONObject) wCommentAuth.get("p:cmAuthor");
                 ArrayList<String> data = new ArrayList<>();
-                //data.add((String) obj.get("@initials"));
                 data.add((String) obj.get("@name"));
                 authorTable.put((String) obj.get("@id"),data);
 
             }else if(wCommentAuth.get("p:cmAuthor") instanceof JSONArray){
                 JSONArray allObj = (JSONArray) wCommentAuth.get("p:cmAuthor");
-                for (Object o : allObj) {
-                    JSONObject obj = (JSONObject) o;
+                for (Object object : allObj) {
+                    JSONObject obj = (JSONObject) object;
                     ArrayList<String> data = new ArrayList<>();
-                    //data.add((String) obj.get("@initials"));
                     data.add((String) obj.get("@name"));
                     authorTable.put((String) obj.get("@id"), data);
                 }
             }else{
-                StatusLogger.AddRecordInfoDebug("Author Table not Handled");
-                StatusLogger.AddRecordInfoDebug(wCommentAuth.toString());
+                StatusLogger.addRecordInfoDebug("Author Table not Handled");
+                StatusLogger.addRecordInfoDebug(wCommentAuth.toString());
             }
         }
         return authorTable;

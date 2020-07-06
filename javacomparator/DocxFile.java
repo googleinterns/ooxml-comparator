@@ -24,7 +24,7 @@ public class DocxFile extends OoxmlFile {
         filesToCompare = new ArrayList<>();
         commentToCompare = new ArrayList<>();
         this.filesToCompare.add("word_document.xml.json");
-        if(jsonFiles.containsKey("word_comments.xml.json")){
+        if(jsonDataFiles.containsKey("word_comments.xml.json")){
             commentToCompare.add("word_comments.xml.json");
         }
     }
@@ -65,9 +65,9 @@ public class DocxFile extends OoxmlFile {
             ArrayList<JSONObject> wrTag = JsonUtility.extractTag(file, tags);
 
             for (JSONObject wrTagObj : wrTag) {
-                ArrayList<String> temp = JsonUtility.getTextContent(wrTagObj, new ArrayList<>(Arrays.asList("w:t")),false);
-                if(!temp.isEmpty()){
-                    allTextTag.add(temp);
+                ArrayList<String> textContent = JsonUtility.getTextContent(wrTagObj, new ArrayList<>(Arrays.asList("w:t")),false);
+                if(!textContent.isEmpty()){
+                    allTextTag.add(textContent);
                 }
             }
         }
@@ -78,8 +78,8 @@ public class DocxFile extends OoxmlFile {
     ArrayList<ArrayList<String>> allCommentTag;
 
     private void extractwcommentTag(JSONObject wCommentTagObj){
-        ArrayList<String> temp = JsonUtility.getCommentContentDocx(wCommentTagObj);
-        allCommentTag.add(temp);
+        ArrayList<String> commentContent = JsonUtility.getCommentContentDocx(wCommentTagObj);
+        allCommentTag.add(commentContent);
     }
 
     /**

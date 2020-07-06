@@ -123,7 +123,7 @@ public class DiffGenerator {
         Path finalFolder = Paths.get(finalOutputPath);
         if (Files.notExists(finalFolder)) {
             // the output path does not exist
-            StatusLogger.AddRecordWarningExec("NOT A VALID FOLDER PATH : " + finalOutputPath);
+            StatusLogger.addRecordWarningExec("NOT A VALID FOLDER PATH : " + finalOutputPath);
             return;
         }
 
@@ -131,13 +131,13 @@ public class DiffGenerator {
         try {
             FileUtils.cleanDirectory(new File(finalOutputPath));
         } catch (IOException ioException) {
-            StatusLogger.AddRecordWarningExec(ioException.getMessage());
+            StatusLogger.addRecordWarningExec(ioException.getMessage());
         }
 
         // Create the individual Diff folder.
         File indivialDiffFolder = new File(finalOutputPath + "/IndividualDiff");
         if (!indivialDiffFolder.mkdir()) {
-            StatusLogger.AddRecordWarningExec("Failed to create the Directory : " + finalOutputPath);
+            StatusLogger.addRecordWarningExec("Failed to create the Directory : " + finalOutputPath);
         }
 
         List<String> foldersOrig = findFoldersInDirectory(pathOrigFile);
@@ -149,19 +149,19 @@ public class DiffGenerator {
         ArrayList<String[]> summaryData = new ArrayList<>();
 
         // Will be used in runDataGeneration
-        RunReportData generalRep = new RunReportData("Global");
-        RunReportData docxRep = new RunReportData("Docx");
-        RunReportData pptxRep = new RunReportData("Pptx");
-        RunReportData xlsxRep = new RunReportData("Xlsx");
+        RunReportData generalReport = new RunReportData("Global");
+        RunReportData docxReport = new RunReportData("Docx");
+        RunReportData pptxReport = new RunReportData("Pptx");
+        RunReportData xlsxReport = new RunReportData("Xlsx");
 
         for (String origFileName : foldersOrig) {
             if (!folderPresentRound.contains(origFileName)) {
-                StatusLogger.AddRecordWarningExec("File Not Present in Round Tripped Folder : " + origFileName);
+                StatusLogger.addRecordWarningExec("File Not Present in Round Tripped Folder : " + origFileName);
                 continue;
             }
 
-            StatusLogger.AddRecordInfoExec("Comparing the file : " + origFileName);
-            StatusLogger.AddRecordInfoDebug("Before Going into Comparator");
+            StatusLogger.addRecordInfoExec("Comparing the file : " + origFileName);
+            StatusLogger.addRecordInfoDebug("Before Going into Comparator");
 
             // add time logger for this file comparision.
             long startTime = System.nanoTime();
@@ -172,62 +172,63 @@ public class DiffGenerator {
             if (!fileComparator.fileExtension.equals("invalid")) {
 
                 // Report data collection starts
-                RunReportData typeRep = null;
+                RunReportData fileTypeReport = null;
                 switch (fileComparator.fileExtension) {
                     case "docx":
-                        typeRep = docxRep;
+                        fileTypeReport = docxReport;
                         break;
                     case "pptx":
-                        typeRep = pptxRep;
+                        fileTypeReport = pptxReport;
                         break;
                     case "xlsx":
-                        typeRep = xlsxRep;
+                        fileTypeReport = xlsxReport;
                         break;
                 }
 
-                generalRep.totalFilesMatched++;
-                typeRep.totalFilesMatched++;
+                generalReport.totalFilesMatched++;
+                assert fileTypeReport != null;
+                fileTypeReport.totalFilesMatched++;
                 if (temp.isEmpty()) {
-                    generalRep.numberOfFileNoDiff++;
-                    typeRep.numberOfFileNoDiff++;
+                    generalReport.numberOfFileNoDiff++;
+                    fileTypeReport.numberOfFileNoDiff++;
                 }
-                generalRep.totalDiff += temp.size();
-                typeRep.totalDiff += temp.size();
-                int CommentDiff = 0;
-                int TextDiff = 0;
-                for (DiffObject x : temp) {
-                    generalRep.addTag(x.tag);
-                    generalRep.addType(x.type);
-                    typeRep.addTag(x.tag);
-                    typeRep.addType(x.type);
-                    if (x.type.equals("0")) {
-                        TextDiff++;
+                generalReport.totalDiff += temp.size();
+                fileTypeReport.totalDiff += temp.size();
+                int commentDiff = 0;
+                int textDiff = 0;
+                for (DiffObject diffObject : temp) {
+                    generalReport.addTag(diffObject.tag);
+                    generalReport.addType(diffObject.type);
+                    fileTypeReport.addTag(diffObject.tag);
+                    fileTypeReport.addType(diffObject.type);
+                    if (diffObject.type.equals("0")) {
+                        textDiff++;
                     } else {
-                        CommentDiff++;
+                        commentDiff++;
                     }
                 }
-                if (TextDiff > 0) {
-                    if (CommentDiff == 0) {
-                        generalRep.filesWithOnlyTextDiff++;
-                        typeRep.filesWithOnlyTextDiff++;
+                if (textDiff > 0) {
+                    if (commentDiff == 0) {
+                        generalReport.filesWithOnlyTextDiff++;
+                        fileTypeReport.filesWithOnlyTextDiff++;
                     }
-                    typeRep.filesContainingTextDiffs++;
-                    generalRep.filesContainingTextDiffs++;
+                    fileTypeReport.filesContainingTextDiffs++;
+                    generalReport.filesContainingTextDiffs++;
                 }
-                if (CommentDiff > 0) {
-                    if (TextDiff == 0) {
-                        generalRep.filesWithOnlyCommentDiff++;
-                        typeRep.filesWithOnlyCommentDiff++;
+                if (commentDiff > 0) {
+                    if (textDiff == 0) {
+                        generalReport.filesWithOnlyCommentDiff++;
+                        fileTypeReport.filesWithOnlyCommentDiff++;
                     }
-                    generalRep.filesContainingCommentDiffs++;
-                    typeRep.filesContainingCommentDiffs++;
+                    generalReport.filesContainingCommentDiffs++;
+                    fileTypeReport.filesContainingCommentDiffs++;
                 }
-                generalRep.addTime((int) (elapsedTime / 1000000));
-                typeRep.addTime((int) (elapsedTime / 1000000));
+                generalReport.addTime((int) (elapsedTime / 1000000));
+                fileTypeReport.addTime((int) (elapsedTime / 1000000));
                 // Repord Data collection ends
 
 
-                StatusLogger.AddRecordInfoDebug("Returned from Comparator");
+                StatusLogger.addRecordInfoDebug("Returned from Comparator");
                 // Add the name of the folder in the front for all the diffs found
                 for (DiffObject diffObject : temp) {
 
@@ -246,328 +247,211 @@ public class DiffGenerator {
         generateGlobalDiffReport(allDiffs);
 
         ArrayList<RunReportData> allPages = new ArrayList<>();
-        allPages.add(generalRep);
-        allPages.add(docxRep);
-        allPages.add(pptxRep);
-        allPages.add(xlsxRep);
-        CreateRunSummary(allPages);
+        allPages.add(generalReport);
+        allPages.add(docxReport);
+        allPages.add(pptxReport);
+        allPages.add(xlsxReport);
+        createRunSummary(allPages);
     }
 
-    private void CreateRunSummary(ArrayList<RunReportData> pages) {
+    private void createXLSXHeading(Workbook workbook, Sheet sheet, String cellContent){
+        Font titleFont = workbook.createFont();
+        titleFont.setBold(true);
+        titleFont.setFontHeightInPoints((short) 20);
+        titleFont.setColor(IndexedColors.BLUE.getIndex());
+
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        Row headerRow = sheet.getRow(0);
+        Cell cell = headerRow.createCell(0);
+        cell.setCellValue(cellContent);
+        headerCellStyle.setFont(titleFont);
+        cell.setCellStyle(headerCellStyle);
+    }
+
+    private void createXLSXSection(Workbook workbook,Sheet sheet,int rowNum,int colNum,String cellContent){
+        Font sectionFont = workbook.createFont();
+        sectionFont.setBold(true);
+        sectionFont.setFontHeightInPoints((short) 16);
+        sectionFont.setColor(IndexedColors.RED.getIndex());
+
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+
+        Row headerRow = sheet.getRow(rowNum);
+        Cell cell = headerRow.createCell(colNum);
+        cell.setCellValue(cellContent);
+        headerCellStyle.setFont(sectionFont);
+        cell.setCellStyle(headerCellStyle);
+    }
+
+    private void createXLSXSubSection(Workbook workbook, Sheet sheet, int rowNum, String cellContent) {
+        Font subSectionFont = workbook.createFont();
+        subSectionFont.setBold(true);
+        subSectionFont.setFontHeightInPoints((short) 12);
+        subSectionFont.setColor(IndexedColors.GREEN.getIndex());
+
+        CellStyle headerCellStyle = workbook.createCellStyle();
+
+        Row headerRow = sheet.getRow(rowNum);
+        Cell cell = headerRow.createCell(0);
+        cell.setCellValue(cellContent);
+        headerCellStyle.setFont(subSectionFont);
+        cell.setCellStyle(headerCellStyle);
+    }
+
+    private void createXLSXDataSection(Workbook workbook,Sheet sheet,int rowNum,int colNum,String cellContent) {
+        Font subSectionFont = workbook.createFont();
+        subSectionFont.setBold(true);
+        subSectionFont.setFontHeightInPoints((short) 12);
+        subSectionFont.setColor(IndexedColors.BLACK.getIndex());
+
+        CellStyle headerCellStyle = workbook.createCellStyle();
+
+        Row row = sheet.getRow(rowNum);
+        Cell cell = row.createCell(colNum);
+        cell.setCellValue(cellContent);
+        headerCellStyle.setFont(subSectionFont);
+        cell.setCellStyle(headerCellStyle);
+    }
+
+    private void createRunSummary(ArrayList<RunReportData> pages) {
         Workbook workbook = new XSSFWorkbook();
         for (RunReportData curData : pages) {
             Sheet sheet = workbook.createSheet(curData.fileType);
 
-            Font titleFont = workbook.createFont();
-            titleFont.setBold(true);
-            titleFont.setFontHeightInPoints((short) 20);
-            titleFont.setColor(IndexedColors.BLUE.getIndex());
+            for(int row=0;row<25;row++){ // 25 row summary data present
+                sheet.createRow(row);
+            }
 
-            Font sectionFont = workbook.createFont();
-            sectionFont.setBold(true);
-            sectionFont.setFontHeightInPoints((short) 16);
-            sectionFont.setColor(IndexedColors.RED.getIndex());
+            createXLSXHeading(workbook,sheet, "File type : " +curData.fileType);
 
-            Font subSectionFont = workbook.createFont();
-            subSectionFont.setBold(true);
-            subSectionFont.setFontHeightInPoints((short) 14);
-            subSectionFont.setColor(IndexedColors.ORANGE.getIndex());
+            createXLSXSection(workbook,sheet,2,0,"File Metrics");
 
-            CellStyle headerCellStyle = workbook.createCellStyle();
+            createXLSXSubSection(workbook,sheet,3, "Total number of files compared");
+            createXLSXDataSection(workbook,sheet,3,1, String.valueOf(curData.totalFilesMatched));
 
-            // Write the file type in the cell
-            Row headerRow = sheet.createRow(0);
-            Cell cell = headerRow.createCell(0);
-            cell.setCellValue(curData.fileType);
-            headerCellStyle.setFont(titleFont);
-            cell.setCellStyle(headerCellStyle);
+            createXLSXSubSection(workbook,sheet,4, "Number of files with no diffs");
+            createXLSXDataSection(workbook,sheet,4,1, String.valueOf(curData.numberOfFileNoDiff));
 
-            headerRow = sheet.createRow(2);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("File Metrics");
-            headerCellStyle.setFont(sectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            headerRow = sheet.createRow(3);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of files compared");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.totalFilesMatched);
+            createXLSXSubSection(workbook,sheet,5, "% of files with no diffs");
+            createXLSXDataSection(workbook,sheet,5,1, String.valueOf(curData.getPercentageNoDiff()));
 
 
-            headerRow = sheet.createRow(4);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Number of files with no diffs");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
+            createXLSXSection(workbook,sheet,7,0,"Diff Metrics");
 
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.numberOfFileNoDiff);
+            createXLSXSubSection(workbook,sheet,8, "Total number of diffs across all the files");
+            createXLSXDataSection(workbook,sheet,8,1, String.valueOf(curData.totalDiff));
 
+            createXLSXSubSection(workbook,sheet,9, "Most common tag which is causing a difference among all files");
+            createXLSXDataSection(workbook,sheet,9,1, curData.getMostFreqTagCausingDiff());
 
-            headerRow = sheet.createRow(5);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("% of files with no diffs");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
+            createXLSXSubSection(workbook,sheet,10, "Total number of text diffs across all the files");
+            createXLSXDataSection(workbook,sheet,10,1, String.valueOf(curData.typeCausingDiff.get("0")));
 
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.getPercentageNoDiff());
-
-            headerRow = sheet.createRow(7);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Diff Metrics");
-            headerCellStyle.setFont(sectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            headerRow = sheet.createRow(8);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of diffs across all the files");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.totalDiff);
+            createXLSXSubSection(workbook,sheet,11, "Total number of comment diffs across all the files");
+            createXLSXDataSection(workbook,sheet,11,1, String.valueOf(curData.typeCausingDiff.get("1")));
 
 
-            headerRow = sheet.createRow(9);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Most common tag which is causing a difference among all files");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
+            createXLSXSection(workbook,sheet,13,0,"Diff + file metrics");
 
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.getMostFreqTagCausingDiff());
+            createXLSXSubSection(workbook,sheet,14, "Total number of files with atleast one text diffs");
+            createXLSXDataSection(workbook,sheet,14,1, String.valueOf(curData.filesContainingTextDiffs));
 
+            createXLSXSubSection(workbook,sheet,15, "Total number of files with atleast one comment diffs");
+            createXLSXDataSection(workbook,sheet,15,1, String.valueOf(curData.filesContainingCommentDiffs));
 
-            headerRow = sheet.createRow(10);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of text diffs across all the files");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
+            createXLSXSubSection(workbook,sheet,16, "Total number of files with only text diffs");
+            createXLSXDataSection(workbook,sheet,16,1, String.valueOf(curData.filesWithOnlyTextDiff));
 
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.typeCausingDiff.get("0"));// 0 means text
+            createXLSXSubSection(workbook,sheet,17, "Total number of files with only comment diffs");
+            createXLSXDataSection(workbook,sheet,17,1, String.valueOf(curData.filesWithOnlyCommentDiff));
 
 
-            headerRow = sheet.createRow(11);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of comment diffs across all the files");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
+            createXLSXSection(workbook,sheet,19,0,"Latency metrics");
+            createXLSXSection(workbook,sheet,19,1,"in ms");
+            createXLSXSection(workbook,sheet,19,2,"in sec");
+            createXLSXSection(workbook,sheet,19,3,"in mins");
 
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.typeCausingDiff.get("1"));// 1 means comment
+            createXLSXSubSection(workbook,sheet,20, "Total time to run for all files");
+            double val = curData.totalTimeTaken();
+            createXLSXDataSection(workbook,sheet,20,1, String.valueOf(val));
+            createXLSXDataSection(workbook,sheet,20,2, String.valueOf(val/1000));
+            createXLSXDataSection(workbook,sheet,20,3, String.valueOf(val/60000));
 
-
-            headerRow = sheet.createRow(13);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Diff + file metrics");
-            headerCellStyle.setFont(sectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            headerRow = sheet.createRow(14);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of files with atleast one text diffs");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.filesContainingTextDiffs);
-
-
-            headerRow = sheet.createRow(15);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of files with atleast one comment diffs");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.filesContainingCommentDiffs);
-
-
-            headerRow = sheet.createRow(16);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of files with only text diffs");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.filesWithOnlyTextDiff);
-
-
-            headerRow = sheet.createRow(17);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total number of files with only comment diffs");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(1);
-            cell.setCellValue(curData.filesWithOnlyCommentDiff);
-
-
-            headerRow = sheet.createRow(19);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Latency metrics");
-            headerCellStyle.setFont(sectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(1);
-            cell.setCellValue("in ms");
-            headerCellStyle.setFont(sectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(2);
-            cell.setCellValue("in s");
-            headerCellStyle.setFont(sectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            cell = headerRow.createCell(3);
-            cell.setCellValue("in mins");
-            headerCellStyle.setFont(sectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-
-            headerRow = sheet.createRow(20);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total time to run for all files");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
-            float val = curData.totalTimeTaken();
-            cell = headerRow.createCell(1);
-            cell.setCellValue(val);
-
-            cell = headerRow.createCell(2);
-            cell.setCellValue(val / 1000);
-
-            cell = headerRow.createCell(3);
-            cell.setCellValue(val / 60000);
-
-
-            headerRow = sheet.createRow(21);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Total time to run for all files");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
+            createXLSXSubSection(workbook,sheet,21, "Average time to run per files");
             val = curData.avgTimeTaken();
-            cell = headerRow.createCell(1);
-            cell.setCellValue(val);
+            createXLSXDataSection(workbook,sheet,21,1, String.valueOf(val));
+            createXLSXDataSection(workbook,sheet,21,2, String.valueOf(val/1000));
+            createXLSXDataSection(workbook,sheet,21,3, String.valueOf(val/60000));
 
-            cell = headerRow.createCell(2);
-            cell.setCellValue(val / 1000);
-
-            cell = headerRow.createCell(3);
-            cell.setCellValue(val / 60000);
-
-
-            headerRow = sheet.createRow(22);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("Maximum time taken compared to all files");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
+            createXLSXSubSection(workbook,sheet,22, "Maximum time taken compared to all files");
             val = curData.maxTimeTaken();
-            cell = headerRow.createCell(1);
-            cell.setCellValue(val);
+            createXLSXDataSection(workbook,sheet,22,1, String.valueOf(val));
+            createXLSXDataSection(workbook,sheet,22,2, String.valueOf(val/1000));
+            createXLSXDataSection(workbook,sheet,22,3, String.valueOf(val/60000));
 
-            cell = headerRow.createCell(2);
-            cell.setCellValue(val / 1000);
-
-            cell = headerRow.createCell(3);
-            cell.setCellValue(val / 60000);
-
-
-            headerRow = sheet.createRow(23);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("99th percentile latency");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
+            createXLSXSubSection(workbook,sheet,23, "99th percentile latency");
             val = curData.get99Percentile();
-            cell = headerRow.createCell(1);
-            cell.setCellValue(val);
+            createXLSXDataSection(workbook,sheet,23,1, String.valueOf(val));
+            createXLSXDataSection(workbook,sheet,23,2, String.valueOf(val/1000));
+            createXLSXDataSection(workbook,sheet,23,3, String.valueOf(val/60000));
 
-            cell = headerRow.createCell(2);
-            cell.setCellValue(val / 1000);
-
-            cell = headerRow.createCell(3);
-            cell.setCellValue(val / 60000);
-
-
-            headerRow = sheet.createRow(24);
-            cell = headerRow.createCell(0);
-            cell.setCellValue("50th percentile latency");
-            headerCellStyle.setFont(subSectionFont);
-            cell.setCellStyle(headerCellStyle);
-
+            createXLSXSubSection(workbook,sheet,24, "50th percentile latency");
             val = curData.get50Percentile();
-            cell = headerRow.createCell(1);
-            cell.setCellValue(val);
-
-            cell = headerRow.createCell(2);
-            cell.setCellValue(val / 1000);
-
-            cell = headerRow.createCell(3);
-            cell.setCellValue(val / 60000);
+            createXLSXDataSection(workbook,sheet,24,1, String.valueOf(val));
+            createXLSXDataSection(workbook,sheet,24,2, String.valueOf(val/1000));
+            createXLSXDataSection(workbook,sheet,24,3, String.valueOf(val/60000));
 
             for (int i = 0; i < 4; i++) {
                 sheet.autoSizeColumn(i);
             }
 
             if (curData.fileType.equals("Global")) {
-                headerRow = sheet.createRow(26);
-                cell = headerRow.createCell(0);
-                cell.setCellValue("Summary/AllDiff file Path : ");
-                headerCellStyle.setFont(subSectionFont);
-                cell.setCellStyle(headerCellStyle);
 
-                cell = headerRow.createCell(1);
-                cell.setCellValue(finalOutputPath + "/summary.xlsx");
+                for(int row=26;row<=28;row++){ // create the extra rows needed
+                    sheet.createRow(row);
+                }
 
+                createXLSXSection(workbook,sheet,26,0,"Path of file generated");
 
-                headerRow = sheet.createRow(27);
-                cell = headerRow.createCell(0);
-                cell.setCellValue("Individual Diff file path : ");
-                headerCellStyle.setFont(subSectionFont);
-                cell.setCellStyle(headerCellStyle);
+                createXLSXSubSection(workbook,sheet,27, "Summary/AllDiff file Path : ");
+                createXLSXDataSection(workbook,sheet,27,1, finalOutputPath + "/summary.xlsx");
 
-                cell = headerRow.createCell(1);
-                cell.setCellValue(finalOutputPath + "/IndividualDiff/");
+                createXLSXSubSection(workbook,sheet,28, "Individual Diff file path : ");
+                createXLSXDataSection(workbook,sheet,28,1, finalOutputPath + "/IndividualDiff/");
             }
         }
+
         // Write the output to a file
         try {
             FileOutputStream fileOut = new FileOutputStream(finalOutputPath + "/RunReport.xlsx");
             workbook.write(fileOut);
             fileOut.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            StatusLogger.addRecordWarningExec(e.getMessage());
         }
     }
 
     private void generateComparisionSummary(ArrayList<String[]> summaryData) {
-        StatusLogger.AddRecordInfoExec("Creating Summary CSV Data");
+        StatusLogger.addRecordInfoExec("Creating Summary CSV Data");
         writeCSVFile(summaryData, new String[]{"File Name", "Exactly Same", "Number of Differences", "timeTaken(in ms)"}, finalOutputPath + "/summary.xlsx");
     }
 
     private void generateGlobalDiffReport(ArrayList<String[]> allDiffs) {
-        StatusLogger.AddRecordInfoExec("Creating All Diff CSV Data");
-        StatusLogger.AddRecordInfoExec("Total number of Diffs found : " + allDiffs.size());
-        writeCSVFile(allDiffs, new String[]{"File Name", "tag_name", "content1", "content2", "details"}, finalOutputPath + "/allDiff.xlsx");
+        StatusLogger.addRecordInfoExec("Creating All Diff CSV Data");
+        StatusLogger.addRecordInfoExec("Total number of Diffs found : " + allDiffs.size());
+        writeCSVFile(allDiffs, new String[]{"File Name", "tag_name","diff_type (0-Text,1-Comment)", "content1", "content2", "details"}, finalOutputPath + "/allDiff.xlsx");
     }
 
-    private void generateIndividualDiffReport(String s, ArrayList<DiffObject> temp) {
-        StatusLogger.AddRecordInfoExec("Creating Individual CSV Data in " + s);
+    private void generateIndividualDiffReport(String fileName, ArrayList<DiffObject> fileDiffEntry) {
+        StatusLogger.addRecordInfoExec("Creating Individual CSV Data in " + fileName);
         ArrayList<String[]> entry = new ArrayList<>();
-        for (DiffObject diffObject : temp) {
+        for (DiffObject diffObject : fileDiffEntry) {
             entry.add(diffObject.getCsvEntry());
         }
-        writeCSVFile(entry, new String[]{"tag_name", "diff_type (0-Text,1-Comment)", "content1", "content2", "details"}, finalOutputPath + "/IndividualDiff/" + s + ".xlsx");
+        writeCSVFile(entry, new String[]{"tag_name", "diff_type (0-Text,1-Comment)", "content1", "content2", "details"}, finalOutputPath + "/IndividualDiff/" + fileName + ".xlsx");
     }
 
 }
