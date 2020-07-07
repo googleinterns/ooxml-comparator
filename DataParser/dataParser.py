@@ -9,7 +9,7 @@ import sys
 import filecmp
 
 
-class ooxml_file:
+class OoxmlFile:
 	"""
 	OOXML file class object to load various XMLs from the zip of the OOXML file and 
 	saving them in json format in the coresponding path in the generate folder.
@@ -50,17 +50,14 @@ class ooxml_file:
 		This saves the loaded XML file's dictionaries into the path provides 
 		in JSON format.
 
-		@Param out_path: path to salve all the XML files by creating a folder 
+		@Param out_path: path to save all the XML files by creating a folder 
 						for the XML file.
-
 		"""
 		path_name_decomp = self.filename.split('/')
 		dir_name = self.filename[:-len(path_name_decomp[-1])]
 		
 		base_name = path_name_decomp[-1].replace('.','_')
 		dir_name = out_path
-
-		print("Processing : ",dir_name,base_name)
 
 		dir_name = dir_name+base_name
 
@@ -85,6 +82,19 @@ class ooxml_file:
 				outfile.write(jData)
 
 
+def is_valid_path(path):
+	"""
+	Function to check if a path is valid
+
+	@Param path: Path to be checked for validity or existence.
+	"""
+	isDirectory = os.path.isdir(path)
+	if not isDirectory:
+		return False
+	else:
+		return True
+
+
 def prepare_folder(path):
 	"""
 	Function to create a new generate folder and 
@@ -92,10 +102,6 @@ def prepare_folder(path):
 
 	@param path: path to the folder whose all files has to be converted to json data 
 	"""
-	isDirectory = os.path.isdir(path)
-	if not isDirectory:
-		return False
-
 	path = path.strip()
 	if path[-1]=='/':
 		gen_path = path + 'generated/'
@@ -103,36 +109,74 @@ def prepare_folder(path):
 		gen_path = path + '/generated/'
 
 	converted_files = 0
+	failed_files = 0
+
 	if not os.path.exists(gen_path):
 		os.mkdir(gen_path)
-	
+
+	exec_logger = open(gen_path+'exec_log.txt','w+')
+
 	for cur_path in Path(path).rglob('*.pptx'):
-		converted_files += 1
-		cur_file = ooxml_file(str(cur_path))
-		cur_file.load_data()
-		cur_file.save_json_data(gen_path)
+		try:
+			exec_logger.write("Processing : "+str(cur_path)+"\n")
+
+			cur_file = OoxmlFile(str(cur_path))
+			cur_file.load_data()
+			cur_file.save_json_data(gen_path)
+
+			converted_files += 1
+		except:
+			failed_files += 1
+			exec_logger.write("Failed to convert : "+str(cur_path)+"\n")
 	
 	for cur_path in Path(path).rglob('*.xlsx'):
-		converted_files += 1
-		cur_file = ooxml_file(str(cur_path))
-		cur_file.load_data()
-		cur_file.save_json_data(gen_path)
-		
+		try:
+			exec_logger.write("Processing : "+str(cur_path)+"\n")
+
+			cur_file = OoxmlFile(str(cur_path))
+			cur_file.load_data()
+			cur_file.save_json_data(gen_path)
+
+			converted_files += 1
+		except:
+			failed_files += 1
+			exec_logger.write("Failed to convert : "+str(cur_path)+"\n")
+
 	for cur_path in Path(path).rglob('*.docx'):
-		converted_files += 1
-		cur_file = ooxml_file(str(cur_path))
-		cur_file.load_data()
-		cur_file.save_json_data(gen_path)
+		try:
+			exec_logger.write("Processing : "+str(cur_path)+"\n")
 
-	print("Number of files processed :",converted_files)
+			cur_file = OoxmlFile(str(cur_path))
+			cur_file.load_data()
+			cur_file.save_json_data(gen_path)
 
-	return True
+			converted_files += 1
+		except:
+			failed_files += 1
+			exec_logger.write("Failed to convert : "+str(cur_path)+"\n")
+
+	exec_logger.write("Number of files processed :"+str(converted_files)+"\n")
+	exec_logger.write("Number of conversion Failed :"+str(failed_files)+"\n")
+
+	exec_logger.write("All files in the path converted Successfully and the Json data is stored in the generated folder\n")
+	exec_logger.write("Location saved at : "+str(gen_path))
+
+	exec_logger.close()
+
 
 if __name__ == "__main__": 
 	
 	cur_path = sys.argv[-1].strip()
-	success = prepare_folder(cur_path)
-	if success:
-		print("All files in the path converted Successfully and the Json data is stored in the generated folder")
+	status_logger = open('status.txt','w+')
+
+	if not is_valid_path(cur_path):
+		status_logger.write("Please enter a valid path\n")
 	else:
-		print("Please enter a valid path")
+		try:
+			prepare_folder(cur_path)
+			status_logger.write("File conversions Successful")
+		except:
+			status_logger.wrte("File conversions failed.")
+
+	status_logger.close()
+		
