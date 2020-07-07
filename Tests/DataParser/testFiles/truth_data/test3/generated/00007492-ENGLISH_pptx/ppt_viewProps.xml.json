@@ -1,0 +1,89 @@
+{
+    "p:viewPr": {
+        "@xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "@xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+        "@lastView": "sldSorterView",
+        "p:normalViewPr": {
+            "p:restoredLeft": {
+                "@sz": "15620"
+            },
+            "p:restoredTop": {
+                "@sz": "94660"
+            }
+        },
+        "p:slideViewPr": {
+            "p:cSldViewPr": {
+                "@snapToGrid": "0",
+                "p:cViewPr": {
+                    "@varScale": "1",
+                    "p:scale": {
+                        "a:sx": {
+                            "@n": "51",
+                            "@d": "100"
+                        },
+                        "a:sy": {
+                            "@n": "51",
+                            "@d": "100"
+                        }
+                    },
+                    "p:origin": {
+                        "@x": "-1243",
+                        "@y": "-82"
+                    }
+                },
+                "p:guideLst": {
+                    "p:guide": [
+                        {
+                            "@orient": "horz",
+                            "@pos": "2160"
+                        },
+                        {
+                            "@pos": "2880"
+                        }
+                    ]
+                }
+            }
+        },
+        "p:notesTextViewPr": {
+            "p:cViewPr": {
+                "p:scale": {
+                    "a:sx": {
+                        "@n": "1",
+                        "@d": "1"
+                    },
+                    "a:sy": {
+                        "@n": "1",
+                        "@d": "1"
+                    }
+                },
+                "p:origin": {
+                    "@x": "0",
+                    "@y": "0"
+                }
+            }
+        },
+        "p:sorterViewPr": {
+            "p:cViewPr": {
+                "p:scale": {
+                    "a:sx": {
+                        "@n": "66",
+                        "@d": "100"
+                    },
+                    "a:sy": {
+                        "@n": "66",
+                        "@d": "100"
+                    }
+                },
+                "p:origin": {
+                    "@x": "0",
+                    "@y": "0"
+                }
+            }
+        },
+        "p:gridSpacing": {
+            "@cx": "73736200",
+            "@cy": "73736200"
+        }
+    }
+}
