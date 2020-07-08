@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -232,7 +231,7 @@ public class DiffGenerator {
             // add time logger for this file comparision.
             long startTime = System.nanoTime();
             FileComparator fileComparator = new FileComparator(pathOriginalFile + "/" + origFileName, pathRoundTripFile + "/" + origFileName);
-            ArrayList<DiffObject> diffObjectsFound = fileComparator.CompareText();
+            ArrayList<DiffObject> diffObjectsFound = fileComparator.compareText();
             long elapsedTime = System.nanoTime() - startTime;
 
             if (!fileComparator.fileExtension.equals("invalid")) {

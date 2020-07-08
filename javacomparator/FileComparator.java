@@ -115,68 +115,77 @@ public class FileComparator {
         StatusLogger.addRecordInfoExec("MATCHED : " + matched);
     }
 
+
+    private void compareTextAndCommentDocx(){
+        DocxFile file1 = new DocxFile(fileOriginalPath, false);
+        DocxFile file2 = new DocxFile(fileRoundtrippedPath, true);
+
+        ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
+        ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
+        compareContentByOrder("w:r", "0", "docx", runTagContents1, runTagContents2);
+
+        ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
+        ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
+
+        compareContentByOrder("w:comment", "1", "docx", commentContents1, commentContents2);
+    }
+
+    private void compareTextAndCommentPptx(){
+        PptxFile file1 = new PptxFile(fileOriginalPath, false);
+        PptxFile file2 = new PptxFile(fileRoundtrippedPath, true);
+
+        ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
+        ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
+
+        StatusLogger.addRecordInfoDebug("BEFORE Content Comparator");
+        compareContentByOrder("a:r", "0", "pptx", runTagContents1, runTagContents2);
+        StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
+
+        ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
+        ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
+
+        compareContentByOrder("p:cm", "1", "pptx", commentContents1, commentContents2);
+    }
+
+    private void compareTextAndCommentXlsx(){
+        XlsxFile file1 = new XlsxFile(fileOriginalPath, false);
+        XlsxFile file2 = new XlsxFile(fileRoundtrippedPath, true);
+
+        file1.loadSharedStrings();
+        file2.loadSharedStrings();
+
+        ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
+        ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
+
+        StatusLogger.addRecordInfoDebug("Before content comparator");
+        compareContentByID("0", runTagContents1, runTagContents2, "Cell value different");
+        StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
+
+        ArrayList<ArrayList<String>> CommentTagContents1 = file1.getCommentContent();
+        ArrayList<ArrayList<String>> CommentTagContents2 = file2.getCommentContent();
+
+        compareContentByID("1", CommentTagContents1, CommentTagContents2, "Cell Comment Different");
+    }
+
     /**
      * Fucntion that runs the main comparision for Text in the two files
      *
      * @return Diff objects for each differences found
      */
-    public ArrayList<DiffObject> CompareText() {
+    public ArrayList<DiffObject> compareText() {
         diffReport = new ArrayList<>();
 
         switch (fileExtension) {
             case "docx": {
-                DocxFile file1 = new DocxFile(fileOriginalPath, false);
-                DocxFile file2 = new DocxFile(fileRoundtrippedPath, true);
-
-                ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
-                ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
-                compareContentByOrder("w:r", "0", "docx", runTagContents1, runTagContents2);
-
-                ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
-                ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
-
-                compareContentByOrder("w:comment", "1", "docx", commentContents1, commentContents2);
+                compareTextAndCommentDocx();
                 break;
             }
             case "pptx": {
-
-                PptxFile file1 = new PptxFile(fileOriginalPath, false);
-                PptxFile file2 = new PptxFile(fileRoundtrippedPath, true);
-
-                ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
-                ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
-
-                StatusLogger.addRecordInfoDebug("BEFORE Content Comparator");
-                compareContentByOrder("a:r", "0", "pptx", runTagContents1, runTagContents2);
-                StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
-
-                ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
-                ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
-
-                compareContentByOrder("p:cm", "1", "pptx", commentContents1, commentContents2);
+                compareTextAndCommentPptx();
                 break;
             }
             case "xlsx": {
-
-                XlsxFile file1 = new XlsxFile(fileOriginalPath, false);
-                XlsxFile file2 = new XlsxFile(fileRoundtrippedPath, true);
-
-                file1.loadSharedStrings();
-                file2.loadSharedStrings();
-                StatusLogger.addRecordInfoDebug("After Shared String Loading");
-
-                ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
-                ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
-
-                StatusLogger.addRecordInfoDebug("Before content comparator");
-                compareContentByID("0", runTagContents1, runTagContents2, "Cell value different");
-                StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
-
-                ArrayList<ArrayList<String>> CommentTagContents1 = file1.getCommentContent();
-                ArrayList<ArrayList<String>> CommentTagContents2 = file2.getCommentContent();
-                StatusLogger.addRecordInfoDebug("After GetCommentContent");
-
-                compareContentByID("1", CommentTagContents1, CommentTagContents2, "Cell Comment Different");
+                compareTextAndCommentXlsx();
                 break;
             }
         }
