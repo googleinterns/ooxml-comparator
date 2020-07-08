@@ -16,36 +16,36 @@ public class JsonUtility {
      *
      * @param jsonDataSubtree     JSONData of the whole Tree
      * @param tagsToSearch         Tags that need to be searched for in the Tree
-     * @param ignoreAttrib Whether we want to visit the Attributes too or not.
+     * @param ignoreAttribute Whether we want to visit the Attributes too or not.
      */
-    private static void recurseVisit(JSONObject jsonDataSubtree, ArrayList<String> tagsToSearch, Boolean ignoreAttrib) {
+    private static void recurseVisit(JSONObject jsonDataSubtree, ArrayList<String> tagsToSearch, Boolean ignoreAttribute) {
         if (jsonDataSubtree == null) {
             return;
         }
-        //StatusLogger.AddRecordInfoDebug(jsonData.toString());
-        for (Object key : jsonDataSubtree.keySet()) {
 
-            Object value = jsonDataSubtree.get(key); // do something with jsonObject here
-            String keyVal = (String) key;
+        for (Object tagName : jsonDataSubtree.keySet()) {
+            Object jsonValue = jsonDataSubtree.get(tagName);
+            String tagNameValue = (String) tagName;
 
-            if (ignoreAttrib && (keyVal.charAt(0) == '@')) {
-                // if its a attibute
+            if (ignoreAttribute && (tagNameValue.charAt(0) == '@')) {
+                // If the node in the recursion is a Attribute.
                 continue;
             }
 
-            if (tagsToSearch.contains(keyVal)) {
-                JSONObject json = new JSONObject();
-                json.put(keyVal, value);
-                buffer.add(json);
+            if (tagsToSearch.contains(tagNameValue)) {
+                JSONObject matchedJsonTree = new JSONObject();
+                matchedJsonTree.put(tagNameValue, jsonValue);
+                buffer.add(matchedJsonTree);
             }
 
-            if (value instanceof JSONObject) {
-                recurseVisit((JSONObject) value, tagsToSearch, ignoreAttrib);
-            } else if (value instanceof JSONArray) {
-                JSONArray subtags = (JSONArray) value;
-                for (Object subtag : subtags) {
-                    if (subtag instanceof JSONObject)
-                        recurseVisit((JSONObject) subtag, tagsToSearch, ignoreAttrib);
+            if (jsonValue instanceof JSONObject) {
+                recurseVisit((JSONObject) jsonValue, tagsToSearch, ignoreAttribute);
+
+            } else if (jsonValue instanceof JSONArray) {
+                JSONArray childSubtreeTagName = (JSONArray) jsonValue;
+                for (Object subtreeTag : childSubtreeTagName) {
+                    if (subtreeTag instanceof JSONObject)
+                        recurseVisit((JSONObject) subtreeTag, tagsToSearch, ignoreAttribute);
                 }
             }
         }
@@ -54,9 +54,9 @@ public class JsonUtility {
     /**
      * To search for tags in the JSON Tree
      *
-     * @param jsonData The Tree JSON data
-     * @param tags     List of tags to be searched for
-     * @return First level occurence of each of the tags
+     * @param jsonData The Tree JSON data.
+     * @param tags     List of tags to be searched for.
+     * @return First level occurence of each of the tags.
      */
     public static ArrayList<JSONObject> extractTag(JSONObject jsonData, ArrayList<String> tags) {
         buffer = new ArrayList<>();
@@ -64,31 +64,38 @@ public class JsonUtility {
         return buffer;
     }
 
+    /**
+     * Recurse on subtree to find the lower level Content text to be used for comparing the tags.
+     * @param jsonData Subtree Json to be searched in.
+     * @param textTags tags that marks the start of some subtree that should be compared.
+     * @param seenTag whether this subree is Already inside a textTag marked node.
+     */
     private static void recurseText(JSONObject jsonData, ArrayList<String> textTags, boolean seenTag) {
-        for (Object key : jsonData.keySet()) {
-            Object value = jsonData.get(key);// do something with jsonObject here
-            String keyVal = (String) key;
-            if (keyVal.charAt(0) == '@') {
+        for (Object tagName : jsonData.keySet()) {
+            Object jsonValue = jsonData.get(tagName); // do something with jsonObject here
+            String tagNameValue = (String) tagName;
+
+            if (tagNameValue.charAt(0) == '@') {
                 continue;
             }
 
             boolean seenTagInParent = seenTag;
-            if (textTags != null && textTags.contains(keyVal)) {
+            if (textTags != null && textTags.contains(tagNameValue)) {
                 seenTagInParent = true;
             }
 
-            if (value instanceof JSONObject) {
-                recurseText((JSONObject) value, textTags, seenTagInParent);
-            } else if (value instanceof JSONArray) {
-                JSONArray subtags = (JSONArray) value;
-                for (Object subtag : subtags) {
-                    if (subtag != null) {
-                        recurseText((JSONObject) subtag, textTags, seenTagInParent);
+            if (jsonValue instanceof JSONObject) {
+                recurseText((JSONObject) jsonValue, textTags, seenTagInParent);
+            } else if (jsonValue instanceof JSONArray) {
+                JSONArray childSubtreeTagName = (JSONArray) jsonValue;
+                for (Object subtreeTag : childSubtreeTagName) {
+                    if (subtreeTag != null) {
+                        recurseText((JSONObject) subtreeTag, textTags, seenTagInParent);
                     }
                 }
             } else {
-                if (value != null && seenTagInParent) {
-                    stringOrder.add((String) value);
+                if (jsonValue != null && seenTagInParent) {
+                    stringOrder.add((String) jsonValue);
                 }
             }
         }
@@ -126,28 +133,27 @@ public class JsonUtility {
     /**
      * Function to find the Comment Strings in Pptx
      *
-     * @param wCommentTagObj Comment JSON object
+     * @param commentTagObj Comment JSON object
      * @return List of Strings of comment in the JSON tree
      */
-    public static ArrayList<String> getCommentContentPptx(JSONObject wCommentTagObj) {
+    public static ArrayList<String> getCommentContentPptx(JSONObject commentTagObj) {
         stringOrder = new ArrayList<>();
-        recurseText(wCommentTagObj, null, true);
-        stringOrder.add(0, (String) wCommentTagObj.get("@idx"));
-        stringOrder.add(1, (String) wCommentTagObj.get("@authorId"));
-        stringOrder.add(2, (String) wCommentTagObj.get("@dt"));
+        recurseText(commentTagObj, null, true);
+        stringOrder.add(0, (String) commentTagObj.get("@idx"));
+        stringOrder.add(1, (String) commentTagObj.get("@authorId"));
+        stringOrder.add(2, (String) commentTagObj.get("@dt"));
         return stringOrder;
     }
 
     /**
      * Function to find the Comment Strings in Xlsx
-     *
-     * @param wCommentTagObj Comment JSON object
+     * @param commentTagObject Comment JSON object
      * @return List of Strings of comment in the JSON tree
      */
-    public static ArrayList<String> getCommentContentXlsx(JSONObject wCommentTagObj, String file) {
+    public static ArrayList<String> getCommentContentXlsx(JSONObject commentTagObject, String fileUniqueId) {
         stringOrder = new ArrayList<>();
-        recurseText(wCommentTagObj, null, true);
-        stringOrder.add(0, file + wCommentTagObj.get("@ref"));
+        recurseText(commentTagObject, null, true);
+        stringOrder.add(0, fileUniqueId + commentTagObject.get("@ref"));
         return stringOrder;
     }
 }

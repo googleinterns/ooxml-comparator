@@ -9,23 +9,23 @@ import java.util.TreeMap;
 
 
 /**
- * OoxmlFile Class implement various file loading methods to load JSON files into the Objects
+ * OoxmlFile Class implement various file loading methods to load JSON files into the Objects.
  */
 public class OoxmlFile {
     String fileDataPath;
-    boolean roundtripped;
+    boolean roundTripped;
 
     Map<String, JSONObject> jsonDataFiles;
 
     /**
      * Constuctor takes in the FolderPath for the file and creates a list of files to be compared.
      *
-     * @param folderPath   Folder path that has the OOXML content of the file in JSON format
-     * @param roundtripped Whether the file is roundTripped file or not.
+     * @param fileDataPath Folder path that has the OOXML content of the file in JSON format.
+     * @param roundTripped Whether the file is roundTripped file or not.
      */
-    public OoxmlFile(String folderPath, boolean roundtripped) {
-        this.fileDataPath = folderPath;
-        this.roundtripped = roundtripped;
+    public OoxmlFile(String fileDataPath, boolean roundTripped) {
+        this.fileDataPath = fileDataPath;
+        this.roundTripped = roundTripped;
         jsonDataFiles = new TreeMap<>();
     }
 
@@ -39,15 +39,15 @@ public class OoxmlFile {
         for (int i = 0; i < Objects.requireNonNull(listOfFiles).length; i++) {
             if (listOfFiles[i].isFile()) {
                 String fileName = listOfFiles[i].getName();
-
                 JSONParser parser = new JSONParser();
+
                 try {
                     Object object = parser.parse(new FileReader(listOfFiles[i]));
                     JSONObject jsonObject = (JSONObject) object;
                     this.jsonDataFiles.put(fileName, jsonObject);
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    StatusLogger.addRecordWarningExec(e.getMessage());
                 }
             }
         }
@@ -55,7 +55,6 @@ public class OoxmlFile {
 
     /**
      * Getter method for any xml file
-     *
      * @param fileName filename whose JSON data is to be retrieved
      * @return JSONObject of the file
      */

@@ -5,17 +5,17 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 /**
- * DocxFile Class implments the methods required for comparasions of DOCX files
+ * DocxFile Class implments the methods required for comparasions of DOCX files.
  */
 public class DocxFile extends OoxmlFile {
 
-    public final String type = "docx";
+    public final String TYPEFILE = "docx";
     public ArrayList<String> filesToCompare;
     public ArrayList<String> commentToCompare;
 
     /**
      * Constuctor takes in the FolderPath for the file and creates a list of files to be compared.
-     * @param folderPath Folder path that has the OOXML content of the file in JSON format
+     * @param folderPath Folder path that has the OOXML content of the file in JSON format.
      * @param roundtripped Whether the file is roundTripped file or not.
      */
     public DocxFile(String folderPath, boolean roundtripped) {
@@ -30,9 +30,9 @@ public class DocxFile extends OoxmlFile {
     }
 
     /**
-     * @return the JSON for the files to be compared for text comparision
+     * @return the JSON for the files to be compared for text comparision.
      */
-    public ArrayList<JSONObject> getJson() {
+    public ArrayList<JSONObject> getTextJson() {
         ArrayList<JSONObject> allJson = new ArrayList<>();
         for (String files : filesToCompare) {
             allJson.add(getJson(files));
@@ -41,7 +41,7 @@ public class DocxFile extends OoxmlFile {
     }
 
     /**
-     * @return the JSON for the files to be compared for comment comparision
+     * @return the JSON for the files to be compared for comment comparision.
      */
     public ArrayList<JSONObject> getCommentJson(){
         ArrayList<JSONObject> allJson = new ArrayList<>();
@@ -52,13 +52,13 @@ public class DocxFile extends OoxmlFile {
     }
 
     /**
-     * The functions implement the total running of tag extraction for text (w:r) and then in the subtree, finding for strings to be matched
-     * @return List of List, where each of them contains the total data to be compared for each 'w:r' tag
+     * The functions implement the total running of tag extraction for text (w:r) and then in the subtree, finding for strings to be matched.
+     * @return List of List, where each of them contains the total data to be compared for each 'w:r' tag.
      */
     public ArrayList<ArrayList<String>> getTextContent() {
         ArrayList<ArrayList<String>> allTextTag = new ArrayList<>();
 
-        for (JSONObject file : getJson()) {
+        for (JSONObject file : getTextJson()) {
 
             ArrayList<String> tags = new ArrayList<>();
             tags.add("w:r");
@@ -83,8 +83,8 @@ public class DocxFile extends OoxmlFile {
     }
 
     /**
-     * The functions implement the total running of tag extraction for text (w:comment tag) and then in the subtree, finding for strings to be matched
-     * @return List of List, where each of them contains the total data to be compared for each 'w:comment' tag
+     * The functions implement the total running of tag extraction for text (w:comment tag) and then in the subtree, finding for strings to be matched.
+     * @return List of List, where each of them contains the total data to be compared for each 'w:comment' tag.
      */
     public ArrayList<ArrayList<String>> getCommentContent() {
         allCommentTag = new ArrayList<>();

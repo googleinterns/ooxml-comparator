@@ -68,7 +68,7 @@ public class XlsxFile extends OoxmlFile {
     /**
      * @return the JSON for the files to be compared by adding the Sheet number in the context
      */
-    public ArrayList<JSONObject> getJson() {
+    public ArrayList<JSONObject> getTextJson() {
         ArrayList<JSONObject> allJson = new ArrayList<>();
         int counter = 0;
         for (String files : filesToCompare) {
@@ -165,7 +165,7 @@ public class XlsxFile extends OoxmlFile {
     public ArrayList<ArrayList<String>> GetTextContent() {
         allTextTag = new ArrayList<>();
 
-        for (JSONObject file : getJson()) {
+        for (JSONObject file : getTextJson()) {
             ArrayList<String> tags = new ArrayList<>();
             tags.add("sheetData");
             ArrayList<JSONObject> sheetData = JsonUtility.extractTag(file,tags);

@@ -3,93 +3,129 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * Class maintains the Data required for each type of editor and global results in form XLSX format.
+ */
 public class RunReportData {
-    public String fileType;
-    public int totalFilesMatched, numberOfFileNoDiff, totalDiff;
-    public HashMap<String, Integer> tagCausingDiff;
-    public HashMap<String, Integer> typeCausingDiff;
-    public int filesContainingTextDiffs, filesContainingCommentDiffs, filesWithOnlyTextDiff, filesWithOnlyCommentDiff;
-    ArrayList<Integer> timeTaken;
 
-    RunReportData(String fileType) {
-        this.fileType = fileType;
-        totalFilesMatched = 0;
-        numberOfFileNoDiff = 0;
-        totalDiff = 0;
-        tagCausingDiff = new HashMap<String, Integer>();
-        typeCausingDiff = new HashMap<>();
-        typeCausingDiff.put("0", 0);
-        typeCausingDiff.put("1", 0);
-        filesContainingTextDiffs = 0;
-        filesContainingCommentDiffs = 0;
-        filesWithOnlyTextDiff = 0;
-        filesWithOnlyCommentDiff = 0;
-        timeTaken = new ArrayList<Integer>();
+    public String fileTypeName;
+    public int totalFilesMatched, numberOfFileNoDiff, totalDiff, filesContainingTextDiffs, filesContainingCommentDiffs, filesWithOnlyTextDiff, filesWithOnlyCommentDiff;
+    public HashMap<String, Integer> tagCausingDiff, typeCausingDiff;
+    public ArrayList<Integer> timeTakenPerFile;
+
+    /**
+     * Initializes various structures that needs to be maintained to get various metrics.
+     * @param fileTypeName the type of file the Object is responsible for.
+     */
+    RunReportData(String fileTypeName) {
+        this.fileTypeName = fileTypeName;
+        this.tagCausingDiff = new HashMap<>();
+        this.typeCausingDiff = new HashMap<>();
+        this.timeTakenPerFile = new ArrayList<>();
     }
 
-    public void addTime(Integer timeVal) {
-        timeTaken.add(timeVal);
+    /**
+     * Adds the time for the file to be considered while calculating latency.
+     * @param timeValForFile time taken by the file in ms.
+     */
+    public void addTimeForFile(Integer timeValForFile) {
+        timeTakenPerFile.add(timeValForFile);
     }
 
-    public void addTag(String tag) {
-        Integer count = tagCausingDiff.get(tag);
-        if (count == null) {
-            count = 0;
+    /**
+     * Add the count of the tags responsible for Diff.
+     * @param tagName tag causing Diff.
+     */
+    public void addTagCount(String tagName) {
+        Integer countTagDiff = tagCausingDiff.get(tagName);
+        if (countTagDiff == null) {
+            countTagDiff = 0;
         }
-        tagCausingDiff.put(tag, count + 1);
+        tagCausingDiff.put(tagName, countTagDiff + 1);
     }
 
-    public void addType(String tag) {
-        Integer count = typeCausingDiff.get(tag);
-        if (count == null) {
-            count = 0;
+    /**
+     * Add the count of the tags type responsible for Diff.
+     * @param tagType tag causing the Diff.
+     */
+    public void addTypeCount(String tagType) {
+        Integer countTagType = typeCausingDiff.get(tagType);
+        if (countTagType == null) {
+            countTagType = 0;
         }
-        typeCausingDiff.put(tag, count + 1);
+        typeCausingDiff.put(tagType, countTagType + 1);
     }
 
+    /**
+     * Function to get the percentage of files having no Diffs
+     * @return Percentage of files with no Diff.
+     */
     public float getPercentageNoDiff() {
         return (numberOfFileNoDiff * 100.0f) / totalFilesMatched;
     }
 
+    /**
+     * Reports the Tag that causes the most number of Diff.
+     * @return tag name causing the Diff.
+     */
     public String getMostFreqTagCausingDiff() {
-        String MostFreqTag = "noStringAvail";
-        Integer Freq = 0;
-        for (Map.Entry<String, Integer> v : tagCausingDiff.entrySet()) {
-            if (v.getValue() > Freq) {
-                Freq = v.getValue();
-                MostFreqTag = v.getKey();
+        String mostFrequentTag = "noStringAvail";
+        Integer mostFrequentTagsCount = 0;
+        for (Map.Entry<String, Integer> tagCountEntry : tagCausingDiff.entrySet()) {
+            if (tagCountEntry.getValue() > mostFrequentTagsCount) {
+                mostFrequentTagsCount = tagCountEntry.getValue();
+                mostFrequentTag = tagCountEntry.getKey();
             }
         }
-        return MostFreqTag;
+        return mostFrequentTag;
     }
 
+    /**
+     * Calculates the total time taken by all files of the specified type.
+     * @return Value of total time taken.
+     */
     public Integer totalTimeTaken() {
-        Integer timeTakenTot = 0;
-        for (Integer v : timeTaken) {
-            timeTakenTot += v;
+        Integer timeTakenInTotal = 0;
+        for (Integer fileTimeTaken : timeTakenPerFile) {
+            timeTakenInTotal += fileTimeTaken;
         }
-        return timeTakenTot;
+        return timeTakenInTotal;
     }
 
-    public float avgTimeTaken() {
-        Integer timeTakenAvg = 0;
-        for (Integer v : timeTaken) {
-            timeTakenAvg += v;
+    /**
+     * Calculates the Average time taken by all files of the specified type.
+     * @return Value of Average time taken.
+     */
+    public float averageTimeTaken() {
+        Integer timeTakenAvgerage = 0;
+        for (Integer fileTimeTaken : timeTakenPerFile) {
+            timeTakenAvgerage += fileTimeTaken;
         }
-        return ((float) timeTakenAvg) / timeTaken.size();
+        return ((float) timeTakenAvgerage) / timeTakenPerFile.size();
     }
 
-    public float maxTimeTaken() {
-        float TakenMax = 0;
-        for (Integer v : timeTaken) {
-            if (v > TakenMax) {
-                TakenMax = v;
+    /**
+     * Calculates the Maximum taken by any of the files of the specified type.
+     * @return Value of Maximum time taken.
+     */
+    public float maximumTimeTaken() {
+        float maximumTimeTakenCurrent = 0;
+        for (Integer fileTimeTaken : timeTakenPerFile) {
+            if (fileTimeTaken > maximumTimeTakenCurrent) {
+                maximumTimeTakenCurrent = fileTimeTaken;
             }
         }
-        return TakenMax;
+        return maximumTimeTakenCurrent;
     }
 
-    public static long percentile(ArrayList<Integer> latencies, double percentile) {
+    /**
+     * Calculates the percentile latency out of all the files time present
+     * @param latencies list containing the time taken for each file.
+     * @param percentile percentile that is required to be calculated.
+     * @return the value with the required percentile.
+     */
+    public static long percentileLatency(ArrayList<Integer> latencies, double percentile) {
         if (latencies.isEmpty()) return 0;
         Collections.sort(latencies);
         int index = (int) Math.ceil(percentile / 100.0 * latencies.size());
@@ -97,11 +133,19 @@ public class RunReportData {
         return latencies.get(index);
     }
 
-    public float get99Percentile() {
-        return percentile(timeTaken, 99.0);
+    /**
+     * Calculates the 99 percentile for the latency data.
+     * @return returns the 99 percentile value
+     */
+    public float get99PercentileLatency() {
+        return percentileLatency(timeTakenPerFile, 99.0);
     }
 
-    public float get50Percentile() {
-        return percentile(timeTaken, 50.0);
+    /**
+     * Calculates the 50 percentile for the latency data.
+     * @return returns the 50 percentile value
+     */
+    public float get50PercentileLatency() {
+        return percentileLatency(timeTakenPerFile, 50.0);
     }
 }

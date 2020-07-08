@@ -6,15 +6,15 @@ public class FileComparator {
     String fileOriginalPath, fileRoundtrippedPath;
     String fileExtension;
 
-    FileComparator(String Path1, String Path2) {
-        fileOriginalPath = Path1;
-        fileRoundtrippedPath = Path2;
+    FileComparator(String fileOriginalPath, String fileRoundtrippedPath) {
+        this.fileOriginalPath = fileOriginalPath;
+        this.fileRoundtrippedPath = fileRoundtrippedPath;
 
-        if (Path1.endsWith("docx") && Path2.endsWith("docx")) {
+        if (fileOriginalPath.endsWith("docx") && fileRoundtrippedPath.endsWith("docx")) {
             fileExtension = "docx";
-        } else if (Path1.endsWith("pptx") && Path2.endsWith("pptx")) {
+        } else if (fileOriginalPath.endsWith("pptx") && fileRoundtrippedPath.endsWith("pptx")) {
             fileExtension = "pptx";
-        } else if (Path1.endsWith("xlsx") && Path2.endsWith("xlsx")) {
+        } else if (fileOriginalPath.endsWith("xlsx") && fileRoundtrippedPath.endsWith("xlsx")) {
             fileExtension = "xlsx";
         } else {
             fileExtension = "invalid";
@@ -36,13 +36,12 @@ public class FileComparator {
             try {
                 float val = Float.parseFloat(contentVal);
                 contentVal = String.valueOf(Math.round(val));
+                stringBuilder.append(contentVal);
             } catch (NumberFormatException e) {
-                // not a float!!
-            }
-
-            for (int i = 0; i < contentVal.length(); i++) {
-                if (!delim.contains(contentVal.charAt(i))) {
-                    stringBuilder.append(Character.toLowerCase(contentVal.charAt(i)));
+                for (int i = 0; i < contentVal.length(); i++) {
+                    if (!delim.contains(contentVal.charAt(i))) {
+                        stringBuilder.append(Character.toLowerCase(contentVal.charAt(i)));
+                    }
                 }
             }
         }
@@ -52,12 +51,12 @@ public class FileComparator {
             try {
                 float val = Float.parseFloat(contentVal);
                 contentVal = String.valueOf(Math.round(val));
+                stringBuilder.append(contentVal);
             } catch (NumberFormatException e) {
-                // not a float!!
-            }
-            for (int i = 0; i < contentVal.length(); i++) {
-                if (!delim.contains(contentVal.charAt(i))) {
-                    stringBuilder.append(Character.toLowerCase(contentVal.charAt(i)));
+                for (int i = 0; i < contentVal.length(); i++) {
+                    if (!delim.contains(contentVal.charAt(i))) {
+                        stringBuilder.append(Character.toLowerCase(contentVal.charAt(i)));
+                    }
                 }
             }
         }

@@ -9,7 +9,7 @@ import java.util.HashMap;
  * PptxFile Class implments the methods required for comparasions of PPTX files
  */
 public class PptxFile extends OoxmlFile {
-    public final String typeFile = "pptx";
+    public final String TYPEFILE = "pptx";
     public ArrayList<String> filesToCompare;
     public ArrayList<String> commentToCompare;
 
@@ -45,7 +45,7 @@ public class PptxFile extends OoxmlFile {
     /**
      * @return the JSON for the files to be compared for text comparision
      */
-    private ArrayList<JSONObject> getJson() {
+    private ArrayList<JSONObject> getTextJson() {
         ArrayList<JSONObject> allJson = new ArrayList<>();
         for (String files : filesToCompare) {
             allJson.add(getJson(files));
@@ -71,7 +71,7 @@ public class PptxFile extends OoxmlFile {
     public ArrayList<ArrayList<String>> getTextContent() {
         ArrayList<ArrayList<String>> allTextTag = new ArrayList<>();
 
-        for (JSONObject file : getJson()) {
+        for (JSONObject file : getTextJson()) {
 
             ArrayList<String> tags = new ArrayList<>();
             tags.add("a:r");
