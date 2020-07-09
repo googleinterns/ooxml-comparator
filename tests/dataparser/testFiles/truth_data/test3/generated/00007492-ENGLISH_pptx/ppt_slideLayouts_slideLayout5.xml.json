@@ -1,0 +1,805 @@
+{
+    "p:sldLayout": {
+        "@xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "@xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+        "@type": "twoTxTwoObj",
+        "@preserve": "1",
+        "p:cSld": {
+            "@name": "Comparison",
+            "p:spTree": {
+                "p:nvGrpSpPr": {
+                    "p:cNvPr": {
+                        "@id": "1",
+                        "@name": ""
+                    },
+                    "p:cNvGrpSpPr": null,
+                    "p:nvPr": null
+                },
+                "p:grpSpPr": {
+                    "a:xfrm": {
+                        "a:off": {
+                            "@x": "0",
+                            "@y": "0"
+                        },
+                        "a:ext": {
+                            "@cx": "0",
+                            "@cy": "0"
+                        },
+                        "a:chOff": {
+                            "@x": "0",
+                            "@y": "0"
+                        },
+                        "a:chExt": {
+                            "@cx": "0",
+                            "@cy": "0"
+                        }
+                    }
+                },
+                "p:sp": [
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "2",
+                                "@name": "Title 1"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "title"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": {
+                                "a:lvl1pPr": {
+                                    "a:defRPr": {
+                                        "@b": "1",
+                                        "a:solidFill": {
+                                            "a:schemeClr": {
+                                                "@val": "accent1",
+                                                "a:lumMod": {
+                                                    "@val": "50000"
+                                                }
+                                            }
+                                        },
+                                        "a:latin": {
+                                            "@typeface": "Arial",
+                                            "@panose": "020B0604020202020204",
+                                            "@pitchFamily": "34",
+                                            "@charset": "0"
+                                        },
+                                        "a:cs": {
+                                            "@typeface": "Arial",
+                                            "@panose": "020B0604020202020204",
+                                            "@pitchFamily": "34",
+                                            "@charset": "0"
+                                        }
+                                    }
+                                }
+                            },
+                            "a:p": {
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-US",
+                                        "@dirty": "0",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:t": "Click to edit Master title style"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-US",
+                                    "@dirty": "0"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "3",
+                                "@name": "Text Placeholder 2"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "body",
+                                    "@idx": "1"
+                                }
+                            }
+                        },
+                        "p:spPr": {
+                            "a:xfrm": {
+                                "a:off": {
+                                    "@x": "457200",
+                                    "@y": "1535113"
+                                },
+                                "a:ext": {
+                                    "@cx": "4040188",
+                                    "@cy": "639762"
+                                }
+                            }
+                        },
+                        "p:txBody": {
+                            "a:bodyPr": {
+                                "@anchor": "b"
+                            },
+                            "a:lstStyle": {
+                                "a:lvl1pPr": {
+                                    "@marL": "0",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "2400",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl2pPr": {
+                                    "@marL": "457200",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "2000",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl3pPr": {
+                                    "@marL": "914400",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1800",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl4pPr": {
+                                    "@marL": "1371600",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl5pPr": {
+                                    "@marL": "1828800",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl6pPr": {
+                                    "@marL": "2286000",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl7pPr": {
+                                    "@marL": "2743200",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl8pPr": {
+                                    "@marL": "3200400",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl9pPr": {
+                                    "@marL": "3657600",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                }
+                            },
+                            "a:p": {
+                                "a:pPr": {
+                                    "@lvl": "0"
+                                },
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-US",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:t": "Click to edit Master text styles"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "4",
+                                "@name": "Content Placeholder 3"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@sz": "half",
+                                    "@idx": "2"
+                                }
+                            }
+                        },
+                        "p:spPr": {
+                            "a:xfrm": {
+                                "a:off": {
+                                    "@x": "457200",
+                                    "@y": "2174875"
+                                },
+                                "a:ext": {
+                                    "@cx": "4040188",
+                                    "@cy": "3951288"
+                                }
+                            }
+                        },
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": {
+                                "a:lvl1pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "2400"
+                                    }
+                                },
+                                "a:lvl2pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "2000"
+                                    }
+                                },
+                                "a:lvl3pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1800"
+                                    }
+                                },
+                                "a:lvl4pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl5pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl6pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl7pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl8pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl9pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                }
+                            },
+                            "a:p": [
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "0"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Click to edit Master text styles"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "1"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Second level"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "2"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Third level"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "3"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Fourth level"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "4"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Fifth level"
+                                    },
+                                    "a:endParaRPr": {
+                                        "@lang": "en-US"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "5",
+                                "@name": "Text Placeholder 4"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "body",
+                                    "@sz": "quarter",
+                                    "@idx": "3"
+                                }
+                            }
+                        },
+                        "p:spPr": {
+                            "a:xfrm": {
+                                "a:off": {
+                                    "@x": "4645025",
+                                    "@y": "1535113"
+                                },
+                                "a:ext": {
+                                    "@cx": "4041775",
+                                    "@cy": "639762"
+                                }
+                            }
+                        },
+                        "p:txBody": {
+                            "a:bodyPr": {
+                                "@anchor": "b"
+                            },
+                            "a:lstStyle": {
+                                "a:lvl1pPr": {
+                                    "@marL": "0",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "2400",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl2pPr": {
+                                    "@marL": "457200",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "2000",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl3pPr": {
+                                    "@marL": "914400",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1800",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl4pPr": {
+                                    "@marL": "1371600",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl5pPr": {
+                                    "@marL": "1828800",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl6pPr": {
+                                    "@marL": "2286000",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl7pPr": {
+                                    "@marL": "2743200",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl8pPr": {
+                                    "@marL": "3200400",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                },
+                                "a:lvl9pPr": {
+                                    "@marL": "3657600",
+                                    "@indent": "0",
+                                    "a:buNone": null,
+                                    "a:defRPr": {
+                                        "@sz": "1600",
+                                        "@b": "1"
+                                    }
+                                }
+                            },
+                            "a:p": {
+                                "a:pPr": {
+                                    "@lvl": "0"
+                                },
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-US",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:t": "Click to edit Master text styles"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "6",
+                                "@name": "Content Placeholder 5"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@sz": "quarter",
+                                    "@idx": "4"
+                                }
+                            }
+                        },
+                        "p:spPr": {
+                            "a:xfrm": {
+                                "a:off": {
+                                    "@x": "4645025",
+                                    "@y": "2174875"
+                                },
+                                "a:ext": {
+                                    "@cx": "4041775",
+                                    "@cy": "3951288"
+                                }
+                            }
+                        },
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": {
+                                "a:lvl1pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "2400"
+                                    }
+                                },
+                                "a:lvl2pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "2000"
+                                    }
+                                },
+                                "a:lvl3pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1800"
+                                    }
+                                },
+                                "a:lvl4pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl5pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl6pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl7pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl8pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                },
+                                "a:lvl9pPr": {
+                                    "a:defRPr": {
+                                        "@sz": "1600"
+                                    }
+                                }
+                            },
+                            "a:p": [
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "0"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Click to edit Master text styles"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "1"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Second level"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "2"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Third level"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "3"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Fourth level"
+                                    }
+                                },
+                                {
+                                    "a:pPr": {
+                                        "@lvl": "4"
+                                    },
+                                    "a:r": {
+                                        "a:rPr": {
+                                            "@lang": "en-US",
+                                            "@smtClean": "0"
+                                        },
+                                        "a:t": "Fifth level"
+                                    },
+                                    "a:endParaRPr": {
+                                        "@lang": "en-US"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "7",
+                                "@name": "Date Placeholder 6"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "dt",
+                                    "@sz": "half",
+                                    "@idx": "10"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:fld": {
+                                    "@id": "{C23916F1-EA50-45B4-924B-DA6E3C21703F}",
+                                    "@type": "datetime1",
+                                    "a:rPr": {
+                                        "@lang": "en-US",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:pPr": null,
+                                    "a:t": "2/26/2013"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-US"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "8",
+                                "@name": "Footer Placeholder 7"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "ftr",
+                                    "@sz": "quarter",
+                                    "@idx": "11"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:endParaRPr": {
+                                    "@lang": "en-US"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "9",
+                                "@name": "Slide Number Placeholder 8"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "sldNum",
+                                    "@sz": "quarter",
+                                    "@idx": "12"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:fld": {
+                                    "@id": "{FBF943B6-41D7-4162-9806-64C925351C48}",
+                                    "@type": "slidenum",
+                                    "a:rPr": {
+                                        "@lang": "en-US",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:pPr": null,
+                                    "a:t": "\u2039#\u203a"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-US"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "p:extLst": {
+                "p:ext": {
+                    "@uri": "{BB962C8B-B14F-4D97-AF65-F5344CB8AC3E}",
+                    "p14:creationId": {
+                        "@xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main",
+                        "@xmlns": "",
+                        "@val": "2684238328"
+                    }
+                }
+            }
+        },
+        "p:clrMapOvr": {
+            "a:masterClrMapping": null
+        },
+        "mc:AlternateContent": {
+            "@xmlns:mc": "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            "mc:Choice": {
+                "@xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main",
+                "@xmlns": "",
+                "@Requires": "p14",
+                "p:transition": {
+                    "@spd": "slow",
+                    "p14:prism": {
+                        "@isContent": "1"
+                    }
+                }
+            },
+            "mc:Fallback": {
+                "p:transition": {
+                    "@spd": "slow",
+                    "p:fade": null
+                }
+            }
+        }
+    }
+}

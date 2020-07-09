@@ -1,0 +1,456 @@
+{
+    "comments": {
+        "@xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        "authors": {
+            "author": "skanda"
+        },
+        "commentList": {
+            "comment": [
+                {
+                    "@ref": "A18",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve",
+                                    "#text": "SWD for 46th street is given. Which one of this?"
+                                }
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "@ref": "A28",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": "lakshmi nagar swd given???"
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "@ref": "A41",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": "north or south"
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "@ref": "A94",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "b": null,
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "family": {
+                                    "@val": "2"
+                                }
+                            },
+                            "t": "Balaji Nagar swd is given. 80/0.75"
+                        }
+                    }
+                },
+                {
+                    "@ref": "A104",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": "SWD for kannan nagar is given. Which one this?"
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "@ref": "A126",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "b": null,
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "family": {
+                                    "@val": "2"
+                                }
+                            },
+                            "t": "BV nagar?? Here its given as south bv nagar"
+                        }
+                    }
+                },
+                {
+                    "@ref": "A140",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": "State bank colony is given. Which one of these?"
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "@ref": "A144",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": "kanagambal colony it says. ??"
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "@ref": "A154",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "family": {
+                                    "@val": "2"
+                                }
+                            },
+                            "t": {
+                                "@xml:space": "preserve",
+                                "#text": "ayyapa nagar street only is given"
+                            }
+                        }
+                    }
+                },
+                {
+                    "@ref": "A174",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "family": {
+                                    "@val": "2"
+                                }
+                            },
+                            "t": {
+                                "@xml:space": "preserve",
+                                "#text": "duraiswamy thotam given. So which is it here?"
+                            }
+                        }
+                    }
+                },
+                {
+                    "@ref": "A187",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": "so many state bank colony given. Which one is this? Does sb mean state bank at all?"
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "family": {
+                                        "@val": "2"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "@ref": "A188",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "charset": {
+                                    "@val": "1"
+                                }
+                            },
+                            "t": {
+                                "@xml:space": "preserve",
+                                "#text": "so many nanganallur is there. Where does this substation come?"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

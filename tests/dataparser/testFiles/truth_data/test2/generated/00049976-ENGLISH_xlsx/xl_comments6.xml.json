@@ -1,0 +1,135 @@
+{
+    "comments": {
+        "@xmlns": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
+        "authors": {
+            "author": "skanda"
+        },
+        "commentList": {
+            "comment": [
+                {
+                    "@ref": "A29",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "family": {
+                                    "@val": "2"
+                                }
+                            },
+                            "t": {
+                                "@xml:space": "preserve",
+                                "#text": "A58 is aother nanganallur main road (hd). Which swd is given?"
+                            }
+                        }
+                    }
+                },
+                {
+                    "@ref": "A44",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "family": {
+                                    "@val": "2"
+                                }
+                            },
+                            "t": {
+                                "@xml:space": "preserve",
+                                "#text": "both are 37th street. Swd for 36th street is given"
+                            }
+                        }
+                    }
+                },
+                {
+                    "@ref": "A105",
+                    "@authorId": "0",
+                    "text": {
+                        "r": {
+                            "rPr": {
+                                "sz": {
+                                    "@val": "9"
+                                },
+                                "color": {
+                                    "@indexed": "81"
+                                },
+                                "rFont": {
+                                    "@val": "Tahoma"
+                                },
+                                "charset": {
+                                    "@val": "1"
+                                }
+                            },
+                            "t": {
+                                "@xml:space": "preserve",
+                                "#text": "many new colony but which has community centres?"
+                            }
+                        }
+                    }
+                },
+                {
+                    "@ref": "C106",
+                    "@authorId": "0",
+                    "text": {
+                        "r": [
+                            {
+                                "rPr": {
+                                    "b": null,
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "charset": {
+                                        "@val": "1"
+                                    }
+                                },
+                                "t": "which street does this feature come under"
+                            },
+                            {
+                                "rPr": {
+                                    "sz": {
+                                        "@val": "9"
+                                    },
+                                    "color": {
+                                        "@indexed": "81"
+                                    },
+                                    "rFont": {
+                                        "@val": "Tahoma"
+                                    },
+                                    "charset": {
+                                        "@val": "1"
+                                    }
+                                },
+                                "t": {
+                                    "@xml:space": "preserve"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}
