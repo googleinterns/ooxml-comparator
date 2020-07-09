@@ -25,6 +25,8 @@ public class PptxFile extends OoxmlFile {
 
     public ArrayList<String> filesToCompare;
     public ArrayList<String> commentToCompare;
+    ArrayList<ArrayList<String>> allCommentTag;
+    HashMap<String,ArrayList<String>> authorTable;
 
     /**
      * Constuctor takes in the FolderPath for the file and creates a list of files to be compared.
@@ -134,9 +136,6 @@ public class PptxFile extends OoxmlFile {
         }
         return authorTable;
     }
-
-    ArrayList<ArrayList<String>> allCommentTag;
-    HashMap<String,ArrayList<String>> authorTable;
 
     private void extractpcmTag(JSONObject wCommentTagObj){
         ArrayList<String> temp = JsonUtility.getCommentContentPptx(wCommentTagObj);

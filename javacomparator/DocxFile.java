@@ -17,6 +17,7 @@ public class DocxFile extends OoxmlFile {
 
     public ArrayList<String> filesToCompare;
     public ArrayList<String> commentToCompare;
+    ArrayList<ArrayList<String>> allCommentTag;
 
     /**
      * Constuctor takes in the FolderPath for the file and creates a list of files to be compared.
@@ -79,8 +80,6 @@ public class DocxFile extends OoxmlFile {
 
         return allTextTag;
     }
-
-    ArrayList<ArrayList<String>> allCommentTag;
 
     private void extractwcommentTag(JSONObject wCommentTagObj){
         ArrayList<String> commentContent = JsonUtility.getCommentContentDocx(wCommentTagObj);

@@ -35,6 +35,7 @@ public class XlsxFile extends OoxmlFile {
     public ArrayList<String> filesToCompare,commentToCompare;
     public ArrayList<ArrayList<String>> sharedString;
     public ArrayList<ArrayList<String>> allTextTag;
+    ArrayList<ArrayList<String>> allCommentTag;
 
     /**
      * Constuctor takes in the FolderPath for the file and creates a list of files to be compared.
@@ -257,7 +258,6 @@ public class XlsxFile extends OoxmlFile {
         }
         return allTextTag;
     }
-    ArrayList<ArrayList<String>> allCommentTag;
 
     private void extractCommentTag(JSONObject wCommentTagObj, JSONObject file){
         StatusLogger.addRecordInfoDebug(wCommentTagObj.toString());
