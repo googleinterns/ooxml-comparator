@@ -80,7 +80,7 @@ public class FileComparator {
         String stringVal2 = stringBuilder.toString();
         return stringVal1.equals(stringVal2);
     }
-    
+
     /**
      * Compares the Tags extracted from the two subtree by the order in which they appear.
      * @param tagComp Tag the JSONSubtree is extracted for

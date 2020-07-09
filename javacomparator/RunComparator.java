@@ -25,7 +25,7 @@ public class RunComparator{
 
     /**
      * The Main execution of the comparator starts here.
-     * @param args Pass in the path of
+     * @param args Pass in the path of Config File.
      */
     public static void main(String[] args) {
         try{
