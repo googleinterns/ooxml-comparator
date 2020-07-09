@@ -9,7 +9,12 @@ import java.util.Comparator;
  */
 public class DocxFile extends OoxmlFile {
 
-    public final String TYPEFILE = "docx";
+    public static final String DOCX_WORD_DOCUMENT_FILE = "word_document.xml.json";
+    public static final String DOCX_WORD_COMMENTS_FILE = "word_comments.xml.json";
+    public static final String DOCX_TAG_TO_COMPARE_TEXT = "w:r";
+    public static final String DOCX_TAG_TO_GET_TEXT_CONTENT = "w:t";
+    public static final String DOCX_TAG_TO_COMPARE_COMMENT = "w:comment";
+
     public ArrayList<String> filesToCompare;
     public ArrayList<String> commentToCompare;
 
@@ -23,9 +28,9 @@ public class DocxFile extends OoxmlFile {
         loadFromPath();
         filesToCompare = new ArrayList<>();
         commentToCompare = new ArrayList<>();
-        this.filesToCompare.add("word_document.xml.json");
-        if(jsonDataFiles.containsKey("word_comments.xml.json")){
-            commentToCompare.add("word_comments.xml.json");
+        this.filesToCompare.add(DOCX_WORD_DOCUMENT_FILE);
+        if(jsonDataFiles.containsKey(DOCX_WORD_COMMENTS_FILE)){
+            commentToCompare.add(DOCX_WORD_COMMENTS_FILE);
         }
     }
 
@@ -61,11 +66,11 @@ public class DocxFile extends OoxmlFile {
         for (JSONObject file : getTextJson()) {
 
             ArrayList<String> tags = new ArrayList<>();
-            tags.add("w:r");
+            tags.add(DOCX_TAG_TO_COMPARE_TEXT);
             ArrayList<JSONObject> wrTag = JsonUtility.extractTag(file, tags);
 
             for (JSONObject wrTagObj : wrTag) {
-                ArrayList<String> textContent = JsonUtility.getTextContent(wrTagObj, new ArrayList<>(Arrays.asList("w:t")),false);
+                ArrayList<String> textContent = JsonUtility.getTextContent(wrTagObj, new ArrayList<>(Arrays.asList(DOCX_TAG_TO_GET_TEXT_CONTENT)),false);
                 if(!textContent.isEmpty()){
                     allTextTag.add(textContent);
                 }
@@ -90,13 +95,13 @@ public class DocxFile extends OoxmlFile {
         allCommentTag = new ArrayList<>();
         for (JSONObject file : getCommentJson()) {
             ArrayList<String> tags = new ArrayList<>();
-            tags.add("w:comment");
+            tags.add(DOCX_TAG_TO_COMPARE_COMMENT);
             JSONObject wCommentTag = JsonUtility.extractTag(file, tags).get(0);
-            if (wCommentTag.get("w:comment") instanceof JSONObject) {
-                JSONObject wCommentTagObj = (JSONObject) wCommentTag.get("w:comment");
+            if (wCommentTag.get(DOCX_TAG_TO_COMPARE_COMMENT) instanceof JSONObject) {
+                JSONObject wCommentTagObj = (JSONObject) wCommentTag.get(DOCX_TAG_TO_COMPARE_COMMENT);
                 extractwcommentTag(wCommentTagObj);
             } else {
-                ArrayList<JSONObject> allCommentTagJson = (ArrayList<JSONObject>) wCommentTag.get("w:comment");
+                ArrayList<JSONObject> allCommentTagJson = (ArrayList<JSONObject>) wCommentTag.get(DOCX_TAG_TO_COMPARE_COMMENT);
                 for (JSONObject wCommentTagObj : allCommentTagJson) {
                     extractwcommentTag(wCommentTagObj);
                 }

@@ -20,6 +20,25 @@ import java.util.TreeSet;
  * Individual comparision report, Global run Summary and All diff compilation
  */
 public class DiffGenerator {
+
+    public static final String GENERAL_SHEET_NAME = "Data";
+    public static final short TITLE_REPORT_SHEET_FONT_SIZE = 20;
+    public static final short SECTION_REPORT_SHEET_FONT_SIZE = 16;
+    public static final short SUBSECTION_DATA_REPORT_SHEET_FONT_SIZE = 12;
+    public static final short HEADER_GENERAL_SHEET_FONT_SIZE = 14;
+    public static final String DIFF_FOUND_TAG_TYPE_TEXT = "0";
+    public static final String DIFF_FOUND_TAG_TYPE_COMMENT = "1";
+
+    public static final String DOCX_FILE_TYPE = "docx";
+    public static final String PPTX_FILE_TYPE = "pptx";
+    public static final String XLSX_FILE_TYPE = "xlsx";
+    public static final String INVALID_FILE_TYPE = "invalid";
+
+    public static final String GLOBAL_REPORT_SHEET_NAME = "Global";
+    public static final String DOCX_REPORT_SHEET_NAME = "Docx";
+    public static final String PPTX_REPORT_SHEET_NAME = "Pptx";
+    public static final String XLSX_REPORT_SHEET_NAME = "Xlsx";
+
     String pathOriginalFile;
     String pathRoundTripFile;
     String finalOutputPath;
@@ -46,11 +65,11 @@ public class DiffGenerator {
      */
     private void writeCSVFile(ArrayList<String[]> rowTableEntry, String[] headerTable, String outputFilePath) {
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheetData = workbook.createSheet("Data");
+        Sheet sheetData = workbook.createSheet(GENERAL_SHEET_NAME);
 
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
-        headerFont.setFontHeightInPoints((short) 14);
+        headerFont.setFontHeightInPoints(HEADER_GENERAL_SHEET_FONT_SIZE);
         headerFont.setColor(IndexedColors.RED.getIndex());
 
         CellStyle headerCellStyle = workbook.createCellStyle();
@@ -69,7 +88,8 @@ public class DiffGenerator {
         int rowNum = 1;
 
         for (String[] entry : rowTableEntry) {
-            Row row = sheetData.createRow(rowNum++);
+            Row row = sheetData.createRow(rowNum);
+            rowNum ++;
             for (int i = 0; i < entry.length; i++) {
                 row.createCell(i).setCellValue(entry[i]);
             }
@@ -121,7 +141,7 @@ public class DiffGenerator {
     private void prepareFolderRequired(){
         Path finalFolder = Paths.get(finalOutputPath);
         if (Files.notExists(finalFolder)) {
-            // the output path does not exist
+            // The output path does not exist.
             StatusLogger.addRecordWarningExec("NOT A VALID FOLDER PATH : " + finalOutputPath);
             return;
         }
@@ -153,17 +173,20 @@ public class DiffGenerator {
         int commentDiffInFile = 0;
         int textDiffInFile = 0;
         for (DiffObject diffObject : diffObjectsFound) {
+
             generalReportData.addTagCount(diffObject.tagCausingDiff);
             generalReportData.addTypeCount(diffObject.typeOfTag);
             fileTypeSpecificReportData.addTagCount(diffObject.tagCausingDiff);
             fileTypeSpecificReportData.addTypeCount(diffObject.typeOfTag);
-            if (diffObject.typeOfTag.equals("0")) {
+
+            if (diffObject.typeOfTag.equals(DIFF_FOUND_TAG_TYPE_TEXT)) {
                 textDiffInFile++;
             } else {
                 commentDiffInFile++;
             }
         }
         if (textDiffInFile > 0) {
+
             if (commentDiffInFile == 0) {
                 generalReportData.filesWithOnlyTextDiff++;
                 fileTypeSpecificReportData.filesWithOnlyTextDiff++;
@@ -172,6 +195,7 @@ public class DiffGenerator {
             generalReportData.filesContainingTextDiffs++;
         }
         if (commentDiffInFile > 0) {
+
             if (textDiffInFile == 0) {
                 generalReportData.filesWithOnlyCommentDiff++;
                 fileTypeSpecificReportData.filesWithOnlyCommentDiff++;
@@ -179,6 +203,7 @@ public class DiffGenerator {
             generalReportData.filesContainingCommentDiffs++;
             fileTypeSpecificReportData.filesContainingCommentDiffs++;
         }
+
         // Adding time taken to compute differences in ms precision.
         generalReportData.addTimeForFile((int) (elapsedTime / 1000000));
         fileTypeSpecificReportData.addTimeForFile((int) (elapsedTime / 1000000));
@@ -215,10 +240,10 @@ public class DiffGenerator {
         ArrayList<String[]> summaryData = new ArrayList<>();
 
         // Will be used in runDataGeneration.
-        RunReportData generalReportData = new RunReportData("Global");
-        RunReportData docxReportData = new RunReportData("Docx");
-        RunReportData pptxReportData = new RunReportData("Pptx");
-        RunReportData xlsxReportData = new RunReportData("Xlsx");
+        RunReportData generalReportData = new RunReportData(GLOBAL_REPORT_SHEET_NAME);
+        RunReportData docxReportData = new RunReportData(DOCX_REPORT_SHEET_NAME);
+        RunReportData pptxReportData = new RunReportData(PPTX_REPORT_SHEET_NAME);
+        RunReportData xlsxReportData = new RunReportData(XLSX_REPORT_SHEET_NAME);
 
         for (String origFileName : foldersOrig) {
             if (!folderPresentRound.contains(origFileName)) {
@@ -234,17 +259,17 @@ public class DiffGenerator {
             ArrayList<DiffObject> diffObjectsFound = fileComparator.compareText();
             long elapsedTime = System.nanoTime() - startTime;
 
-            if (!fileComparator.fileExtension.equals("invalid")) {
+            if (!fileComparator.fileExtension.equals(INVALID_FILE_TYPE)) {
                 // Report data collection starts.
                 RunReportData fileTypeReport;
                 switch (fileComparator.fileExtension) {
-                    case "docx":
+                    case DOCX_FILE_TYPE:
                         fileTypeReport = docxReportData;
                         break;
-                    case "pptx":
+                    case PPTX_FILE_TYPE:
                         fileTypeReport = pptxReportData;
                         break;
-                    case "xlsx":
+                    case XLSX_FILE_TYPE:
                         fileTypeReport = xlsxReportData;
                         break;
                     default:
@@ -264,7 +289,7 @@ public class DiffGenerator {
     private void createXLSXHeading(Workbook workbook, Sheet sheet, String cellContent){
         Font titleFont = workbook.createFont();
         titleFont.setBold(true);
-        titleFont.setFontHeightInPoints((short) 20);
+        titleFont.setFontHeightInPoints(TITLE_REPORT_SHEET_FONT_SIZE);
         titleFont.setColor(IndexedColors.BLUE.getIndex());
 
         CellStyle headerCellStyle = workbook.createCellStyle();
@@ -280,7 +305,7 @@ public class DiffGenerator {
     private void createXLSXSection(Workbook workbook,Sheet sheet,int rowNum,int colNum,String cellContent){
         Font sectionFont = workbook.createFont();
         sectionFont.setBold(true);
-        sectionFont.setFontHeightInPoints((short) 16);
+        sectionFont.setFontHeightInPoints(SECTION_REPORT_SHEET_FONT_SIZE);
         sectionFont.setColor(IndexedColors.RED.getIndex());
 
         CellStyle headerCellStyle = workbook.createCellStyle();
@@ -296,7 +321,7 @@ public class DiffGenerator {
     private void createXLSXSubSection(Workbook workbook, Sheet sheet, int rowNum, String cellContent) {
         Font subSectionFont = workbook.createFont();
         subSectionFont.setBold(true);
-        subSectionFont.setFontHeightInPoints((short) 12);
+        subSectionFont.setFontHeightInPoints(SUBSECTION_DATA_REPORT_SHEET_FONT_SIZE);
         subSectionFont.setColor(IndexedColors.GREEN.getIndex());
 
         CellStyle headerCellStyle = workbook.createCellStyle();
@@ -311,7 +336,7 @@ public class DiffGenerator {
     private void createXLSXDataSection(Workbook workbook,Sheet sheet,int rowNum,int colNum,String cellContent) {
         Font subSectionFont = workbook.createFont();
         subSectionFont.setBold(true);
-        subSectionFont.setFontHeightInPoints((short) 12);
+        subSectionFont.setFontHeightInPoints(SUBSECTION_DATA_REPORT_SHEET_FONT_SIZE);
         subSectionFont.setColor(IndexedColors.BLACK.getIndex());
 
         CellStyle headerCellStyle = workbook.createCellStyle();
@@ -393,13 +418,13 @@ public class DiffGenerator {
         createXLSXDataSection(workbook,sheet,22,3, String.valueOf(val/60000));
 
         createXLSXSubSection(workbook,sheet,23, "99th percentile latency");
-        val = currentData.get99PercentileLatency();
+        val = currentData.percentileLatency(currentData.timeTakenPerFile,99.0);
         createXLSXDataSection(workbook,sheet,23,1, String.valueOf(val));
         createXLSXDataSection(workbook,sheet,23,2, String.valueOf(val/1000));
         createXLSXDataSection(workbook,sheet,23,3, String.valueOf(val/60000));
 
         createXLSXSubSection(workbook,sheet,24, "50th percentile latency");
-        val = currentData.get50PercentileLatency();
+        val = currentData.percentileLatency(currentData.timeTakenPerFile,50.0);
         createXLSXDataSection(workbook,sheet,24,1, String.valueOf(val));
         createXLSXDataSection(workbook,sheet,24,2, String.valueOf(val/1000));
         createXLSXDataSection(workbook,sheet,24,3, String.valueOf(val/60000));
@@ -434,7 +459,7 @@ public class DiffGenerator {
                 sheet.autoSizeColumn(i);
             }
 
-            if (currentData.fileTypeName.equals("Global")) {
+            if (currentData.fileTypeName.equals(GLOBAL_REPORT_SHEET_NAME)) {
                 for(int row=26;row<=28;row++){ // Create the extra rows needed.
                     sheet.createRow(row);
                 }

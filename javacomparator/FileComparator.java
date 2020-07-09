@@ -1,8 +1,16 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class FileComparator {
+
+    public static final String DOCX_FILE_TYPE = "docx";
+    public static final String PPTX_FILE_TYPE = "pptx";
+    public static final String XLSX_FILE_TYPE = "xlsx";
+    public static final String INVALID_FILE_TYPE = "invalid";
+    public static final List<Character> CHARACTER_IGNORE_LIST =  Arrays.asList(' ', '\t', '\n');
+    public static final String CONTENT_DIFFERENT_MESSAGE_FOR_REPORT = "TEXT CONTENT DIFFERENT";
     String fileOriginalPath, fileRoundtrippedPath;
     String fileExtension;
 
@@ -10,14 +18,14 @@ public class FileComparator {
         this.fileOriginalPath = fileOriginalPath;
         this.fileRoundtrippedPath = fileRoundtrippedPath;
 
-        if (fileOriginalPath.endsWith("docx") && fileRoundtrippedPath.endsWith("docx")) {
-            fileExtension = "docx";
-        } else if (fileOriginalPath.endsWith("pptx") && fileRoundtrippedPath.endsWith("pptx")) {
-            fileExtension = "pptx";
-        } else if (fileOriginalPath.endsWith("xlsx") && fileRoundtrippedPath.endsWith("xlsx")) {
-            fileExtension = "xlsx";
+        if (fileOriginalPath.endsWith(DOCX_FILE_TYPE) && fileRoundtrippedPath.endsWith(DOCX_FILE_TYPE)) {
+            fileExtension = DOCX_FILE_TYPE;
+        } else if (fileOriginalPath.endsWith(PPTX_FILE_TYPE) && fileRoundtrippedPath.endsWith(PPTX_FILE_TYPE)) {
+            fileExtension = PPTX_FILE_TYPE;
+        } else if (fileOriginalPath.endsWith(XLSX_FILE_TYPE) && fileRoundtrippedPath.endsWith(XLSX_FILE_TYPE)) {
+            fileExtension = XLSX_FILE_TYPE;
         } else {
-            fileExtension = "invalid";
+            fileExtension = INVALID_FILE_TYPE;
             StatusLogger.addRecordWarningExec("Either Path is invalid / File types do not match");
         }
     }
@@ -30,7 +38,7 @@ public class FileComparator {
      * @return whether the content of the two tags are same or not
      */
     private boolean comparisionLogic(ArrayList<String> content1, ArrayList<String> content2) {
-        ArrayList<Character> delim = new ArrayList<>(Arrays.asList(' ', '\t', '\n'));
+
         StringBuilder stringBuilder = new StringBuilder();
         for (String contentVal : content1) {
             try {
@@ -39,7 +47,7 @@ public class FileComparator {
                 stringBuilder.append(contentVal);
             } catch (NumberFormatException e) {
                 for (int i = 0; i < contentVal.length(); i++) {
-                    if (!delim.contains(contentVal.charAt(i))) {
+                    if (!CHARACTER_IGNORE_LIST.contains(contentVal.charAt(i))) {
                         stringBuilder.append(Character.toLowerCase(contentVal.charAt(i)));
                     }
                 }
@@ -54,7 +62,7 @@ public class FileComparator {
                 stringBuilder.append(contentVal);
             } catch (NumberFormatException e) {
                 for (int i = 0; i < contentVal.length(); i++) {
-                    if (!delim.contains(contentVal.charAt(i))) {
+                    if (!CHARACTER_IGNORE_LIST.contains(contentVal.charAt(i))) {
                         stringBuilder.append(Character.toLowerCase(contentVal.charAt(i)));
                     }
                 }
@@ -66,6 +74,14 @@ public class FileComparator {
 
     public ArrayList<DiffObject> diffReport;
 
+    /**
+     * Compares the Tags extracted from the two subtree by the order in which they appear.
+     * @param tagComp Tag the JSONSubtree is extracted for
+     * @param type "0" for text, "1" for comment tag
+     * @param FileType Type of file the matching is done for.
+     * @param TagContents1 Content of the First Subtree, from the Original OOXML file.
+     * @param TagContents2 Content of the Second Subtree, from the Roundtripped OOXML file.
+     */
     private void compareContentByOrder(String tagComp, String type, String FileType, ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2) {
         if (TagContents2.size() != TagContents1.size()) {
             StatusLogger.addRecordInfoExec("NUMBER OF " + tagComp + " in " + FileType + " are not same!!");
@@ -85,13 +101,19 @@ public class FileComparator {
             boolean isSame = comparisionLogic(TagContents1.get(i), TagContents2.get(i));
             matched += 1;
             if (!isSame) {
-                diffReport.add(new DiffObject(tagComp, type, TagContents1.get(i), TagContents2.get(i), "CONTENT DIFFERENT"));
+                diffReport.add(new DiffObject(tagComp, type, TagContents1.get(i), TagContents2.get(i),CONTENT_DIFFERENT_MESSAGE_FOR_REPORT));
             }
         }
         StatusLogger.addRecordInfoExec("MATCHED : " + matched);
     }
 
-    private void compareContentByID(String type, ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2, String diffMsg) {
+    /**
+     * Compare the contents for the two subtree ordered by the ID.
+     * @param type "0" for text, "1" for comment tag
+     * @param TagContents1 Content of the First Subtree, from the Original OOXML file.
+     * @param TagContents2 Content of the Second Subtree, from the Roundtripped OOXML file.
+     */
+    private void compareContentByID(String type, ArrayList<ArrayList<String>> TagContents1, ArrayList<ArrayList<String>> TagContents2) {
         if (TagContents2.size() != TagContents1.size()) {
             StatusLogger.addRecordInfoExec("NUMBER OF c in " + fileExtension + " are not same!!");
         }
@@ -108,7 +130,7 @@ public class FileComparator {
                 ArrayList<String> actualContent = cellValues.get(it.get(0));
                 boolean isSame = comparisionLogic(actualContent, it);
                 if (!isSame) {
-                    diffReport.add(new DiffObject("c", type, actualContent, it, diffMsg));
+                    diffReport.add(new DiffObject("c", type, actualContent, it,CONTENT_DIFFERENT_MESSAGE_FOR_REPORT));
                 }
             }
         }
@@ -122,12 +144,12 @@ public class FileComparator {
 
         ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
         ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
-        compareContentByOrder("w:r", "0", "docx", runTagContents1, runTagContents2);
+        compareContentByOrder(DocxFile.DOCX_TAG_TO_COMPARE_TEXT, DiffGenerator.DIFF_FOUND_TAG_TYPE_TEXT, DOCX_FILE_TYPE, runTagContents1, runTagContents2);
 
         ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
         ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
 
-        compareContentByOrder("w:comment", "1", "docx", commentContents1, commentContents2);
+        compareContentByOrder(DocxFile.DOCX_TAG_TO_COMPARE_COMMENT, DiffGenerator.DIFF_FOUND_TAG_TYPE_COMMENT, DOCX_FILE_TYPE, commentContents1, commentContents2);
     }
 
     private void compareTextAndCommentPptx(){
@@ -137,14 +159,12 @@ public class FileComparator {
         ArrayList<ArrayList<String>> runTagContents1 = file1.getTextContent();
         ArrayList<ArrayList<String>> runTagContents2 = file2.getTextContent();
 
-        StatusLogger.addRecordInfoDebug("BEFORE Content Comparator");
-        compareContentByOrder("a:r", "0", "pptx", runTagContents1, runTagContents2);
-        StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
+        compareContentByOrder(PptxFile.PPTX_TAG_TO_COMPARE_TEXT, DiffGenerator.DIFF_FOUND_TAG_TYPE_TEXT, PPTX_FILE_TYPE, runTagContents1, runTagContents2);
 
         ArrayList<ArrayList<String>> commentContents1 = file1.getCommentContent();
         ArrayList<ArrayList<String>> commentContents2 = file2.getCommentContent();
 
-        compareContentByOrder("p:cm", "1", "pptx", commentContents1, commentContents2);
+        compareContentByOrder(PptxFile.PPTX_TAG_TO_COMPARE_COMMENT, DiffGenerator.DIFF_FOUND_TAG_TYPE_COMMENT, PPTX_FILE_TYPE, commentContents1, commentContents2);
     }
 
     private void compareTextAndCommentXlsx(){
@@ -157,14 +177,12 @@ public class FileComparator {
         ArrayList<ArrayList<String>> runTagContents1 = file1.GetTextContent();
         ArrayList<ArrayList<String>> runTagContents2 = file2.GetTextContent();
 
-        StatusLogger.addRecordInfoDebug("Before content comparator");
-        compareContentByID("0", runTagContents1, runTagContents2, "Cell value different");
-        StatusLogger.addRecordInfoDebug("AFTER Content Comparator");
+        compareContentByID(DiffGenerator.DIFF_FOUND_TAG_TYPE_TEXT, runTagContents1, runTagContents2);
 
         ArrayList<ArrayList<String>> CommentTagContents1 = file1.getCommentContent();
         ArrayList<ArrayList<String>> CommentTagContents2 = file2.getCommentContent();
 
-        compareContentByID("1", CommentTagContents1, CommentTagContents2, "Cell Comment Different");
+        compareContentByID(DiffGenerator.DIFF_FOUND_TAG_TYPE_COMMENT, CommentTagContents1, CommentTagContents2);
     }
 
     /**
@@ -176,15 +194,15 @@ public class FileComparator {
         diffReport = new ArrayList<>();
 
         switch (fileExtension) {
-            case "docx": {
+            case DOCX_FILE_TYPE: {
                 compareTextAndCommentDocx();
                 break;
             }
-            case "pptx": {
+            case PPTX_FILE_TYPE: {
                 compareTextAndCommentPptx();
                 break;
             }
-            case "xlsx": {
+            case XLSX_FILE_TYPE: {
                 compareTextAndCommentXlsx();
                 break;
             }

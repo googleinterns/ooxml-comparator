@@ -8,6 +8,20 @@ import java.util.ArrayList;
  */
 public class JsonUtility {
 
+    public static final char ATTRIBUTE_TAG_START_CHARACTER = '@';
+    public static final boolean DEFAULT_STATE_IGNORE_ATTRIBUTE = true;
+    public static final boolean DEFAULT_STATE_SEEN_ANCESTOR_ATTRIBUTE = true;
+
+    public static final String DOCX_COMMENT_ATTRIBUTE_ID = "@w:id";
+    public static final String DOCX_COMMENT_ATTRIBUTE_AUTHOR = "@w:author";
+    public static final String DOCX_COMMENT_ATTRIBUTE_DATE = "@w:date";
+
+    public static final String PPTX_COMMENT_ATTRIBUTE_ID = "@idx";
+    public static final String PPTX_COMMENT_ATTRIBUTE_AUTHOR = "@authorId";
+    public static final String PPTX_COMMENT_ATTRIBUTE_DATE = "@dt";
+
+    public static final String XLSX_COMMENT_ATTRIBUTE_REF_ID = "@ref";
+
     public static ArrayList<JSONObject> buffer;
     public static ArrayList<String> stringOrder;
 
@@ -27,7 +41,7 @@ public class JsonUtility {
             Object jsonValue = jsonDataSubtree.get(tagName);
             String tagNameValue = (String) tagName;
 
-            if (ignoreAttribute && (tagNameValue.charAt(0) == '@')) {
+            if (ignoreAttribute && (tagNameValue.charAt(0) == ATTRIBUTE_TAG_START_CHARACTER)) {
                 // If the node in the recursion is a Attribute.
                 continue;
             }
@@ -60,7 +74,7 @@ public class JsonUtility {
      */
     public static ArrayList<JSONObject> extractTag(JSONObject jsonData, ArrayList<String> tags) {
         buffer = new ArrayList<>();
-        recurseVisit(jsonData, tags, true);
+        recurseVisit(jsonData, tags, DEFAULT_STATE_IGNORE_ATTRIBUTE);
         return buffer;
     }
 
@@ -75,13 +89,13 @@ public class JsonUtility {
             Object jsonValue = jsonData.get(tagName); // do something with jsonObject here
             String tagNameValue = (String) tagName;
 
-            if (tagNameValue.charAt(0) == '@') {
+            if (tagNameValue.charAt(0) == ATTRIBUTE_TAG_START_CHARACTER) {
                 continue;
             }
 
             boolean seenTagInParent = seenTag;
             if (textTags != null && textTags.contains(tagNameValue)) {
-                seenTagInParent = true;
+                seenTagInParent = DEFAULT_STATE_SEEN_ANCESTOR_ATTRIBUTE;
             }
 
             if (jsonValue instanceof JSONObject) {
@@ -123,10 +137,10 @@ public class JsonUtility {
      */
     public static ArrayList<String> getCommentContentDocx(JSONObject wCommentTagObj) {
         stringOrder = new ArrayList<>();
-        recurseText(wCommentTagObj, null, true);
-        stringOrder.add(0, (String) wCommentTagObj.get("@w:id"));
-        stringOrder.add(1, (String) wCommentTagObj.get("@w:author"));
-        stringOrder.add(2, (String) wCommentTagObj.get("@w:date"));
+        recurseText(wCommentTagObj, null, DEFAULT_STATE_SEEN_ANCESTOR_ATTRIBUTE);
+        stringOrder.add(0, (String) wCommentTagObj.get(DOCX_COMMENT_ATTRIBUTE_ID));
+        stringOrder.add(1, (String) wCommentTagObj.get(DOCX_COMMENT_ATTRIBUTE_AUTHOR));
+        stringOrder.add(2, (String) wCommentTagObj.get(DOCX_COMMENT_ATTRIBUTE_DATE));
         return stringOrder;
     }
 
@@ -138,10 +152,10 @@ public class JsonUtility {
      */
     public static ArrayList<String> getCommentContentPptx(JSONObject commentTagObj) {
         stringOrder = new ArrayList<>();
-        recurseText(commentTagObj, null, true);
-        stringOrder.add(0, (String) commentTagObj.get("@idx"));
-        stringOrder.add(1, (String) commentTagObj.get("@authorId"));
-        stringOrder.add(2, (String) commentTagObj.get("@dt"));
+        recurseText(commentTagObj, null, DEFAULT_STATE_SEEN_ANCESTOR_ATTRIBUTE);
+        stringOrder.add(0, (String) commentTagObj.get(PPTX_COMMENT_ATTRIBUTE_ID));
+        stringOrder.add(1, (String) commentTagObj.get(PPTX_COMMENT_ATTRIBUTE_AUTHOR));
+        stringOrder.add(2, (String) commentTagObj.get(PPTX_COMMENT_ATTRIBUTE_DATE));
         return stringOrder;
     }
 
@@ -152,8 +166,8 @@ public class JsonUtility {
      */
     public static ArrayList<String> getCommentContentXlsx(JSONObject commentTagObject, String fileUniqueId) {
         stringOrder = new ArrayList<>();
-        recurseText(commentTagObject, null, true);
-        stringOrder.add(0, fileUniqueId + commentTagObject.get("@ref"));
+        recurseText(commentTagObject, null, DEFAULT_STATE_SEEN_ANCESTOR_ATTRIBUTE);
+        stringOrder.add(0, fileUniqueId + commentTagObject.get(XLSX_COMMENT_ATTRIBUTE_REF_ID));
         return stringOrder;
     }
 }

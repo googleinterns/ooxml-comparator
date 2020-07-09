@@ -9,6 +9,8 @@ import java.util.Map;
  */
 public class RunReportData {
 
+    public static final float FULL_PERCENT = 100.0f;
+
     public String fileTypeName;
     public int totalFilesMatched, numberOfFileNoDiff, totalDiff, filesContainingTextDiffs, filesContainingCommentDiffs, filesWithOnlyTextDiff, filesWithOnlyCommentDiff;
     public HashMap<String, Integer> tagCausingDiff, typeCausingDiff;
@@ -62,7 +64,8 @@ public class RunReportData {
      * @return Percentage of files with no Diff.
      */
     public float getPercentageNoDiff() {
-        return (numberOfFileNoDiff * 100.0f) / totalFilesMatched;
+        if(totalFilesMatched==0) return FULL_PERCENT;
+        return (numberOfFileNoDiff * FULL_PERCENT) / totalFilesMatched;
     }
 
     /**
@@ -128,24 +131,8 @@ public class RunReportData {
     public static long percentileLatency(ArrayList<Integer> latencies, double percentile) {
         if (latencies.isEmpty()) return 0;
         Collections.sort(latencies);
-        int index = (int) Math.ceil(percentile / 100.0 * latencies.size());
+        int index = (int) Math.ceil(percentile / FULL_PERCENT * latencies.size());
         if (index > 0) index--;
         return latencies.get(index);
-    }
-
-    /**
-     * Calculates the 99 percentile for the latency data.
-     * @return returns the 99 percentile value
-     */
-    public float get99PercentileLatency() {
-        return percentileLatency(timeTakenPerFile, 99.0);
-    }
-
-    /**
-     * Calculates the 50 percentile for the latency data.
-     * @return returns the 50 percentile value
-     */
-    public float get50PercentileLatency() {
-        return percentileLatency(timeTakenPerFile, 50.0);
     }
 }

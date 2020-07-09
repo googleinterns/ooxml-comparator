@@ -6,6 +6,7 @@ import java.util.logging.*;
  */
 public class StatusLogger {
 
+
     private final static Logger loggerExecution = Logger.getLogger("EXEC");
     private final static Logger loggerDebug = Logger.getLogger("DEBUG");
 

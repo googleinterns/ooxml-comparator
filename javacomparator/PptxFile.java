@@ -9,7 +9,20 @@ import java.util.HashMap;
  * PptxFile Class implments the methods required for comparasions of PPTX files
  */
 public class PptxFile extends OoxmlFile {
-    public final String TYPEFILE = "pptx";
+
+    public static final String PPTX_SLIDE_TEXT_FILE_NAME_PREFIX = "ppt_slides_slide";
+    public static final String PPTX_SLIDE_COMMENT_FILE_NAME_PREFIX = "ppt_comments_comment";
+    public static final String PPTX_SLIDE_FILE_NAME_SUFFIX = ".xml.json";
+
+    public static final String PPTX_TAG_TO_COMPARE_TEXT = "a:r";
+    public static final String PPTX_TAG_TO_GET_TEXT_CONTENT = "a:t";
+    public static final String PPTX_TAG_TO_COMPARE_COMMENT = "p:cm";
+
+    public static final String PPTX_COMMENT_AUTHOR_TABLE_FILE_NAME = "ppt_commentAuthors.xml.json";
+    public static final String PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_NAME = "p:cmAuthor";
+    public static final String PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_ATTRIBUTE_NAME ="@name";
+    public static final String PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_ATTRIBUTE_ID="@id";
+
     public ArrayList<String> filesToCompare;
     public ArrayList<String> commentToCompare;
 
@@ -23,7 +36,7 @@ public class PptxFile extends OoxmlFile {
         loadFromPath();
         filesToCompare = new ArrayList<>();
         for (int i = 1; ; i++) {
-            String xmlFileName = "ppt_slides_slide" + i + ".xml.json";
+            String xmlFileName = PPTX_SLIDE_TEXT_FILE_NAME_PREFIX + i + PPTX_SLIDE_FILE_NAME_SUFFIX;
             if (jsonDataFiles.containsKey(xmlFileName)) {
                 filesToCompare.add(xmlFileName);
             } else {
@@ -33,7 +46,7 @@ public class PptxFile extends OoxmlFile {
 
         commentToCompare = new ArrayList<>();
         for(int i = 1; ; i++){
-            String xmlFileName = "ppt_comments_comment" + i + ".xml.json";
+            String xmlFileName = PPTX_SLIDE_COMMENT_FILE_NAME_PREFIX + i + PPTX_SLIDE_FILE_NAME_SUFFIX;
             if (jsonDataFiles.containsKey(xmlFileName)) {
                 commentToCompare.add(xmlFileName);
             } else {
@@ -74,11 +87,11 @@ public class PptxFile extends OoxmlFile {
         for (JSONObject file : getTextJson()) {
 
             ArrayList<String> tags = new ArrayList<>();
-            tags.add("a:r");
+            tags.add(PPTX_TAG_TO_COMPARE_TEXT);
             ArrayList<JSONObject> arTag = JsonUtility.extractTag(file, tags);
 
             for (JSONObject arTagObj : arTag) {
-                ArrayList<String> temp = JsonUtility.getTextContent(arTagObj, new ArrayList<>(Arrays.asList("a:t")),false);
+                ArrayList<String> temp = JsonUtility.getTextContent(arTagObj, new ArrayList<>(Arrays.asList(PPTX_TAG_TO_GET_TEXT_CONTENT)),false);
                 if(!temp.isEmpty()){
                     allTextTag.add(temp);
                 }
@@ -91,27 +104,28 @@ public class PptxFile extends OoxmlFile {
     /**
      * @return Hashmap of author data of the File hashed by the ID.
      */
+
     private HashMap<String,ArrayList<String>> getAuthorTable(){
         HashMap<String,ArrayList<String>> authorTable = new HashMap<>();
-        if(jsonDataFiles.containsKey("ppt_commentAuthors.xml.json")){
-            JSONObject authorFile = getJson("ppt_commentAuthors.xml.json");
-            ArrayList<String> tags = new ArrayList<>();
-            tags.add("p:cmAuthor");
-            JSONObject wCommentAuth = JsonUtility.extractTag(authorFile, tags).get(0);
+        if(jsonDataFiles.containsKey(PPTX_COMMENT_AUTHOR_TABLE_FILE_NAME)){
+            JSONObject authorFile = getJson(PPTX_COMMENT_AUTHOR_TABLE_FILE_NAME);
+            ArrayList<String> tagsToGetAuthorDetails = new ArrayList<>();
+            tagsToGetAuthorDetails.add(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_NAME);
+            JSONObject wCommentAuth = JsonUtility.extractTag(authorFile, tagsToGetAuthorDetails).get(0);
 
-            if(wCommentAuth.get("p:cmAuthor") instanceof JSONObject){
-                JSONObject obj = (JSONObject) wCommentAuth.get("p:cmAuthor");
+            if(wCommentAuth.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_NAME) instanceof JSONObject){
+                JSONObject obj = (JSONObject) wCommentAuth.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_NAME);
                 ArrayList<String> data = new ArrayList<>();
-                data.add((String) obj.get("@name"));
-                authorTable.put((String) obj.get("@id"),data);
+                data.add((String) obj.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_ATTRIBUTE_NAME));
+                authorTable.put((String) obj.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_ATTRIBUTE_ID),data);
 
-            }else if(wCommentAuth.get("p:cmAuthor") instanceof JSONArray){
-                JSONArray allObj = (JSONArray) wCommentAuth.get("p:cmAuthor");
+            }else if(wCommentAuth.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_NAME) instanceof JSONArray){
+                JSONArray allObj = (JSONArray) wCommentAuth.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_NAME);
                 for (Object object : allObj) {
                     JSONObject obj = (JSONObject) object;
                     ArrayList<String> data = new ArrayList<>();
-                    data.add((String) obj.get("@name"));
-                    authorTable.put((String) obj.get("@id"), data);
+                    data.add((String) obj.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_ATTRIBUTE_NAME));
+                    authorTable.put((String) obj.get(PPTX_COMMENT_AUTHOR_TABLE_AUTHOR_TAG_ATTRIBUTE_ID), data);
                 }
             }else{
                 StatusLogger.addRecordInfoDebug("Author Table not Handled");
@@ -145,14 +159,14 @@ public class PptxFile extends OoxmlFile {
 
         for (JSONObject file : getCommentJson()) {
             ArrayList<String> tags = new ArrayList<>();
-            tags.add("p:cm");
+            tags.add(PPTX_TAG_TO_COMPARE_COMMENT);
             JSONObject wCommentTag = JsonUtility.extractTag(file, tags).get(0);
 
-            if(wCommentTag.get("p:cm") instanceof JSONObject){
-                JSONObject wCommentTagObj = (JSONObject) wCommentTag.get("p:cm");
+            if(wCommentTag.get(PPTX_TAG_TO_COMPARE_COMMENT) instanceof JSONObject){
+                JSONObject wCommentTagObj = (JSONObject) wCommentTag.get(PPTX_TAG_TO_COMPARE_COMMENT);
                 extractpcmTag(wCommentTagObj);
-            }else if(wCommentTag.get("p:cm") instanceof JSONArray){
-                JSONArray allCommentTagJson = (JSONArray) wCommentTag.get("p:cm");
+            }else if(wCommentTag.get(PPTX_TAG_TO_COMPARE_COMMENT) instanceof JSONArray){
+                JSONArray allCommentTagJson = (JSONArray) wCommentTag.get(PPTX_TAG_TO_COMPARE_COMMENT);
                 for (Object o : allCommentTagJson){
                     JSONObject wCommentTagObj = (JSONObject) o;
                     extractpcmTag(wCommentTagObj);
