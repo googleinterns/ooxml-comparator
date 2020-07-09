@@ -1,17 +1,17 @@
-import os
 import json
 import xmltodict
 import zipfile
 import pandas as pd
 from pathlib import Path
 import pytest
+import os
 import sys
-sys.path.append("../../DataParser")
 import filecmp
 import dataParser
 
 testFiles = "./testFiles"
 truth_folder = "./testFiles/truth_data"
+sys.path.append("../../DataParser")
 
 __TESTS__ = 4 
 
@@ -74,7 +74,7 @@ def test_method1():
 	""" 
 	Test for conversion of Word Data
 	"""
-	assert(dataParser.prepare_folder("./testFiles/test1")==True)
+	dataParser.prepare_folder("./testFiles/test1")
 	assert(are_dir_trees_equal("./testFiles/truth_data/test1","./testFiles/test1")==True)
 	os.system("rm -rf ./testFiles/test1/generated")
 
@@ -83,7 +83,7 @@ def test_method2():
 	""" 
 	Test for conversion of Excel Data
 	"""
-	assert(dataParser.prepare_folder("./testFiles/test2")==True)
+	dataParser.prepare_folder("./testFiles/test2")
 	assert(are_dir_trees_equal("./testFiles/truth_data/test2","./testFiles/test2")==True)
 	os.system("rm -rf ./testFiles/test2/generated")
 
@@ -93,7 +93,7 @@ def test_method3():
 	""" 
 	Test for conversion of PPT Data
 	"""
-	assert(dataParser.prepare_folder("./testFiles/test3")==True)
+	dataParser.prepare_folder("./testFiles/test3")
 	assert(are_dir_trees_equal("./testFiles/truth_data/test3","./testFiles/test3")==True)
 	os.system("rm -rf ./testFiles/test3/generated")
 
@@ -103,7 +103,7 @@ def test_method4():
 	""" 
 	Test for Empty Directory
 	"""
-	assert(dataParser.prepare_folder("./testFiles/test4")==True)
+	dataParser.prepare_folder("./testFiles/test4")
 	assert(are_dir_trees_equal("./testFiles/truth_data/test4","./testFiles/test4")==True)
 	os.system("rm -rf ./testFiles/test4/generated")
 
@@ -112,5 +112,5 @@ def test_method5():
 	""" 
 	Test for Invalid Path
 	"""
-	assert(dataParser.prepare_folder("./testFiles/test5")==False)
+	dataParser.prepare_folder("./testFiles/test5")==False
 	
