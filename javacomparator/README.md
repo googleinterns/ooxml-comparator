@@ -8,6 +8,8 @@ Java Comparator takes in Folder for each of the OOXML files converted, loads the
 
 Once the Dataparser has been run on Folders containing the OOXML files, We now have two generated folders containing all the Folders for all OOXML for their respective types. The Java Comparator takes the Path to these folders as input through a config file.
 
+Java 11.0.7 was used for development of the project.
+
 To prepare the input, a config file looks something like this.
 
 ```bash

@@ -11,7 +11,7 @@ The project comprises of two main parts:
 
 # Data Parser
 
-To use the zipped OOXML files in JAVA, the files are first converted to JSON format for enhanced readablity and manual inspections for Diffs.
+To use the zipped OOXML files in JAVA, the files are first converted to JSON format for enhanced readability and manual inspections for Diffs.
 
 
 ## Requirements
@@ -28,7 +28,7 @@ pip3 install -r ./requirements.txt
 To convert a folder containing various file of .docx, .pptx, .xlsx files, use 
 
 ```bash
-python3 dataparser /path/to/the/folder
+python3 dataparser.py /path/to/the/folder
 ```
 
 a 'generated' subfolder is created in the folder provided, with execution log saved in the exec_log.txt and the JSON files for all OOXML files successfully converted.
@@ -43,6 +43,8 @@ Java Comparator takes in folder for each of the OOXML files converted, loads the
 ## Setup and Usage
 
 Once the Dataparser has been run on Folders containing the OOXML files, We now have two generated folders containing all the folders of OOXML files for their respective types. The Java Comparator takes the Path to these folders as input through a config file.
+
+Java 11.0.7 was used for development of the project.
 
 To prepare the input, a config file looks something like this:
 
