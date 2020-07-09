@@ -16,6 +16,7 @@ public class FileComparator {
     public static final String CONTENT_DIFFERENT_MESSAGE_FOR_REPORT = "TEXT CONTENT DIFFERENT";
     String fileOriginalPath, fileRoundtrippedPath;
     String fileExtension;
+    public ArrayList<DiffObject> diffReport;
 
     /**
      * Constructor to load the File Paths of files to be compared and decide on the file type.
@@ -45,7 +46,7 @@ public class FileComparator {
      * @param content2 List of string of content for tag2
      * @return whether the content of the two tags are same or not
      */
-    private boolean comparisionLogic(ArrayList<String> content1, ArrayList<String> content2) {
+    public boolean comparisionLogic(ArrayList<String> content1, ArrayList<String> content2) {
 
         StringBuilder stringBuilder = new StringBuilder();
         for (String contentVal : content1) {
@@ -79,9 +80,7 @@ public class FileComparator {
         String stringVal2 = stringBuilder.toString();
         return stringVal1.equals(stringVal2);
     }
-
-    public ArrayList<DiffObject> diffReport;
-
+    
     /**
      * Compares the Tags extracted from the two subtree by the order in which they appear.
      * @param tagComp Tag the JSONSubtree is extracted for

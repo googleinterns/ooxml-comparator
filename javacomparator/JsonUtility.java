@@ -54,7 +54,6 @@ public class JsonUtility {
 
             if (jsonValue instanceof JSONObject) {
                 recurseVisit((JSONObject) jsonValue, tagsToSearch, ignoreAttribute);
-
             } else if (jsonValue instanceof JSONArray) {
                 JSONArray childSubtreeTagName = (JSONArray) jsonValue;
                 for (Object subtreeTag : childSubtreeTagName) {
