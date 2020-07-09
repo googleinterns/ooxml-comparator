@@ -3,6 +3,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class to compare 2 files to find out the Diffs.
+ */
 public class FileComparator {
 
     public static final String DOCX_FILE_TYPE = "docx";
@@ -14,6 +17,11 @@ public class FileComparator {
     String fileOriginalPath, fileRoundtrippedPath;
     String fileExtension;
 
+    /**
+     * Constructor to load the File Paths of files to be compared and decide on the file type.
+     * @param fileOriginalPath
+     * @param fileRoundtrippedPath
+     */
     FileComparator(String fileOriginalPath, String fileRoundtrippedPath) {
         this.fileOriginalPath = fileOriginalPath;
         this.fileRoundtrippedPath = fileRoundtrippedPath;
@@ -137,7 +145,9 @@ public class FileComparator {
         StatusLogger.addRecordInfoExec("MATCHED : " + matched);
     }
 
-
+    /**
+     * Call the relevent function for Docx to get the text, compare them, get the comments and compare them.
+     */
     private void compareTextAndCommentDocx(){
         DocxFile file1 = new DocxFile(fileOriginalPath, false);
         DocxFile file2 = new DocxFile(fileRoundtrippedPath, true);
@@ -152,6 +162,9 @@ public class FileComparator {
         compareContentByOrder(DocxFile.DOCX_TAG_TO_COMPARE_COMMENT, DiffGenerator.DIFF_FOUND_TAG_TYPE_COMMENT, DOCX_FILE_TYPE, commentContents1, commentContents2);
     }
 
+    /**
+     * Call the relevent function for Pptx to get the text, compare them, get the comments and compare them.
+     */
     private void compareTextAndCommentPptx(){
         PptxFile file1 = new PptxFile(fileOriginalPath, false);
         PptxFile file2 = new PptxFile(fileRoundtrippedPath, true);
@@ -167,6 +180,9 @@ public class FileComparator {
         compareContentByOrder(PptxFile.PPTX_TAG_TO_COMPARE_COMMENT, DiffGenerator.DIFF_FOUND_TAG_TYPE_COMMENT, PPTX_FILE_TYPE, commentContents1, commentContents2);
     }
 
+    /**
+     * Call the relevent function for Xlsx to get the text, compare them, get the comments and compare them.
+     */
     private void compareTextAndCommentXlsx(){
         XlsxFile file1 = new XlsxFile(fileOriginalPath, false);
         XlsxFile file2 = new XlsxFile(fileRoundtrippedPath, true);
@@ -187,7 +203,6 @@ public class FileComparator {
 
     /**
      * Fucntion that runs the main comparision for Text in the two files
-     *
      * @return Diff objects for each differences found
      */
     public ArrayList<DiffObject> compareText() {

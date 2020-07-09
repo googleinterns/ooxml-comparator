@@ -137,6 +137,10 @@ public class PptxFile extends OoxmlFile {
         return authorTable;
     }
 
+    /**
+     * Extracts the p:cm tags from the tree to be found in.
+     * @param wCommentTagObj the tag tree object to search comments in.
+     */
     private void extractpcmTag(JSONObject wCommentTagObj){
         ArrayList<String> temp = JsonUtility.getCommentContentPptx(wCommentTagObj);
         String authorId = temp.get(1);

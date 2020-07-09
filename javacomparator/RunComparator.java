@@ -1,19 +1,41 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Main Execution of the Comparator starts at this Class.
+ */
 public class RunComparator{
-    public static void runComparator(String pathOrig, String pathRound, String outputPath) {
-        DiffGenerator diff = new DiffGenerator(pathOrig, pathRound, outputPath);
+    public static final String DEFAULT_CONFIG_FILE_PATH = "./target/comparator.config";
+
+    /**
+     * Runs the Comparator on the Given paths
+     * @param pathOriginalFile Path to the folder of original files convered by V0 (generated folder)
+     * @param pathRoundtrippedFile Path to the folder of Roundtripped files convered by V0 (generated folder)
+     * @param outputPath Path to generate the Reports and Diffs at
+     */
+    public static void runComparator(String pathOriginalFile, String pathRoundtrippedFile, String outputPath) {
+        DiffGenerator diffGenerator = new DiffGenerator(pathOriginalFile, pathRoundtrippedFile, outputPath);
         try {
-            diff.prepareFolderAndRun();
+            diffGenerator.prepareFolderRequired();
+            diffGenerator.prepareFolderAndRun();
         } catch (Exception e) {
             StatusLogger.addRecordWarningExec(e.getMessage());
         }
     }
+
+    /**
+     * The Main execution of the comparator starts here.
+     * @param args Pass in the path of
+     */
     public static void main(String[] args) {
         try{
-            File file=new File(args[0]);
-            FileReader fileReader=new FileReader(file);
+            File fileConfigPath;
+            if(args.length==0) {
+                fileConfigPath = new File(DEFAULT_CONFIG_FILE_PATH);
+            }else{
+                fileConfigPath = new File(args[0]);
+            }
+            FileReader fileReader=new FileReader(fileConfigPath);
             BufferedReader bufferedReader=new BufferedReader(fileReader);
             ArrayList<String> Contents = new ArrayList<>();
             String lineData;
@@ -26,5 +48,4 @@ public class RunComparator{
             StatusLogger.addRecordWarningExec(e.getMessage());
         }
     }
-    //runComparator("/home/vivgupta/OOXMLcomp/generate/original","/home/vivgupta/OOXMLcomp/generate/roundtripped","/home/vivgupta/OOXMLcomp/generate/output");
 }

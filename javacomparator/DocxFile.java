@@ -81,6 +81,10 @@ public class DocxFile extends OoxmlFile {
         return allTextTag;
     }
 
+    /**
+     * Calls the JSON Utility to the comment instances in the Docx Files and Adds to the List.
+     * @param wCommentTagObj The Tree where the Comments are to be seached.
+     */
     private void extractwcommentTag(JSONObject wCommentTagObj){
         ArrayList<String> commentContent = JsonUtility.getCommentContentDocx(wCommentTagObj);
         allCommentTag.add(commentContent);

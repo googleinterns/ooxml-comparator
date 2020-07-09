@@ -138,7 +138,7 @@ public class DiffGenerator {
     /**
      * Checks existence for the Folder required to create the output and prepare structure.
      */
-    private void prepareFolderRequired(){
+    public void prepareFolderRequired(){
         Path finalFolder = Paths.get(finalOutputPath);
         if (Files.notExists(finalFolder)) {
             // The output path does not exist.
@@ -160,8 +160,14 @@ public class DiffGenerator {
         }
     }
 
-
-    private void runReportDataCreation(RunReportData generalReportData,RunReportData fileTypeSpecificReportData,ArrayList<DiffObject> diffObjectsFound,long elapsedTime){
+    /**
+     * Generates the report data by adding contribution of Diffs for a particular file.
+     * @param generalReportData Global space report item that has to be updated.
+     * @param fileTypeSpecificReportData The file type specific info that needs to be updated.
+     * @param diffObjectsFound List of Diffs found for the particular file.
+     * @param elapsedTime Latency metric for the file run.
+     */
+    private void runReportDataCreation(RunReportData generalReportData, RunReportData fileTypeSpecificReportData, ArrayList<DiffObject> diffObjectsFound, long elapsedTime){
         generalReportData.totalFilesMatched++;
         fileTypeSpecificReportData.totalFilesMatched++;
         if (diffObjectsFound.isEmpty()) {
@@ -209,20 +215,33 @@ public class DiffGenerator {
         fileTypeSpecificReportData.addTimeForFile((int) (elapsedTime / 1000000));
     }
 
-    private void addNecessaryDataToCreateRunReportAndSummary(String origFileName,ArrayList<String[]> allDiffs, ArrayList<String[]> summaryData,RunReportData generalReportData,RunReportData fileTypeReport,ArrayList<DiffObject> diffObjectsFound, long elapsedTime){
+    /**
+     * Adds the relevent data to run report and Summary files for every file.
+     * @param origFileName File that generates the Diff.
+     * @param allDiffs List of Diffs found in all the files till now.
+     * @param summaryData The List of Summary Data of all files.
+     * @param generalReportData Report Generation data to get the XLSX output for Globals space.
+     * @param fileTypeReport  Report Generation data to get the XLSX output for File Specific type.
+     * @param diffObjectsFound List of Diffs found in the current file.
+     * @param elapsedTime Time taken in comparing the given file.
+     */
+    private void addNecessaryDataToCreateRunReportAndSummary(String origFileName,
+                                                             ArrayList<String[]> allDiffs,
+                                                             ArrayList<String[]> summaryData,
+                                                             RunReportData generalReportData,
+                                                             RunReportData fileTypeReport,
+                                                             ArrayList<DiffObject> diffObjectsFound,
+                                                             long elapsedTime){
         runReportDataCreation(generalReportData,fileTypeReport,diffObjectsFound,elapsedTime);
 
         // Add the name of the folder in the front for all the diffs found.
         for (DiffObject diffObject : diffObjectsFound) {
-
             String[] diffObjectCsvEntry = diffObject.getCsvEntry();
             String[] fileNameCsvEntry = new String[diffObjectCsvEntry.length + 1];
             fileNameCsvEntry[0] = origFileName;
             System.arraycopy(diffObjectCsvEntry, 0, fileNameCsvEntry, 1, diffObjectCsvEntry.length);
             allDiffs.add(fileNameCsvEntry);
         }
-
-
         summaryData.add(new String[]{origFileName, String.valueOf(diffObjectsFound.isEmpty()), String.valueOf(diffObjectsFound.size()), String.valueOf(elapsedTime / 1000000)});
     }
 
@@ -230,7 +249,6 @@ public class DiffGenerator {
      * This prepares and run the comparator on folder and files.
      */
     public void prepareFolderAndRun() {
-        prepareFolderRequired();
 
         List<String> foldersOrig = findFoldersInDirectory(pathOriginalFile);
         List<String> foldersRound = findFoldersInDirectory(pathRoundTripFile);
@@ -286,6 +304,9 @@ public class DiffGenerator {
         createRunSummary(allPages);
     }
 
+    /**
+     * Create the XLSX Heading Cell in the Final generated Report.
+     */
     private void createXLSXHeading(Workbook workbook, Sheet sheet, String cellContent){
         Font titleFont = workbook.createFont();
         titleFont.setBold(true);
@@ -302,6 +323,9 @@ public class DiffGenerator {
         cell.setCellStyle(headerCellStyle);
     }
 
+    /**
+     * Create the XLSX Section Cells in the Final generated Report.
+     */
     private void createXLSXSection(Workbook workbook,Sheet sheet,int rowNum,int colNum,String cellContent){
         Font sectionFont = workbook.createFont();
         sectionFont.setBold(true);
@@ -318,6 +342,9 @@ public class DiffGenerator {
         cell.setCellStyle(headerCellStyle);
     }
 
+    /**
+     * Create the XLSX SubSection Cells in the Final generated Report.
+     */
     private void createXLSXSubSection(Workbook workbook, Sheet sheet, int rowNum, String cellContent) {
         Font subSectionFont = workbook.createFont();
         subSectionFont.setBold(true);
@@ -333,6 +360,9 @@ public class DiffGenerator {
         cell.setCellStyle(headerCellStyle);
     }
 
+    /**
+     * Create the XLSX Data Section Cells in the Final generated Report.
+     */
     private void createXLSXDataSection(Workbook workbook,Sheet sheet,int rowNum,int colNum,String cellContent) {
         Font subSectionFont = workbook.createFont();
         subSectionFont.setBold(true);
@@ -348,51 +378,52 @@ public class DiffGenerator {
         cell.setCellStyle(headerCellStyle);
     }
 
+    /**
+     * Create the File Metric Section Cells in the Final generated Report.
+     */
     private void createFileMetricSection(Workbook workbook, Sheet sheet, RunReportData currentData){
         createXLSXSection(workbook,sheet,2,0,"File Metrics");
-
         createXLSXSubSection(workbook,sheet,3, "Total number of files compared");
         createXLSXDataSection(workbook,sheet,3,1, String.valueOf(currentData.totalFilesMatched));
-
         createXLSXSubSection(workbook,sheet,4, "Number of files with no diffs");
         createXLSXDataSection(workbook,sheet,4,1, String.valueOf(currentData.numberOfFileNoDiff));
-
         createXLSXSubSection(workbook,sheet,5, "% of files with no diffs");
         createXLSXDataSection(workbook,sheet,5,1, String.valueOf(currentData.getPercentageNoDiff()));
     }
 
+    /**
+     * Create the Diffs related Metric Section Cells in the Final generated Report.
+     */
     private void createDiffMetricSection(Workbook workbook,Sheet sheet, RunReportData currentData){
         createXLSXSection(workbook,sheet,7,0,"Diff Metrics");
-
         createXLSXSubSection(workbook,sheet,8, "Total number of diffs across all the files");
         createXLSXDataSection(workbook,sheet,8,1, String.valueOf(currentData.totalDiff));
-
         createXLSXSubSection(workbook,sheet,9, "Most common tag which is causing a difference among all files");
         createXLSXDataSection(workbook,sheet,9,1, currentData.getMostFreqTagCausingDiff());
-
         createXLSXSubSection(workbook,sheet,10, "Total number of text diffs across all the files");
         createXLSXDataSection(workbook,sheet,10,1, String.valueOf(currentData.typeCausingDiff.get("0")));
-
         createXLSXSubSection(workbook,sheet,11, "Total number of comment diffs across all the files");
         createXLSXDataSection(workbook,sheet,11,1, String.valueOf(currentData.typeCausingDiff.get("1")));
     }
 
+    /**
+     * Create the File Metric combined with Diffs Section Cells in the Final generated Report.
+     */
     private void createDiffPlusFileMetricSection(Workbook workbook,Sheet sheet, RunReportData currentData){
         createXLSXSection(workbook,sheet,13,0,"Diff + file metrics");
-
         createXLSXSubSection(workbook,sheet,14, "Total number of files with atleast one text diffs");
         createXLSXDataSection(workbook,sheet,14,1, String.valueOf(currentData.filesContainingTextDiffs));
-
         createXLSXSubSection(workbook,sheet,15, "Total number of files with atleast one comment diffs");
         createXLSXDataSection(workbook,sheet,15,1, String.valueOf(currentData.filesContainingCommentDiffs));
-
         createXLSXSubSection(workbook,sheet,16, "Total number of files with only text diffs");
         createXLSXDataSection(workbook,sheet,16,1, String.valueOf(currentData.filesWithOnlyTextDiff));
-
         createXLSXSubSection(workbook,sheet,17, "Total number of files with only comment diffs");
         createXLSXDataSection(workbook,sheet,17,1, String.valueOf(currentData.filesWithOnlyCommentDiff));
     }
 
+    /**
+     * Create the Latency Metrics Section Cells in the Final generated Report.
+     */
     private void createLatencyMetricSection(Workbook workbook,Sheet sheet, RunReportData currentData){
         createXLSXSection(workbook,sheet,19,0,"Latency metrics");
         createXLSXSection(workbook,sheet,19,1,"in ms");
@@ -430,16 +461,21 @@ public class DiffGenerator {
         createXLSXDataSection(workbook,sheet,24,3, String.valueOf(val/60000));
     }
 
+    /**
+     * Create the Global path of Output Section Cells in the Final generated Report.
+     */
     private void createPathGlobalsSection(Workbook workbook,Sheet sheet){
         createXLSXSection(workbook,sheet,26,0,"Path of file generated");
-
         createXLSXSubSection(workbook,sheet,27, "Summary/AllDiff file Path : ");
         createXLSXDataSection(workbook,sheet,27,1, finalOutputPath + "/summary.xlsx");
-
         createXLSXSubSection(workbook,sheet,28, "Individual Diff file path : ");
         createXLSXDataSection(workbook,sheet,28,1, finalOutputPath + "/IndividualDiff/");
     }
 
+    /**
+     * Creates the Run report XLSX for the Whole execution
+     * @param pages The various RunReport objects summarising the data found for all 4 scopes.
+     */
     private void createRunSummary(ArrayList<RunReportData> pages) {
         Workbook workbook = new XSSFWorkbook();
         for (RunReportData currentData : pages) {
@@ -476,17 +512,30 @@ public class DiffGenerator {
         }
     }
 
+    /**
+     * Genrates the Summary of all the files.
+     * @param summaryData The collected about various metrics while comparing files.
+     */
     private void generateComparisionSummary(ArrayList<String[]> summaryData) {
         StatusLogger.addRecordInfoExec("Creating Summary CSV Data");
         writeCSVFile(summaryData, new String[]{"File Name", "Exactly Same", "Number of Differences", "timeTaken(in ms)"}, finalOutputPath + "/summary.xlsx");
     }
 
+    /**
+     * Generates XLSX containing all the Diffs found in the comparision across all files.
+     * @param allDiffs List of all the diffs found.
+     */
     private void generateGlobalDiffReport(ArrayList<String[]> allDiffs) {
         StatusLogger.addRecordInfoExec("Creating All Diff CSV Data");
         StatusLogger.addRecordInfoExec("Total number of Diffs found : " + allDiffs.size());
         writeCSVFile(allDiffs, new String[]{"File Name", "tag_name","diff_type (0-Text,1-Comment)", "content1", "content2", "details"}, finalOutputPath + "/allDiff.xlsx");
     }
 
+    /**
+     * Generates the XLSX containing the Individual Diffs for each of the files.
+     * @param fileName Name of the file for which the Diffs are being reported.
+     * @param fileDiffEntry The list of Diffs that are found in the file.
+     */
     private void generateIndividualDiffReport(String fileName, ArrayList<DiffObject> fileDiffEntry) {
         StatusLogger.addRecordInfoExec("Creating Individual CSV Data in " + fileName);
         ArrayList<String[]> entry = new ArrayList<>();

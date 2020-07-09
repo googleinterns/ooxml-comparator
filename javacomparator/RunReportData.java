@@ -89,6 +89,7 @@ public class RunReportData {
      * @return Value of total time taken.
      */
     public Integer totalTimeTaken() {
+        if(timeTakenPerFile.isEmpty())return 0;
         Integer timeTakenInTotal = 0;
         for (Integer fileTimeTaken : timeTakenPerFile) {
             timeTakenInTotal += fileTimeTaken;
@@ -101,6 +102,7 @@ public class RunReportData {
      * @return Value of Average time taken.
      */
     public float averageTimeTaken() {
+        if(timeTakenPerFile.isEmpty())return 0;
         Integer timeTakenAvgerage = 0;
         for (Integer fileTimeTaken : timeTakenPerFile) {
             timeTakenAvgerage += fileTimeTaken;
@@ -113,6 +115,7 @@ public class RunReportData {
      * @return Value of Maximum time taken.
      */
     public float maximumTimeTaken() {
+        if(timeTakenPerFile.isEmpty())return 0;
         float maximumTimeTakenCurrent = 0;
         for (Integer fileTimeTaken : timeTakenPerFile) {
             if (fileTimeTaken > maximumTimeTakenCurrent) {
