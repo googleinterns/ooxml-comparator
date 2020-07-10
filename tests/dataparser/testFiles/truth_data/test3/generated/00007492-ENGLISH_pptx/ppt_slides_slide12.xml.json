@@ -1,0 +1,204 @@
+{
+    "p:sld": {
+        "@xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "@xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+        "p:cSld": {
+            "p:spTree": {
+                "p:nvGrpSpPr": {
+                    "p:cNvPr": {
+                        "@id": "1",
+                        "@name": ""
+                    },
+                    "p:cNvGrpSpPr": null,
+                    "p:nvPr": null
+                },
+                "p:grpSpPr": {
+                    "a:xfrm": {
+                        "a:off": {
+                            "@x": "0",
+                            "@y": "0"
+                        },
+                        "a:ext": {
+                            "@cx": "0",
+                            "@cy": "0"
+                        },
+                        "a:chOff": {
+                            "@x": "0",
+                            "@y": "0"
+                        },
+                        "a:chExt": {
+                            "@cx": "0",
+                            "@cy": "0"
+                        }
+                    }
+                },
+                "p:sp": [
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "2",
+                                "@name": "Title 1"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "title"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": {
+                                "a:normAutofit": {
+                                    "@fontScale": "90000"
+                                }
+                            },
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:r": {
+                                    "a:rPr": {
+                                        "@lang": "en-ZA",
+                                        "@dirty": "0",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:t": "DURBANVILLE"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-ZA",
+                                    "@dirty": "0"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "p:nvSpPr": {
+                            "p:cNvPr": {
+                                "@id": "3",
+                                "@name": "Slide Number Placeholder 2"
+                            },
+                            "p:cNvSpPr": {
+                                "a:spLocks": {
+                                    "@noGrp": "1"
+                                }
+                            },
+                            "p:nvPr": {
+                                "p:ph": {
+                                    "@type": "sldNum",
+                                    "@sz": "quarter",
+                                    "@idx": "12"
+                                }
+                            }
+                        },
+                        "p:spPr": null,
+                        "p:txBody": {
+                            "a:bodyPr": null,
+                            "a:lstStyle": null,
+                            "a:p": {
+                                "a:fld": {
+                                    "@id": "{FBF943B6-41D7-4162-9806-64C925351C48}",
+                                    "@type": "slidenum",
+                                    "a:rPr": {
+                                        "@lang": "en-US",
+                                        "@smtClean": "0"
+                                    },
+                                    "a:pPr": null,
+                                    "a:t": "12"
+                                },
+                                "a:endParaRPr": {
+                                    "@lang": "en-US"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "p:pic": {
+                    "p:nvPicPr": {
+                        "p:cNvPr": {
+                            "@id": "4",
+                            "@name": "Picture 3"
+                        },
+                        "p:cNvPicPr": {
+                            "a:picLocks": {
+                                "@noChangeAspect": "1"
+                            }
+                        },
+                        "p:nvPr": null
+                    },
+                    "p:blipFill": {
+                        "a:blip": {
+                            "@r:embed": "rId2",
+                            "@cstate": "print",
+                            "a:extLst": {
+                                "a:ext": {
+                                    "@uri": "{28A0092B-C50C-407E-A947-70E740481C1C}",
+                                    "a14:useLocalDpi": {
+                                        "@xmlns:a14": "http://schemas.microsoft.com/office/drawing/2010/main",
+                                        "@xmlns": "",
+                                        "@val": "0"
+                                    }
+                                }
+                            }
+                        },
+                        "a:stretch": {
+                            "a:fillRect": null
+                        }
+                    },
+                    "p:spPr": {
+                        "a:xfrm": {
+                            "a:off": {
+                                "@x": "313944",
+                                "@y": "873579"
+                            },
+                            "a:ext": {
+                                "@cx": "8516112",
+                                "@cy": "5678424"
+                            }
+                        },
+                        "a:prstGeom": {
+                            "@prst": "rect",
+                            "a:avLst": null
+                        }
+                    }
+                }
+            },
+            "p:extLst": {
+                "p:ext": {
+                    "@uri": "{BB962C8B-B14F-4D97-AF65-F5344CB8AC3E}",
+                    "p14:creationId": {
+                        "@xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main",
+                        "@xmlns": "",
+                        "@val": "2701150609"
+                    }
+                }
+            }
+        },
+        "p:clrMapOvr": {
+            "a:masterClrMapping": null
+        },
+        "mc:AlternateContent": {
+            "@xmlns:mc": "http://schemas.openxmlformats.org/markup-compatibility/2006",
+            "mc:Choice": {
+                "@xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main",
+                "@xmlns": "",
+                "@Requires": "p14",
+                "p:transition": {
+                    "@spd": "slow",
+                    "p14:prism": {
+                        "@isContent": "1"
+                    }
+                }
+            },
+            "mc:Fallback": {
+                "p:transition": {
+                    "@spd": "slow",
+                    "p:fade": null
+                }
+            }
+        }
+    }
+}
