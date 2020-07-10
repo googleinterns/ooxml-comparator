@@ -1,4 +1,4 @@
-## OOXML COMPARATOR - Intern Project 2020
+# OOXML COMPARATOR - Intern Project 2020
 
 Whenever an Office file is imported into Google docs and exported back, there are significant differences between the OOXML of the original document and the exported document. It would be helpful to compare the OOXMLs of the two documents so as to understand the similarities and differences.
 
